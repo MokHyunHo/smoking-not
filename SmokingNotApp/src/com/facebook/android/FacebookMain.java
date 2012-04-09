@@ -19,30 +19,31 @@ package com.facebook.android;
 import java.io.IOException;
 
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+//import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
+//import android.provider.MediaStore;
+//import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+//import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
+//import android.widget.AdapterView;
+//import android.widget.AdapterView.OnItemClickListener;
+//import android.widget.ArrayAdapter;
+//import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
+//import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,13 +128,13 @@ public class FacebookMain extends Activity  {
 			public void onClick(View v) {
 	            Intent myIntent = new Intent(getApplicationContext(), Profile.class);
 	            if (!Utility.mFacebook.isSessionValid()) {
-	            	mText.setBackgroundColor(Color.YELLOW);
-	            	//mLoginButton.setBackgroundColor(Color.RED);
+	            	 mText.setText("Please login first to Smoking Not APP!" );
+	            	 mText.setTextColor(Color.BLUE);
+	            	
 	            }
                 if (Utility.mFacebook.isSessionValid()) {
-                	mText.setBackgroundColor(Color.TRANSPARENT);
                     Utility.objectID = "me";
-                startActivity(myIntent);}
+                    startActivity(myIntent);}
                 
 				
 			}
@@ -143,15 +144,14 @@ public class FacebookMain extends Activity  {
          mReportButton.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				//change
-				 Intent myIntent = new Intent(getApplicationContext(), Profile.class);
+				 Intent myIntent = new Intent(getApplicationContext(), Report.class);
 				 if (!Utility.mFacebook.isSessionValid()) {
-					 mText.setBackgroundColor(Color.YELLOW);
+					 mText.setText("Please login first to Smoking Not APP!" );
+					 mText.setTextColor(Color.BLUE); 
 		            }
 	                if (Utility.mFacebook.isSessionValid()) {
-	                	mText.setBackgroundColor(Color.TRANSPARENT);
 	                    Utility.objectID = "me";
-	                   // startActivity(myIntent);
+	                    startActivity(myIntent);
 	                    }
 	                
 	                
@@ -162,15 +162,14 @@ public class FacebookMain extends Activity  {
          mPlacesButton.setOnClickListener(new OnClickListener() {
  			
  			public void onClick(View v) {
- 				//change
- 				 Intent myIntent = new Intent(getApplicationContext(), Profile.class);
+ 				 Intent myIntent = new Intent(getApplicationContext(), Places.class);
  				if (!Utility.mFacebook.isSessionValid()) {
- 					mText.setBackgroundColor(Color.YELLOW);
+ 					 mText.setText("Please login first to Smoking Not APP!" );
+ 					 mText.setTextColor(Color.BLUE); 
 	            }
                 if (Utility.mFacebook.isSessionValid()) {
-                	mText.setBackgroundColor(Color.TRANSPARENT);
                     Utility.objectID = "me";
-               // startActivity(myIntent);
+                    startActivity(myIntent);
                     }
                 
  			}
