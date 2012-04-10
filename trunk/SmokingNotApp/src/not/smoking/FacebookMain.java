@@ -18,8 +18,6 @@ package not.smoking;
 
 import java.io.IOException;
 
-
-
 import not.smoking.SessionEvents.AuthListener;
 import not.smoking.SessionEvents.LogoutListener;
 
@@ -27,26 +25,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-//import android.app.AlertDialog;
 import android.app.ProgressDialog;
-//import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-//import android.provider.MediaStore;
-//import android.view.LayoutInflater;
 import android.view.View;
-//import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-//import android.widget.AdapterView;
-//import android.widget.AdapterView.OnItemClickListener;
-//import android.widget.ArrayAdapter;
-//import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-//import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,294 +43,286 @@ import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Util;
 
-public class FacebookMain extends Activity  {
+public class FacebookMain extends Activity {
 
-    /*
-     * Your Facebook Application ID must be set before running this example See
-     * http://www.facebook.com/developers/createapp.php
-     */
-    public static final String APP_ID = "306456662758902";
+	/*
+	 * Your Facebook Application ID must be set before running this example See
+	 * http://www.facebook.com/developers/createapp.php
+	 */
+	public static final String APP_ID = "306456662758902";
 
-    private LoginButton mLoginButton;
-    private TextView mText;
-    private ImageView mUserPic;
-    private Handler mHandler;
-    ProgressDialog dialog;
+	private LoginButton mLoginButton;
+	private TextView mText;
+	private ImageView mUserPic;
+	private Handler mHandler;
+	ProgressDialog dialog;
 
-    final static int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
-    final static int PICK_EXISTING_PHOTO_RESULT_CODE = 1;
-    
-    public static String picURL;
-    public static String name ;
-    public static String email;
-    
-    
-    
-    private Button mProfileButton;
-    private Button mReportButton;
-    private Button mPlacesButton;
+	final static int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
+	final static int PICK_EXISTING_PHOTO_RESULT_CODE = 1;
 
-   
-    String[] permissions = {  "publish_stream", "email", "user_photos" };
+	public static String picURL;
+	public static String name;
+	public static String email;
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	private Button mProfileButton;
+	private Button mReportButton;
+	private Button mPlacesButton;
 
-        if (APP_ID == null) {
-            Util.showAlert(this, "Warning", "Facebook Applicaton ID must be "
-                    + "specified before running this example: see FbAPIs.java");
-            return;
-        }
+	String[] permissions = { "publish_stream", "email", "user_photos" };
 
-        setContentView(R.layout.main);
-        mHandler = new Handler();
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        mText = (TextView) FacebookMain.this.findViewById(R.id.txt);
-        mUserPic = (ImageView) FacebookMain.this.findViewById(R.id.user_pic);
-        
+		if (APP_ID == null) {
+			Util.showAlert(this, "Warning", "Facebook Applicaton ID must be "
+					+ "specified before running this example: see FbAPIs.java");
+			return;
+		}
 
-        // Create the Facebook Object using the app id.
-        Utility.mFacebook = new Facebook(APP_ID);
-        // Instantiate the asynrunner object for asynchronous api calls.
-        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+		setContentView(R.layout.main);
+		mHandler = new Handler();
 
-        mLoginButton = (LoginButton) findViewById(R.id.login);
-        mProfileButton= (Button)findViewById(R.id.profileButton);  
-        mReportButton= (Button) findViewById(R.id.reportButton);
-        mPlacesButton= (Button)findViewById(R.id.placesButton);
+		mText = (TextView) FacebookMain.this.findViewById(R.id.txt);
+		mUserPic = (ImageView) FacebookMain.this.findViewById(R.id.user_pic);
 
-        // restore session if one exists
-        SessionStore.restore(Utility.mFacebook, this);
-        SessionEvents.addAuthListener(new FbAPIsAuthListener());
-        SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
+		// Create the Facebook Object using the app id.
+		Utility.mFacebook = new Facebook(APP_ID);
+		// Instantiate the asynrunner object for asynchronous api calls.
+		Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
-        /*
-         * Source Tag: login_tag
-         */
-        mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE, Utility.mFacebook, permissions);
+		mLoginButton = (LoginButton) findViewById(R.id.login);
+		mProfileButton = (Button) findViewById(R.id.profileButton);
+		mReportButton = (Button) findViewById(R.id.reportButton);
+		mPlacesButton = (Button) findViewById(R.id.placesButton);
 
-        if (Utility.mFacebook.isSessionValid()) {
-            requestUserData();
-        }
+		// restore session if one exists
+		SessionStore.restore(Utility.mFacebook, this);
+		SessionEvents.addAuthListener(new FbAPIsAuthListener());
+		SessionEvents.addLogoutListener(new FbAPIsLogoutListener());
 
-        
-        mProfileButton.setOnClickListener(new OnClickListener() {
-			
+		/*
+		 * Source Tag: login_tag
+		 */
+		mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE,
+				Utility.mFacebook, permissions);
+
+		if (Utility.mFacebook.isSessionValid()) {
+			requestUserData();
+		}
+
+		mProfileButton.setOnClickListener(new OnClickListener() {
+
 			public void onClick(View v) {
-	            Intent myIntent = new Intent(getApplicationContext(), Profile.class);
-	            if (!Utility.mFacebook.isSessionValid()) {
-	            	 mText.setText("Please login first to Smoking Not APP!" );
-	            	 mText.setTextColor(Color.BLUE);
-	            	
-	            }
-                if (Utility.mFacebook.isSessionValid()) {
-                    Utility.objectID = "me";
-                    startActivity(myIntent);}
-                
-				
+				Intent myIntent = new Intent(getApplicationContext(),
+						Profile.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first to Smoking Not APP!");
+					mText.setTextColor(Color.BLUE);
+
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					Utility.objectID = "me";
+					startActivity(myIntent);
+				}
+
 			}
 		});
-			
-		
-         mReportButton.setOnClickListener(new OnClickListener() {
-			
+
+		mReportButton.setOnClickListener(new OnClickListener() {
+
 			public void onClick(View v) {
-				 Intent myIntent = new Intent(getApplicationContext(), Report.class);
-				 if (!Utility.mFacebook.isSessionValid()) {
-					 mText.setText("Please login first to Smoking Not APP!" );
-					 mText.setTextColor(Color.BLUE); 
-		            }
-	                if (Utility.mFacebook.isSessionValid()) {
-	                    Utility.objectID = "me";
-	                    startActivity(myIntent);
-	                    }
-	                
-	                
+				Intent myIntent = new Intent(getApplicationContext(),
+						Report.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first to Smoking Not APP!");
+					mText.setTextColor(Color.BLUE);
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					Utility.objectID = "me";
+					startActivity(myIntent);
+				}
+
 			}
 		});
-        
-         
-         mPlacesButton.setOnClickListener(new OnClickListener() {
- 			
- 			public void onClick(View v) {
- 				 Intent myIntent = new Intent(getApplicationContext(), Places.class);
- 				if (!Utility.mFacebook.isSessionValid()) {
- 					 mText.setText("Please login first to Smoking Not APP!" );
- 					 mText.setTextColor(Color.BLUE); 
-	            }
-                if (Utility.mFacebook.isSessionValid()) {
-                    Utility.objectID = "me";
-                    startActivity(myIntent);
-                    }
-                
- 			}
- 		});
-      
-    }
 
-     
+		mPlacesButton.setOnClickListener(new OnClickListener() {
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(Utility.mFacebook != null) {
-            if (!Utility.mFacebook.isSessionValid()) {
-                mText.setText("You are logged out! ");
-                mUserPic.setImageBitmap(null);
-            } else {
-                Utility.mFacebook.extendAccessTokenIfNeeded(this, null);
-            }
-        }
-    }
+			public void onClick(View v) {
+				Intent myIntent = new Intent(getApplicationContext(),
+						Places.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first to Smoking Not APP!");
+					mText.setTextColor(Color.BLUE);
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					Utility.objectID = "me";
+					startActivity(myIntent);
+				}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-        /*
-         * if this is the activity result from authorization flow, do a call
-         * back to authorizeCallback Source Tag: login_tag
-         */
-            case AUTHORIZE_ACTIVITY_RESULT_CODE: {
-                Utility.mFacebook.authorizeCallback(requestCode, resultCode, data);
-                break;
-            }
-            /*
-             * if this is the result for a photo picker from the gallery, upload
-             * the image after scaling it. You can use the Utility.scaleImage()
-             * function for scaling
-             */
-            case PICK_EXISTING_PHOTO_RESULT_CODE: {
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri photoUri = data.getData();
-                    if (photoUri != null) {
-                        Bundle params = new Bundle();
-                        try {
-                            params.putByteArray("photo",
-                                    Utility.scaleImage(getApplicationContext(), photoUri));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        params.putString("caption", "FbAPIs Sample App photo upload");
-                        Utility.mAsyncRunner.request("me/photos", params, "POST",
-                                new PhotoUploadListener(), null);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "Error selecting image from the gallery.", Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(), "No image selected for upload.",
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
-            }
-        }
-    }
+			}
+		});
 
-    
-    /*
-     * callback for the photo upload
-     */
-    public class PhotoUploadListener extends BaseRequestListener {
+	}
 
-        @Override
-        public void onComplete(final String response, final Object state) {
-            dialog.dismiss();
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    new UploadPhotoResultDialog(FacebookMain.this, "Upload Photo executed", response)
-                            .show();
-                }
-            });
-        }
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (Utility.mFacebook != null) {
+			if (!Utility.mFacebook.isSessionValid()) {
+				mText.setText("You are logged out! ");
+				mUserPic.setImageBitmap(null);
+			} else {
+				Utility.mFacebook.extendAccessTokenIfNeeded(this, null);
+			}
+		}
+	}
 
-        public void onFacebookError(FacebookError error) {
-            dialog.dismiss();
-            Toast.makeText(getApplicationContext(), "Facebook Error: " + error.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		/*
+		 * if this is the activity result from authorization flow, do a call
+		 * back to authorizeCallback Source Tag: login_tag
+		 */
+		case AUTHORIZE_ACTIVITY_RESULT_CODE: {
+			Utility.mFacebook.authorizeCallback(requestCode, resultCode, data);
+			break;
+		}
+		/*
+		 * if this is the result for a photo picker from the gallery, upload the
+		 * image after scaling it. You can use the Utility.scaleImage() function
+		 * for scaling
+		 */
+		case PICK_EXISTING_PHOTO_RESULT_CODE: {
+			if (resultCode == Activity.RESULT_OK) {
+				Uri photoUri = data.getData();
+				if (photoUri != null) {
+					Bundle params = new Bundle();
+					try {
+						params.putByteArray("photo", Utility.scaleImage(
+								getApplicationContext(), photoUri));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					params.putString("caption",
+							"FbAPIs Sample App photo upload");
+					Utility.mAsyncRunner.request("me/photos", params, "POST",
+							new PhotoUploadListener(), null);
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Error selecting image from the gallery.",
+							Toast.LENGTH_SHORT).show();
+				}
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"No image selected for upload.", Toast.LENGTH_SHORT)
+						.show();
+			}
+			break;
+		}
+		}
+	}
 
- 
+	/*
+	 * callback for the photo upload
+	 */
+	public class PhotoUploadListener extends BaseRequestListener {
 
-    /*
-     * Callback for fetching current user's name, picture, uid.
-     */
-    public class UserRequestListener extends BaseRequestListener {
+		@Override
+		public void onComplete(final String response, final Object state) {
+			dialog.dismiss();
+			mHandler.post(new Runnable() {
+				public void run() {
+					new UploadPhotoResultDialog(FacebookMain.this,
+							"Upload Photo executed", response).show();
+				}
+			});
+		}
 
-        @Override
-        public void onComplete(final String response, final Object state) {
-            JSONObject jsonObject;
-            try {
-                jsonObject = new JSONObject(response);
+		public void onFacebookError(FacebookError error) {
+			dialog.dismiss();
+			Toast.makeText(getApplicationContext(),
+					"Facebook Error: " + error.getMessage(), Toast.LENGTH_LONG)
+					.show();
+		}
+	}
 
-                 picURL = jsonObject.getString("picture");
-                 name = jsonObject.getString("name");
-                 email = jsonObject.getString("email");
-                Utility.userUID = jsonObject.getString("id");
+	/*
+	 * Callback for fetching current user's name, picture, uid.
+	 */
+	public class UserRequestListener extends BaseRequestListener {
 
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mText.setText("Welcome " + name + "!");
-                        mUserPic.setImageBitmap(Utility.getBitmap(picURL));
-                    }
-                });
+		@Override
+		public void onComplete(final String response, final Object state) {
+			JSONObject jsonObject;
+			try {
+				jsonObject = new JSONObject(response);
 
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
+				picURL = jsonObject.getString("picture");
+				name = jsonObject.getString("name");
+				email = jsonObject.getString("email");
+				Utility.userUID = jsonObject.getString("id");
 
-    }
-    
-    /*
-     * The Callback for notifying the application when authorization succeeds or
-     * fails.
-     */
+				mHandler.post(new Runnable() {
+					public void run() {
+						mText.setText("Welcome " + name + "!");
+						mUserPic.setImageBitmap(Utility.getBitmap(picURL));
+					}
+				});
 
-    public class FbAPIsAuthListener implements AuthListener {
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-        @Override
-        public void onAuthSucceed() {
-            requestUserData();
-        }
+	}
 
-        @Override
-        public void onAuthFail(String error) {
-            mText.setText("Login Failed: " + error);
-        }
-    }
+	/*
+	 * The Callback for notifying the application when authorization succeeds or
+	 * fails.
+	 */
 
-    /*
-     * The Callback for notifying the application when log out starts and
-     * finishes.
-     */
-    public class FbAPIsLogoutListener implements LogoutListener {
-        @Override
-        public void onLogoutBegin() {
-            mText.setText("Logging out...");
-        }
+	public class FbAPIsAuthListener implements AuthListener {
 
-        @Override
-        public void onLogoutFinish() {
-            mText.setText("You have logged out! ");
-            mUserPic.setImageBitmap(null);
-        }
-    }
+		public void onAuthSucceed() {
+			requestUserData();
+		}
 
+		public void onAuthFail(String error) {
+			mText.setText("Login Failed: " + error);
+		}
+	}
 
-    /*
-     * Request user name, and picture to show on the main screen.
-     */
-    public void requestUserData() {
-        mText.setText("Fetching user name, profile pic...");
-        Bundle params = new Bundle();
-        params.putString("fields", "name, picture, email");
-        Utility.mAsyncRunner.request("me", params, new UserRequestListener());
-    }
+	/*
+	 * The Callback for notifying the application when log out starts and
+	 * finishes.
+	 */
+	public class FbAPIsLogoutListener implements LogoutListener {
+		public void onLogoutBegin() {
+			mText.setText("Logging out...");
+		}
+
+		public void onLogoutFinish() {
+			mText.setText("You have logged out! ");
+			mUserPic.setImageBitmap(null);
+		}
+
+		public void onAuthSucceed() {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+
+	/*
+	 * Request user name, and picture to show on the main screen.
+	 */
+	public void requestUserData() {
+		mText.setText("Fetching user name, profile pic...");
+		Bundle params = new Bundle();
+		params.putString("fields", "name, picture, email");
+		Utility.mAsyncRunner.request("me", params, new UserRequestListener());
+	}
 }
