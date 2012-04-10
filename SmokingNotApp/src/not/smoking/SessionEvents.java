@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package not.smoking;
 
 import java.util.LinkedList;
 

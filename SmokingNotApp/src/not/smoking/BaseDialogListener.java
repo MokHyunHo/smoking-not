@@ -1,5 +1,7 @@
-package com.facebook.android;
+package not.smoking;
 
+import com.facebook.android.DialogError;
+import com.facebook.android.FacebookError;
 import com.facebook.android.Facebook.DialogListener;
 
 /**

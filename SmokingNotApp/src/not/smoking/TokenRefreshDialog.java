@@ -1,7 +1,12 @@
-package com.facebook.android;
+package not.smoking;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
+import com.facebook.android.Facebook.ServiceListener;
 
 import android.app.Activity;
 import android.app.Dialog;

@@ -1,4 +1,4 @@
-package com.facebook.android;
+package not.smoking;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -10,6 +10,9 @@ import java.net.URLConnection;
 import java.util.Hashtable;
 
 import org.json.JSONObject;
+
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.Facebook;
 
 import android.app.Application;
 import android.content.Context;
