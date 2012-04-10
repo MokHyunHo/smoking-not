@@ -1,4 +1,4 @@
-package com.facebook.android;
+package not.smoking;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 
 import android.util.Log;
 
+import com.facebook.android.FacebookError;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 
 /**

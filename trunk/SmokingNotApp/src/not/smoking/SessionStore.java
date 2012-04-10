@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package not.smoking;
+
+import com.facebook.android.Facebook;
 
 import android.content.Context;
 import android.content.SharedPreferences;

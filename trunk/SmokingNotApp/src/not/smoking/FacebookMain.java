@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package not.smoking;
 
 import java.io.IOException;
 
 
+
+import not.smoking.SessionEvents.AuthListener;
+import not.smoking.SessionEvents.LogoutListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,8 +50,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.android.SessionEvents.AuthListener;
-import com.facebook.android.SessionEvents.LogoutListener;
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
 
 public class FacebookMain extends Activity  {
 

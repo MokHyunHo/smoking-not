@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.facebook.android;
+package not.smoking;
 
+import not.smoking.SessionEvents.AuthListener;
+import not.smoking.SessionEvents.LogoutListener;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -25,9 +27,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
 import com.facebook.android.Facebook.DialogListener;
-import com.facebook.android.SessionEvents.AuthListener;
-import com.facebook.android.SessionEvents.LogoutListener;
 
 public class LoginButton extends ImageButton {
 

@@ -1,19 +1,19 @@
-package com.facebook.android;
+package not.smoking;
 
 //import java.io.IOException;
 
-import com.facebook.android.FacebookMain;
+import not.smoking.FacebookMain;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+//import android.widget.ImageView;
+//import android.widget.TextView;
 
 
-public class Profile extends Activity {
+public class Report extends Activity {
     /** Called when the activity is first created. */
 	
 	private Button mProfileButton;
@@ -21,15 +21,12 @@ public class Profile extends Activity {
     private Button mPlacesButton;
 	
 	 private Button exitButton;
-	 private TextView mText;
-	 private TextView email;
-	 private ImageView mUserPic;
 
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profile);
+        setContentView(R.layout.report);
         
        
         //connection between XML & JAVA
@@ -39,30 +36,21 @@ public class Profile extends Activity {
        mProfileButton= (Button)findViewById(R.id.profileButton);  
        mReportButton= (Button) findViewById(R.id.reportButton);
        mPlacesButton= (Button)findViewById(R.id.placesButton);
-        
-      
-       //PROFILE INFORMATION
-        mText = (TextView) findViewById(R.id.txt);
-        email = (TextView) findViewById(R.id.email);
-        mUserPic = (ImageView) findViewById(R.id.user_pic);
-        
-        mText.setText("Welcome " + FacebookMain.name );
-        email.setText("Email: " + FacebookMain.email);
-        mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
-        
-        
-        //listeners for FIRST-UP MENU
+
+       //listeners for FIRST-UP MENU
         
         mProfileButton.setOnClickListener(new OnClickListener() {
     			public void onClick(View v) {
-    	            Intent myIntent = new Intent(getApplicationContext(), Profile.class);
+    	            Intent myIntent = new Intent(getApplicationContext(), Report.class);
                     if (Utility.mFacebook.isSessionValid()) {
                         Utility.objectID = "me";
                         startActivity(myIntent);
     			}}
     		});
     			
-    		
+        
+        /**	 //because it's report class
+         
              mReportButton.setOnClickListener(new OnClickListener() {
     			public void onClick(View v) {
     				 Intent myIntent = new Intent(getApplicationContext(), Report.class);
@@ -71,7 +59,7 @@ public class Profile extends Activity {
     	                    startActivity(myIntent);
     	                }}
     		});
-            
+            **/
              
              mPlacesButton.setOnClickListener(new OnClickListener() {
      			public void onClick(View v) {
@@ -95,10 +83,7 @@ public class Profile extends Activity {
 	                    Utility.objectID = "me";
 	                }
 	                startActivity(myIntent);
-				
 			}
-		});
-			
-   
+		});			
     }
 }

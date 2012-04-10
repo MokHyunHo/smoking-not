@@ -1,8 +1,8 @@
-package com.facebook.android;
+package not.smoking;
 
 //import java.io.IOException;
 
-import com.facebook.android.FacebookMain;
+import not.smoking.FacebookMain;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

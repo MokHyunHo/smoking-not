@@ -1,7 +1,9 @@
-package com.facebook.android;
+package not.smoking;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.facebook.android.FacebookError;
 
 import android.app.Activity;
 import android.app.Dialog;
