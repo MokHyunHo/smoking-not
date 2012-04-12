@@ -6,6 +6,8 @@ import com.facebook.android.FacebookMain;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,7 +23,9 @@ public class Report extends Activity {
     private Button mPlacesButton;
 	
 	 private Button exitButton;
-
+	 
+	 
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,7 @@ public class Report extends Activity {
     			
         
         /**	 //because it's report class
+        
          
              mReportButton.setOnClickListener(new OnClickListener() {
     			public void onClick(View v) {
@@ -64,7 +69,10 @@ public class Report extends Activity {
              mPlacesButton.setOnClickListener(new OnClickListener() {
      			public void onClick(View v) {
      				 Intent myIntent = new Intent(getApplicationContext(), Places.class);
-                    if (Utility.mFacebook.isSessionValid()) {
+                  
+     			
+     				 
+     				 if (Utility.mFacebook.isSessionValid()) {
                         Utility.objectID = "me";
                         startActivity(myIntent);
      			}}
