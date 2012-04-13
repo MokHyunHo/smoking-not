@@ -242,6 +242,7 @@ public class FoursquareApp {
 					
 					venue.location	= loc;
 					//venue.address	= location.getString("address");
+					Log.i("ERIC", location.getString("distance"));
 					venue.distance	= Integer.valueOf(location.getString("distance"));
 					venue.herenow	= item.getJSONObject("hereNow").getInt("count");
 					//venue.type		= group.getString("type");
