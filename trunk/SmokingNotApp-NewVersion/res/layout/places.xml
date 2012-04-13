@@ -4,11 +4,10 @@
     android:layout_height="fill_parent"
     android:gravity="center_horizontal|fill"
     android:orientation="vertical" >
-
+
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_weight="0.09"
+        android:layout_height="58dp"
         android:padding="6dip" >
 
         <Button
@@ -36,20 +35,16 @@
             android:id="@+id/exitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            android:layout_marginBottom="26dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:layout_alignBaseline="@+id/reportButton"
+            android:layout_alignBottom="@+id/reportButton"
+            android:layout_alignParentRight="true"
             android:text="@string/exit" />
-
     </RelativeLayout>
-
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="118dp"
-        android:layout_weight="0.03" >
+        android:layout_weight="0.01" >
 
         <EditText
             android:id="@+id/et_latitude"
@@ -67,10 +62,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_latitude"
             android:ems="10"
-            android:hint="radius" >
-
-            <requestFocus />
-        </EditText>
+            android:hint="radius" />
 
         <EditText
             android:id="@+id/et_longitude"
@@ -80,22 +72,21 @@
             android:layout_alignParentTop="true"
             android:ems="10"
             android:hint="longitude" />
-
+
         <Button
             android:id="@+id/b_go"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_radius"
             android:text=" Get Nearby Places " />
-
     </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
         android:layout_height="164dp"
-        android:layout_marginTop="5dp" >
+        android:layout_weight="0.04" >
     </ListView>
 
 </LinearLayout>
