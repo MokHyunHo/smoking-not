@@ -1,94 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal">
-       
-    <RelativeLayout
+    android:background="@drawable/brownlinesbg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvCategories"
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:padding="6dip" >
+        android:layout_height="30dp"
+        android:background="#5f6a6e"
+        android:gravity="center" />
 
-        <Button
-            android:id="@+id/placesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/places" />
-
-        <Button
-            android:id="@+id/profileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="33dp"
-            android:text="@string/profile" />
-
-        <Button
-            android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/placesButton"
-            android:layout_alignBottom="@+id/placesButton"
-            android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@+id/placesButton"
-            android:text="@string/report" />
-
-    </RelativeLayout>
-
- <RelativeLayout
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="fill_parent"
-        android:padding="6dip"
-        android:layout_height="?android:attr/listPreferredItemHeight">
-        <ImageView
-            android:id="@+id/user_pic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="6dip" />
-        <TextView
-            android:id="@+id/txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/user_pic" />
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txt"
-            android:layout_toRightOf="@id/user_pic"/>     
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCategories"
+        android:gravity="center"
+        android:text="@string/profile"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
- <ProgressBar
-     android:id="@+id/progressbar"
-     style="?android:attr/progressBarStyleHorizontal"
-     android:layout_width="198dp"
-     android:layout_height="wrap_content"
-     android:max="100" />
-  <TextView
-     android:id="@+id/tv_score"
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-             />
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/exit" />
 
-  <!-- RatingBar
-      android:id="@+id/ratingBar1"
-      style="@style/smokingRatingBar"
-      android:layout_width="wrap_content"
-      android:layout_height="75dp"
-      android:numStars="5"
-      android:stepSize="1" /-->
+    <TextView
+        android:id="@+id/tvProPlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/exitButton"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvProProfile"
+        android:background="#000000"
+        android:gravity="center"
+        android:text="Places"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
-  <Button
-      android:id="@+id/exitButton"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="20dp"
-      android:paddingLeft="20dp"
-      android:paddingRight="20dp"
-      android:text="@string/exit" />
-	
-</LinearLayout>
+    <TextView
+        android:id="@+id/tvProReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvCategories"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="#000000"
+        android:gravity="center"
+        android:text="Report"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvProProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/exitButton"
+        android:gravity="center"
+        android:text="Profile"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/user_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txt"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/user_pic"
+        android:layout_marginLeft="26dp"
+        android:layout_toRightOf="@+id/user_pic"
+        android:gravity="center"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_pic"
+        android:layout_centerHorizontal="true"
+        android:max="100" />
+
+    <TextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:text="score/100" />
+
+    <ImageView
+        android:id="@+id/iv_ratingbar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar1" />
+
+    <ImageView
+        android:id="@+id/iv_ratingbar2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar2" />
+    <ImageView
+        android:id="@+id/iv_ratingbar3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar3" />
+     <ImageView
+        android:id="@+id/iv_ratingbar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar4" />
+     <ImageView
+        android:id="@+id/iv_ratingbar5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar5" />
+      <ImageView
+        android:id="@+id/iv_ratingbarfull"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exitButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/rating_bar" />
+          
+
+</RelativeLayout>
