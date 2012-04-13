@@ -74,13 +74,13 @@
      android:layout_height="wrap_content"
              />
 
-  <RatingBar
+  <!-- RatingBar
       android:id="@+id/ratingBar1"
       style="@style/smokingRatingBar"
       android:layout_width="wrap_content"
       android:layout_height="75dp"
       android:numStars="5"
-      android:stepSize="1" />
+      android:stepSize="1" /-->
 
   <Button
       android:id="@+id/exitButton"
