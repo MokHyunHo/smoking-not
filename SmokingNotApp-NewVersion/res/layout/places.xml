@@ -2,75 +2,94 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
+    android:gravity="center_horizontal|fill"
     android:orientation="vertical" >
-
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_weight="0.09"
         android:padding="6dip" >
-
-        <Button
-            android:id="@+id/placesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/places" />
 
         <Button
             android:id="@+id/profileButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="33dp"
             android:text="@string/profile" />
+
+        <Button
+            android:id="@+id/placesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/profileButton"
+            android:text="@string/places" />
 
         <Button
             android:id="@+id/reportButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/placesButton"
-            android:layout_alignBottom="@+id/placesButton"
-            android:layout_marginLeft="30dp"
             android:layout_toRightOf="@+id/placesButton"
             android:text="@string/report" />
+
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:layout_marginBottom="26dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/exit" />
+
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="118dp"
+        android:layout_weight="0.03" >
 
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="@string/exit" />
+        <EditText
+            android:id="@+id/et_latitude"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="latitude" />
 
-    <EditText
-        android:id="@+id/et_longitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="latitude" />
+        <EditText
+            android:id="@+id/et_radius"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_latitude"
+            android:ems="10"
+            android:hint="radius" >
 
-    <EditText
-        android:id="@+id/et_latitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="latitude" >
+            <requestFocus />
+        </EditText>
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/et_longitude"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="longitude" />
+
+        <Button
+            android:id="@+id/b_go"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:text=" Get Nearby Places " />
 
-    <Button
-        android:id="@+id/b_go"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text=" Get Nearby Places " />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_places"

@@ -51,6 +51,7 @@ public class Places extends Activity {
 
 		final EditText latitudeEt = (EditText) findViewById(R.id.et_latitude);
 		final EditText longitudeEt = (EditText) findViewById(R.id.et_longitude);
+		final EditText radiusEt		= (EditText) findViewById(R.id.et_radius);
 		Button goBtn = (Button) findViewById(R.id.b_go);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
@@ -116,6 +117,7 @@ public class Places extends Activity {
 				Log.i("Eric", "Pipi-1");
 				String latitude = latitudeEt.getText().toString();
 				String longitude = longitudeEt.getText().toString();
+				String radius = radiusEt.getText().toString();
 
 				if (latitude.equals("") || longitude.equals("")) {
 					Toast.makeText(Places.this,
@@ -126,13 +128,14 @@ public class Places extends Activity {
 
 				double lat = Double.valueOf(latitude);
 				double lon = Double.valueOf(longitude);
+				int rad = Integer.valueOf(radius);
 				Log.i("Eric", "Pipi0");
-				loadNearbyPlaces(lat, lon);
+				loadNearbyPlaces(lat, lon, rad);
 			}
 		});
 	}
 
-	private void loadNearbyPlaces(final double latitude, final double longitude) {
+	private void loadNearbyPlaces(final double latitude, final double longitude, final int radius) {
 		mProgress.show();
 
 		new Thread() {
@@ -141,8 +144,8 @@ public class Places extends Activity {
 				int what = 0;
 
 				try {
-					Log.i("Eric", "Pipi1");
-					mNearbyList = mFsqApp.getNearby(latitude, longitude);
+					//Log.i("Eric", "Pipi1");
+					mNearbyList = mFsqApp.getNearby(latitude, longitude, radius);
 				} catch (Exception e) {
 					what = 1;
 					e.printStackTrace();
