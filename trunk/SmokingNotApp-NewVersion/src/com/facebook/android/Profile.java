@@ -60,7 +60,7 @@ public class Profile extends Activity   {
       //user's progress
         pb=(ProgressBar) findViewById(R.id.progressbar);
         total_score=(TextView)findViewById(R.id.tv_score);
-        rb=(RatingBar)findViewById(R.id.ratingBar1);
+        //rb=(RatingBar)findViewById(R.id.ratingBar1);
         
         
         mText.setText("Welcome " + FacebookMain.name );
