@@ -114,7 +114,6 @@ public class Places extends Activity {
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.i("Eric", "Pipi-1");
 				String latitude = latitudeEt.getText().toString();
 				String longitude = longitudeEt.getText().toString();
 				String radius = radiusEt.getText().toString();
@@ -144,7 +143,7 @@ public class Places extends Activity {
 				int what = 0;
 
 				try {
-					//Log.i("Eric", "Pipi1");
+					Log.i("Eric", "Pipi1");
 					mNearbyList = mFsqApp.getNearby(latitude, longitude, radius);
 				} catch (Exception e) {
 					what = 1;
