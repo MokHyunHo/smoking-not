@@ -2,16 +2,20 @@ package com.facebook.android;
 
 import android.content.Context;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ImageView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 public class NearbyAdapter extends BaseAdapter {
 	private ArrayList<FsqVenue> mVenueList;
@@ -40,9 +44,13 @@ public class NearbyAdapter extends BaseAdapter {
 		return position;
 	}
 
+
+	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
+		
+		Random rnd = new Random();
 		
 		if (convertView == null) {
 			convertView	=  mInflater.inflate(R.layout.nearby_list, null);
@@ -51,8 +59,9 @@ public class NearbyAdapter extends BaseAdapter {
 			
 			holder.mNameTxt 		= (TextView) convertView.findViewById(R.id.tv_name);
 			holder.mAddressTxt 		= (TextView) convertView.findViewById(R.id.tv_address);
-			holder.mHereNowTxt 		= (TextView) convertView.findViewById(R.id.tv_here_now);
+			//holder.mHereNowTxt 		= (TextView) convertView.findViewById(R.id.tv_here_now);
 			holder.mDistanceTxt 	= (TextView) convertView.findViewById(R.id.tv_distance);
+			holder.mRaiting			= (ProgressBar) convertView.findViewById(R.id.pb_Raiting);
 			//holder.mRibbonImg		= (ImageView) convertView.findViewById(R.id.iv_ribbon);
 			
 			convertView.setTag(holder);
@@ -63,12 +72,15 @@ public class NearbyAdapter extends BaseAdapter {
 		FsqVenue venue 	= mVenueList.get(position);
 	
 		holder.mNameTxt.setText(venue.name);
-		//holder.mAddressTxt.setText(venue.location.toString());
-		holder.mHereNowTxt.setText("(" + String.valueOf(venue.herenow) + " people here)");
-		holder.mDistanceTxt.setText(formatDistance(venue.direction));
+		holder.mAddressTxt.setText(venue.address);
+		//holder.mHereNowTxt.setText("(" + String.valueOf(venue.herenow) + " people here)");
+		holder.mDistanceTxt.setText(formatDistance((double)venue.distance));
+		//holder.mDistanceTxt.setText(String.valueOf(venue.distance));
+		holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
+		Log.i("ERIC", String.valueOf(holder.mRaiting.getProgress()));
 
 		//holder.mRibbonImg.setVisibility((venue.type.equals("trending")) ? View.VISIBLE : View.INVISIBLE);
-		
+	
         return convertView;
 	}
 	
@@ -91,8 +103,7 @@ public class NearbyAdapter extends BaseAdapter {
 	static class ViewHolder {
 		TextView mNameTxt;
 		TextView mAddressTxt;
-		TextView mHereNowTxt;
 		TextView mDistanceTxt;
-		ImageView mRibbonImg;
+		ProgressBar mRaiting;
 	}
 }
