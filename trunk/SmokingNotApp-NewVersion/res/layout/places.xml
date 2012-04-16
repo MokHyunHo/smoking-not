@@ -1,92 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="center_horizontal|fill"
+    android:background="@drawable/brownlinesbg"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tvCategories"
         android:layout_width="fill_parent"
-        android:layout_height="58dp"
-        android:padding="6dip" >
+        android:layout_height="30dp"
+        android:background="#5f6a6e"
+        android:gravity="center" />
 
-        <Button
-            android:id="@+id/profileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="@string/profile" />
-
-        <Button
-            android:id="@+id/placesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/profileButton"
-            android:text="@string/places" />
-
-        <Button
-            android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/placesButton"
-            android:text="@string/report" />
-
-        <Button
-            android:id="@+id/exitButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/reportButton"
-            android:layout_alignBottom="@+id/reportButton"
-            android:layout_alignParentRight="true"
-            android:text="@string/exit" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="118dp"
-        android:layout_weight="0.01" >
-
-        <EditText
-            android:id="@+id/et_latitude"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="latitude" />
-
-        <EditText
-            android:id="@+id/et_radius"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/et_latitude"
-            android:ems="10"
-            android:hint="radius" />
-
-        <EditText
-            android:id="@+id/et_longitude"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="longitude" />
-
-        <Button
-            android:id="@+id/b_go"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/et_radius"
-            android:text=" Get Nearby Places " />
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/lv_places"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="fill_parent"
-        android:layout_height="164dp"
-        android:layout_weight="0.04" >
-    </ListView>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCategories"
+        android:gravity="center"
+        android:text="@string/places"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/exit" />
+
+    <TextView
+        android:id="@+id/tvPlaPlaces"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignLeft="@+id/exitButton"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvPlaProfile"
+        android:gravity="center"
+        android:text="Places"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPlaReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvCategories"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="#000000"
+        android:gravity="center"
+        android:text="Report"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPlaProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/exitButton"
+        android:background="#000000"
+        android:gravity="center"
+        android:text="Profile"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
