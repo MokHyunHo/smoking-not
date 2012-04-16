@@ -12,15 +12,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.content.Context;
 import android.util.Log;
-import android.app.Activity;
 import android.app.ProgressDialog;
 
 import android.location.Location;
