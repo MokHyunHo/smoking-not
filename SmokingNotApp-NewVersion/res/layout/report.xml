@@ -1,51 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal">
-	
-     <RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/brownlinesbg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvCategories"
         android:layout_width="fill_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:padding="6dip" >
+        android:layout_height="30dp"
+        android:background="#5f6a6e"
+        android:gravity="center" />
 
-        <Button
-            android:id="@+id/placesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:text="@string/places" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCategories"
+        android:gravity="center"
+        android:text="@string/report"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/profileButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="33dp"
-            android:text="@string/profile" />
+    <ImageView
+        android:id="@+id/ivReport"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/imageplace" />
 
-        <Button
-            android:id="@+id/reportButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/placesButton"
-            android:layout_alignBottom="@+id/placesButton"
-            android:layout_marginLeft="30dp"
-            android:layout_toRightOf="@+id/placesButton"
-            android:text="@string/report" />
-
-    </RelativeLayout>
-    
-    <Button android:id="@+id/exitButton" 
-        android:text="@string/exit"
+    <ImageButton
+        android:id="@+id/ibReport"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:paddingRight="20dp" 
-        android:paddingLeft="20dp"
-        android:layout_margin="20dp" 
-		/>
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/ivReport"
+        android:layout_alignTop="@+id/ivReport"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/takeapic"
+        android:src="@drawable/takeapic" />
 
-	
-</LinearLayout>
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/ivReport"
+        android:layout_below="@+id/ivReport"
+        android:ems="10"
+        android:hint="Type your location here" />
+
+    <Spinner
+        android:id="@+id/ReasonSp"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_below="@+id/etLocation"
+        android:prompt="@string/ReportReason" />
+
+    <Spinner
+        android:id="@+id/PublishSp"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/ReasonSp"
+        android:layout_below="@+id/ReasonSp"
+        android:prompt="@string/ReportWays" />
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/PublishSp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Report" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bReport"
+        android:layout_centerHorizontal="true"
+        android:text="@string/exit" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/ivReport"
+        android:layout_alignTop="@+id/ibReport"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Take a Pic!"
+        android:textColor="#000000"
+        android:textSize="13dp" />
+
+    <TextView
+        android:id="@+id/tvRep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvCategories"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvPla"
+        android:gravity="center"
+        android:text="Report"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvPla"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvCategories"
+        android:layout_alignLeft="@+id/exitButton"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/textView2"
+        android:gravity="center"
+        android:text="Places"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:background="#000000" />
+
+    <TextView
+        android:id="@+id/tvPro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvCategories"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="Profile"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:background="#000000" />
+
+</RelativeLayout>

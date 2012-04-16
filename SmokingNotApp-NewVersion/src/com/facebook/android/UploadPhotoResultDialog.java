@@ -3,6 +3,13 @@ package com.facebook.android;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.facebook.android.FacebookError;
+import com.facebook.android.R;
+import com.facebook.android.Util;
+import com.facebook.android.R.id;
+import com.facebook.android.R.layout;
+import com.facebook.android.R.string;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
