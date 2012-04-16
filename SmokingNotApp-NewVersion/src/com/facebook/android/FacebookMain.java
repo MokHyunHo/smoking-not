@@ -173,8 +173,12 @@ public class FacebookMain extends Activity  {
  			public void onClick(View v) {
  				 Intent myIntent = new Intent(getApplicationContext(), Places.class);
  				if (!Utility.mFacebook.isSessionValid()) {
+ 					/*
  					 mText.setText("Please login first to Smoking Not APP!" );
- 					 mText.setTextColor(Color.BLUE); 
+ 					 mText.setTextColor(Color.BLUE);
+ 					 */
+ 					 Utility.objectID = "me";
+                     startActivity(myIntent);
 	            }
                 if (Utility.mFacebook.isSessionValid()) {
                     Utility.objectID = "me";

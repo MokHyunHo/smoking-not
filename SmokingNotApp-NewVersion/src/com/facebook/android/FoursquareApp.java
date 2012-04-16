@@ -20,6 +20,7 @@ import org.json.JSONTokener;
 
 import android.content.Context;
 import android.util.Log;
+import android.app.Activity;
 import android.app.ProgressDialog;
 
 import android.location.Location;
