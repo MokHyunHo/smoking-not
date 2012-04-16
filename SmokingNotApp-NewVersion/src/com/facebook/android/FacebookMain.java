@@ -50,10 +50,7 @@ import android.widget.Toast;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
-import com.facebook.android.R;
 import com.facebook.android.Util;
-import com.facebook.android.R.id;
-import com.facebook.android.R.layout;
 import com.facebook.android.SessionEvents.AuthListener;
 import com.facebook.android.SessionEvents.LogoutListener;
 
