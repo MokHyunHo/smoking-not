@@ -11,6 +11,9 @@ import java.util.Hashtable;
 
 import org.json.JSONObject;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.Facebook;
+
 import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;

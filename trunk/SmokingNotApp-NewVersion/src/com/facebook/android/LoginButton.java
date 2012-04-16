@@ -25,7 +25,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
+import com.facebook.android.R;
 import com.facebook.android.Facebook.DialogListener;
+import com.facebook.android.R.drawable;
 import com.facebook.android.SessionEvents.AuthListener;
 import com.facebook.android.SessionEvents.LogoutListener;
 
@@ -82,9 +88,9 @@ public class LoginButton extends ImageButton {
                 AsyncFacebookRunner asyncRunner = new AsyncFacebookRunner(mFb);
                 asyncRunner.logout(getContext(), new LogoutRequestListener());
             } else {
-                mFb.authorize(mActivity, mPermissions, mActivityCode, new LoginDialogListener());
+                //mFb.authorize(mActivity, mPermissions, mActivityCode, new LoginDialogListener());
                 //change AFTER
-                //  mFb.authorize(mActivity, mPermissions, mFb.FORCE_DIALOG_AUTH,  new LoginDialogListener());
+                  mFb.authorize(mActivity, mPermissions, mFb.FORCE_DIALOG_AUTH,  new LoginDialogListener());
             }
         }
     }

@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 
 import android.util.Log;
 
+import com.facebook.android.FacebookError;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 
 /**
