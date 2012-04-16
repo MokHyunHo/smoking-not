@@ -196,9 +196,10 @@ public class Report extends Activity implements View.OnClickListener,
 				nextBundle.putStringArray("chosenReasons",reason);
 			}
 			nextBundle.putString("ChosenWay", way);
-			Intent int_a = new Intent(Report.this, AcceptReport.class);
+			/*Intent int_a = new Intent(Report.this, AcceptReport.class);
 			int_a.putExtras(nextBundle);
 			startActivity(int_a);
+			*/
 			break;
 		case R.id.tvRep:
 			break;

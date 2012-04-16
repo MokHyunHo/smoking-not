@@ -2,17 +2,26 @@ package com.facebook.android;
 
 //import java.io.IOException;
 
+import java.util.ArrayList;
+
 import com.facebook.android.R;
 import com.facebook.android.R.id;
 import com.facebook.android.R.layout;
 import com.facebook.android.FacebookMain;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 //import android.widget.ImageView;
 //import android.widget.TextView;
 import android.widget.TextView;
@@ -22,7 +31,18 @@ public class Places extends Activity implements View.OnClickListener {
     /** Called when the activity is first created. */
 	
 	private TextView tvReport, tvPlaces, tvProfile;
-	private Button exitButton;
+	private EditText latitudeEt, longitudeEt, radiusEt;
+	private Button exitButton, goBtn;
+	
+	private FoursquareApp mFsqApp;
+	private ListView mListView;
+	private NearbyAdapter mAdapter;
+	private ArrayList<FsqVenue> mNearbyList;
+	private ProgressDialog mProgress;
+
+	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
+	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
+
 
 	
     @Override
@@ -55,7 +75,27 @@ public class Places extends Activity implements View.OnClickListener {
 				
 			}
 		});
-			
+		
+	goBtn.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                String latitude = latitudeEt.getText().toString();
+                                String longitude = longitudeEt.getText().toString();
+                                String radius = radiusEt.getText().toString();
+
+                                if (latitude.equals("") || longitude.equals("")) {
+                                        Toast.makeText(Places.this,
+                                                        "Latitude or longitude is empty",
+                                                        Toast.LENGTH_SHORT).show();
+                                        return;
+                                }
+
+                                double lat = Double.valueOf(latitude);
+                                double lon = Double.valueOf(longitude);
+                                int rad = Integer.valueOf(radius);
+                                loadNearbyPlaces(lat, lon, rad);
+                        }
+                });
    
     }
 
@@ -64,6 +104,18 @@ public class Places extends Activity implements View.OnClickListener {
 		tvReport=(TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces=(TextView) findViewById(R.id.tvPlaPlaces);
 		tvProfile=(TextView) findViewById(R.id.tvPlaProfile);
+		
+		latitudeEt 	= (EditText) findViewById(R.id.et_latitude);
+		longitudeEt	= (EditText) findViewById(R.id.et_longitude);
+		radiusEt 	= (EditText) findViewById(R.id.et_radius);
+		goBtn 		= (Button) findViewById(R.id.b_go);
+		mListView	= (ListView) findViewById(R.id.lv_places);
+
+		mFsqApp 	= new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+
+		mAdapter 	= new NearbyAdapter(this);
+		mNearbyList	= new ArrayList<FsqVenue>();
+		mProgress	= new ProgressDialog(this);
 	}
 
 
@@ -96,4 +148,47 @@ public class Places extends Activity implements View.OnClickListener {
 			break;
 		}
 	}
+	
+	private void loadNearbyPlaces(final double latitude, final double longitude, final int radius) {
+			mProgress.show();
+
+			new Thread() {
+					@Override
+					public void run() {
+							int what = 0;
+
+							try {
+									mNearbyList = mFsqApp.getNearby(latitude, longitude, radius);
+							} catch (Exception e) {
+									what = 1;
+									e.printStackTrace();
+							}
+
+							mHandler.sendMessage(mHandler.obtainMessage(what));
+					}
+			}.start();
+	}
+
+	private Handler mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+					mProgress.dismiss();
+
+					if (msg.what == 0) {
+							if (mNearbyList.size() == 0) {
+									Toast.makeText(Places.this,
+													"No nearby places available", Toast.LENGTH_SHORT)
+													.show();
+									return;
+							}
+
+							mAdapter.setData(mNearbyList);
+							mListView.setAdapter(mAdapter);
+					} else {
+							Toast.makeText(Places.this,
+											"Failed to load nearby places: " + msg.what,
+											Toast.LENGTH_SHORT).show();
+					}
+			}
+	};
 }
