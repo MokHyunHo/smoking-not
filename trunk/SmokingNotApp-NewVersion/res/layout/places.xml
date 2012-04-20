@@ -7,121 +7,140 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tvCategories"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:background="#5f6a6e"
-        android:gravity="center" />
-
-    <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCategories"
+        android:layout_below="@+id/TableLayout"
         android:gravity="center"
         android:text="@string/places"
         android:textColor="#ffffff"
         android:textSize="30dp"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvPlaPlaces"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignLeft="@+id/exitButton"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/exitButton"
-        android:gravity="center"
-        android:text="Places"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvPlaReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/exitButton"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="Report"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvPlaProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/tvPlaPlaces"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="Profile"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/et_latitude"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:ems="10"
+        android:hint="latitude"
+        android:inputType="number|numberDecimal|textPostalAddress"
+        android:text="32.06" />
+
+    <TableLayout
+        android:id="@+id/TableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/grey"
+            android:baselineAligned="true" >
+
+            <TextView
+                android:id="@+id/tvPlaReport"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Report"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPlaPlaces"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Places"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPlaProfile"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Profile"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </TableRow>
+    </TableLayout>
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
         android:layout_height="164dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_weight="0.04" >
+        android:layout_below="@+id/b_go"
+        android:layout_weight="0.04"
+        android:background="@color/black" >
+
     </ListView>
-
-    <EditText
-        android:id="@+id/et_radius"
-        android:layout_width="150dp"
+
+    <Button
+        android:id="@+id/b_go"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="radius" >
-    </EditText>
-
-    <EditText
-        android:id="@+id/et_latitude"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/et_radius"
-        android:layout_alignParentLeft="true"
-        android:ems="10"
-        android:hint="latitude"
-        android:text="32.06" />
+        android:layout_below="@+id/et_latitude"
+        android:layout_toLeftOf="@+id/et_longitude"
+        android:autoLink="map"
+        android:text=" Get Nearby Places " />
 
     <EditText
         android:id="@+id/et_longitude"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/et_radius"
-        android:layout_toRightOf="@+id/et_radius"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/et_latitude"
         android:ems="10"
         android:hint="longitude"
-        android:text="34.77" />
+        android:inputType="number"
+        android:text="34.77" >
 
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_radius"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/b_go"
+        android:layout_toRightOf="@+id/et_longitude"
+        android:ems="10"
+        android:hint="radius"
+        android:inputType="number"
+        android:text="100" />
+
+    <Button
+        android:id="@+id/b_updateLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/et_longitude"
+        android:layout_alignTop="@+id/b_go"
+        android:layout_toRightOf="@+id/b_go"
+        android:text="Update my location" />
+
     <Button
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/lv_places"
+        android:layout_alignRight="@+id/et_radius"
+        android:layout_alignTop="@+id/b_updateLocation"
+        android:layout_toRightOf="@+id/b_updateLocation"
         android:text="@string/exit" />
-
-    <Button
-        android:id="@+id/b_go"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/et_radius"
-        android:autoLink="map"
-        android:text=" Get Nearby Places " />
 
 </RelativeLayout>

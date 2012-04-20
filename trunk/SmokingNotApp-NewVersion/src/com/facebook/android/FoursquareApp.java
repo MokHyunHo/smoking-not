@@ -18,25 +18,36 @@ import org.json.JSONTokener;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.TextView;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+
+
 
 /**
  * 
  * @author Lorensius W. L. T <lorenz@londatiga.net>
  * 
  */
-public class FoursquareApp {
+public class FoursquareApp implements LocationListener {
+	
+	private Context context;
 	private FoursquareSession mSession;
 	private FoursquareDialog mDialog;
 	private FsqAuthListener mListener;
 	private ProgressDialog mProgress;
 	private String mTokenUrl;
 	private String mAccessToken;
+	private Location mLocation;
+	private LocationManager lm;
+	private boolean locEnabled;
 
 	/**
 	 * Callback url, as set in 'Manage OAuth Costumers' page
@@ -52,6 +63,8 @@ public class FoursquareApp {
 	private static final String TAG = "FoursquareApi";
 
 	public FoursquareApp(Context context, String clientId, String clientSecret) {
+		this.context = context;
+		
 		mSession = new FoursquareSession(context);
 
 		mAccessToken = mSession.getAccessToken();
@@ -80,6 +93,28 @@ public class FoursquareApp {
 		mProgress = new ProgressDialog(context);
 
 		mProgress.setCancelable(false);
+		
+		lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		
+		
+		mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		if (mLocation == null)
+		{
+			Log.i("ERIC", "Netwrok location couldn't be retrieved");
+			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		if (mLocation == null)
+		{
+			Log.i("ERIC", "GPS location couldn't be retrieved");
+			locEnabled = false;
+		}
+		else
+			locEnabled = true;
+		
+		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+		
+		//Log.i("ERIC", "Location manager configured: " + mLocation.toString());
+		
 	}
 
 	private void getAccessToken(final String code) {
@@ -341,5 +376,61 @@ public class FoursquareApp {
 		public abstract void onSuccess();
 
 		public abstract void onFail(String error);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		this.mLocation = location;
+		showDialog("Location Manager", "Location updated: " + location.toString());
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		if (provider == LocationManager.GPS_PROVIDER)
+		{
+			lm.removeUpdates(this);
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+		}
+		showDialog("Location Manager", "Provider disabled: " + provider);
+		
+	}
+	
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		if (provider == LocationManager.GPS_PROVIDER)
+		{
+			lm.removeUpdates(this);
+			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
+		}
+		showDialog("Location Manager", "Provider enabled: " + provider);	
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public Location getLocation() {
+		return mLocation;
+		
+	}
+	
+	public boolean isLocationEnabled() {
+		return this.locEnabled;
+	}
+	
+	private void showDialog(String title, String message)
+	{
+		Dialog d = new Dialog(this.context);
+		d.setCanceledOnTouchOutside(true);
+		d.setTitle(title);
+		TextView sTV = new TextView(context);
+		sTV.setText(message);
+		d.setContentView(sTV);
+		d.show();
 	}
 }
