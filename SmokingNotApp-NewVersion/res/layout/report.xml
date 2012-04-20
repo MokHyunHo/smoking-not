@@ -6,17 +6,10 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tvCategories"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:background="#5f6a6e"
-        android:gravity="center" />
-
-    <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCategories"
+        android:layout_below="@+id/TableLayout"
         android:gravity="center"
         android:text="@string/report"
         android:textColor="#ffffff"
@@ -70,50 +63,6 @@
         android:text="Take a Pic!"
         android:textColor="#000000"
         android:textSize="13dp" />
-
-    <TextView
-        android:id="@+id/tvRep"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/bReport"
-        android:gravity="center"
-        android:text="Report"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvPla"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/textView2"
-        android:layout_toRightOf="@+id/tvRep"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="Places"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvPro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="#000000"
-        android:gravity="center"
-        android:text="Profile"
-        android:textColor="#ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -159,5 +108,56 @@
         android:layout_alignLeft="@+id/checkBox3"
         android:layout_marginLeft="19dp"
         android:text="Report" />
+
+    <TableLayout
+        android:id="@+id/TableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/grey"
+            android:baselineAligned="true" >
+
+            <TextView
+                android:id="@+id/tvRep"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Report"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPla"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Places"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPro"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Profile"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>
