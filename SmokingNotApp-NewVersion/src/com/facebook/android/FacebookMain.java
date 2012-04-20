@@ -54,8 +54,6 @@ import com.facebook.android.Util;
 import com.facebook.android.SessionEvents.AuthListener;
 import com.facebook.android.SessionEvents.LogoutListener;
 
-import android.location.*;
-
 public class FacebookMain extends Activity  {
 
     /*
