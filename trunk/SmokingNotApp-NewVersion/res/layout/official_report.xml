@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/brownlinesbg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvOR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You&apos;ve chosen the Official Report option, please fill the following:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/etORID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvOR"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="ID" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/etORNAME"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etORID"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="First and Last Name" >
+    </EditText>
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Report" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bReport"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="@string/exit" />
+
+</RelativeLayout>

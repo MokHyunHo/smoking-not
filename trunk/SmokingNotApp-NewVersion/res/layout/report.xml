@@ -59,31 +59,6 @@
         android:layout_below="@+id/etLocation"
         android:prompt="@string/ReportReason" />
 
-    <Spinner
-        android:id="@+id/PublishSp"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
-        android:layout_alignLeft="@+id/ReasonSp"
-        android:layout_below="@+id/ReasonSp"
-        android:prompt="@string/ReportWays" />
-
-    <Button
-        android:id="@+id/bReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/PublishSp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="Report" />
-
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bReport"
-        android:layout_centerHorizontal="true"
-        android:text="@string/exit" />
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -103,7 +78,7 @@
         android:layout_alignBottom="@+id/tvCategories"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tvPla"
+        android:layout_alignRight="@+id/bReport"
         android:gravity="center"
         android:text="Report"
         android:textColor="#ffffff"
@@ -115,15 +90,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvCategories"
-        android:layout_alignLeft="@+id/exitButton"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/textView2"
+        android:layout_toRightOf="@+id/tvRep"
+        android:background="#000000"
         android:gravity="center"
         android:text="Places"
         android:textColor="#ffffff"
         android:textSize="15dp"
-        android:textStyle="bold"
-        android:background="#000000" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvPro"
@@ -133,11 +108,56 @@
         android:layout_alignLeft="@+id/textView2"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:background="#000000"
         android:gravity="center"
         android:text="Profile"
         android:textColor="#ffffff"
         android:textSize="15dp"
-        android:textStyle="bold"
-        android:background="#000000" />
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ReasonSp"
+        android:layout_below="@+id/ReasonSp"
+        android:text="Facebook" />
+
+    <CheckBox
+        android:id="@+id/checkBox2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/checkBox1"
+        android:layout_alignBottom="@+id/checkBox1"
+        android:layout_alignLeft="@+id/ibReport"
+        android:text="Place Owner" />
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBox1"
+        android:layout_below="@+id/checkBox1"
+        android:layout_marginTop="15dp"
+        android:text="Official Report via Authorities" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBox2"
+        android:layout_below="@+id/checkBox3"
+        android:layout_marginTop="14dp"
+        android:text="@string/exit" />
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/exitButton"
+        android:layout_alignBottom="@+id/exitButton"
+        android:layout_alignLeft="@+id/checkBox3"
+        android:layout_marginLeft="19dp"
+        android:text="Report" />
 
 </RelativeLayout>

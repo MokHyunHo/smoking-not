@@ -51,6 +51,7 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 		
 		case R.id.bSelect:
 			//passing values to the 'Send' action
+			String loc="";
 			String[] checked=new String[NumOfOptions];
 			ExtendedCheckBox cb;
 			int j=0;
@@ -63,8 +64,15 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 					j++;
 				}
 			}
+			Bundle gotLoc = getIntent().getExtras();
+			try {
+				loc = gotLoc.getString("StrLocation");
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
 			Bundle returnBundle=new Bundle();
 			returnBundle.putStringArray("checkedOptions", checked);
+			returnBundle.putString("StrLocation", loc);
 			Intent int_a=new Intent(getApplicationContext(),Report.class);
 			int_a.putExtras(returnBundle);
 			startActivity(int_a);
