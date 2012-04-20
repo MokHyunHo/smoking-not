@@ -9,11 +9,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import java.io.InputStream;
 import android.app.Activity;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,19 +24,18 @@ import android.widget.TextView;
 
 public class Report extends Activity implements View.OnClickListener,
 		OnItemSelectedListener {
-	String[] checked, Pchecked;
+	String[] checked;
 	TextView tvReport, tvPlaces, tvProfile;
 	Button report;
 	ImageButton ib;
 	ImageView iv;
 	EditText et1;
-	Spinner s1, s2;
+	Spinner s1;
+	CheckBox c1, c2, c3;
 	Intent i, profileIntent;
 	final static int iData = 0;
 	Bitmap bmp;
 	String[] cbl = { "Good Report", "Complaint" };
-	String[] cb2 = { "Facebook", "Place Owner",
-			"Official Report via Authorities" };
 	private Button exitButton;
 
 	@Override
@@ -42,8 +43,6 @@ public class Report extends Activity implements View.OnClickListener,
 		super.onCreate(savedInstanceState);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(Report.this,
 				android.R.layout.simple_spinner_item, cbl);
-		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(Report.this,
-				android.R.layout.simple_spinner_item, cb2);
 
 		// initialization of all the objects
 		setContentView(R.layout.report);
@@ -55,7 +54,9 @@ public class Report extends Activity implements View.OnClickListener,
 			e.printStackTrace();
 		}
 		try {
-			Pchecked = gotChecked.getStringArray("publishingOptions");
+			String loc;
+			loc = gotChecked.getString("StrLocation");
+			et1.setText(loc);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -69,37 +70,6 @@ public class Report extends Activity implements View.OnClickListener,
 		s1.setAdapter(adapter);
 		s1.setOnItemSelectedListener(this);
 
-		s2.setAdapter(adapter2);
-		/*s2.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				int position = s2.getSelectedItemPosition();
-				switch (position) {
-				case 2:
-					try {
-						Class cbClass = Class
-								.forName("com.facebook.android.ExtendedCheckBoxListPublish");
-						Intent newIntent = new Intent(Report.this, cbClass);
-						startActivityForResult(newIntent, iData);
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					break;
-
-				}
-
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});*/
 		report.setOnClickListener(this);
 		ib.setOnClickListener(this);
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
@@ -125,25 +95,6 @@ public class Report extends Activity implements View.OnClickListener,
 			});
 			s1.setSelection(1);
 		}
-		if (Pchecked != null) {
-			s2.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-				@Override
-				public void onItemSelected(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0) {
-					// TODO Auto-generated method stub
-
-				}
-
-			});
-			s2.setSelection(2);
-		}
 
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
@@ -168,7 +119,9 @@ public class Report extends Activity implements View.OnClickListener,
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
 		tvProfile = (TextView) findViewById(R.id.tvPro);
 		s1 = (Spinner) findViewById(R.id.ReasonSp);
-		s2 = (Spinner) findViewById(R.id.PublishSp);
+		c1 = (CheckBox) findViewById(R.id.checkBox1);
+		c2 = (CheckBox) findViewById(R.id.checkBox2);
+		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		et1 = (EditText) findViewById(R.id.etLocation);
 	}
 
@@ -183,22 +136,36 @@ public class Report extends Activity implements View.OnClickListener,
 			break;
 		case R.id.bReport:
 			// passing values to the 'Send' action
-			String location = et1.getText().toString();
-			String way=s2.getSelectedItem().toString();
-			Bundle nextBundle = new Bundle();
-			nextBundle.putString("keyLocation", location);
-			if(checked!=null)
-				nextBundle.putStringArray("chosenReasons", checked);
-			else
-			{
-				String[] reason=new String[2];
-				reason[0]= s1.getSelectedItem().toString();
-				nextBundle.putStringArray("chosenReasons",reason);
+
+			/*
+			 * Bundle nextBundle = new Bundle(); String[] ways=new String[3];
+			 * int j=0; String location = et1.getText().toString();
+			 * nextBundle.putString("keyLocation", location);
+			 * 
+			 * if(c1.isChecked()) { ways[j]=c1.getText().toString(); j++; }
+			 * if(c2.isChecked()) { ways[j]=c2.getText().toString(); j++; }
+			 * if(c3.isChecked()) { ways[j]=c3.getText().toString(); j++; }
+			 * nextBundle.putStringArray("PublishWays", ways); if(checked!=null)
+			 * nextBundle.putStringArray("chosenReasons", checked); else {
+			 * String[] reason=new String[2]; reason[0]=
+			 * s1.getSelectedItem().toString();
+			 * nextBundle.putStringArray("chosenReasons",reason); } Intent int_a
+			 * = new Intent(Report.this, AcceptReport.class);
+			 * int_a.putExtras(nextBundle); startActivity(int_a);
+			 */
+			if (c3.isChecked()) {
+				myIntent = new Intent(Report.this, OfficialReport.class);
+				startActivity(myIntent);	
+			} else {
+				Dialog d = new Dialog(this);
+				d.setCanceledOnTouchOutside(true);
+				d.setTitle("Your Report Has Been Sent!");
+				TextView sTV = new TextView(this);
+				sTV.setText("please check out your profile.");
+				d.setContentView(sTV);
+				d.show();
 			}
-			nextBundle.putString("ChosenWay", way);
-			Intent int_a = new Intent(Report.this, AcceptReport.class);
-			int_a.putExtras(nextBundle);
-			startActivity(int_a);
+
 			
 			break;
 		case R.id.tvRep:
@@ -248,7 +215,12 @@ public class Report extends Activity implements View.OnClickListener,
 				Class cbClass = Class
 						.forName("com.facebook.android.ExtendedCheckBoxList");
 				i = new Intent(Report.this, cbClass);
+				Bundle cbBundle = new Bundle();
+				String strlocation = et1.getText().toString();
+				cbBundle.putString("StrLocation", strlocation);
+				i.putExtras(cbBundle);
 				startActivityForResult(i, iData);
+
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
