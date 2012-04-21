@@ -4,6 +4,7 @@ import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,12 +46,14 @@ public class Report extends Activity implements View.OnClickListener,
 	CheckBox c1, c2, c3;
 	Intent i, profileIntent;
 	final static int iData = 0;
+	final static int iVenue = 1;
 	Bitmap bmp;
 	String[] cbl = { "Positive Report", "Complaint" };
 	private Button exitButton;
 	static final int uniqueId = 1234;
 	NotificationManager nm;
-
+	private FsqVenue mFsqVenue = new FsqVenue();
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +81,7 @@ public class Report extends Activity implements View.OnClickListener,
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
 		tvProfile.setOnClickListener(this);
-
+		et1.setOnClickListener(this);
 		// TBA
 		s1.setAdapter(adapter);
 		s1.setOnItemSelectedListener(this);
@@ -261,20 +264,40 @@ public class Report extends Activity implements View.OnClickListener,
 				startActivity(myIntent);
 			}
 			break;
+		case R.id.etLocation:
+			myIntent = new Intent(getApplicationContext(), ChooseVenue.class);
+			startActivityForResult(myIntent, iVenue);
+			Log.i("ERIC", "Should show ChooseVenue");
+			break;
 		}
 
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
+		try {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			Bundle extras = data.getExtras();
-			bmp = (Bitmap) extras.get("data");
-			iv.setImageBitmap(bmp);
+			switch (requestCode)
+			{
+			case iData:
+				bmp = (Bitmap) extras.get("data");
+				iv.setImageBitmap(bmp);
+				break;
+			case iVenue:
+				Log.i("ERIC", "getting venue");
+				Log.i("ERIC", "bundle: " + extras.getString("venueName"));
+				mFsqVenue.id = extras.getString("venueID");
+				mFsqVenue.name = extras.getString("venueName");
+				Log.i("ERIC", "name: " + mFsqVenue.name);
+				et1.setText(mFsqVenue.name);
+				break;
+			}
 		}
-
+		} catch (Throwable Ex) {
+			Log.i("ERIC", "msg: " + Ex.toString());
+		}
 	}
 
 	@Override
