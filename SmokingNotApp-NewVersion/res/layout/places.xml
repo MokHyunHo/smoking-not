@@ -76,7 +76,8 @@
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
-
+
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
@@ -88,7 +89,8 @@
         android:background="@color/black" >
 
     </ListView>
-
+
+
     <Button
         android:id="@+id/b_go"
         android:layout_width="wrap_content"
@@ -123,7 +125,8 @@
         android:hint="radius"
         android:inputType="number"
         android:text="100" />
-
+
+
     <Button
         android:id="@+id/b_updateLocation"
         android:layout_width="wrap_content"
@@ -132,7 +135,8 @@
         android:layout_alignTop="@+id/b_go"
         android:layout_toRightOf="@+id/b_go"
         android:text="Update my location" />
-
+
+
     <Button
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
