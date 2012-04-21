@@ -7,7 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -38,7 +46,7 @@ public class Report extends Activity implements View.OnClickListener,
 	Intent i, profileIntent;
 	final static int iData = 0;
 	Bitmap bmp;
-	String[] cbl = { "Good Report", "Complaint" };
+	String[] cbl = { "Positive Report", "Complaint" };
 	private Button exitButton;
 	static final int uniqueId = 1234;
 	NotificationManager nm;
@@ -114,8 +122,8 @@ public class Report extends Activity implements View.OnClickListener,
 				startActivity(myIntent);
 			}
 		});
-		//create notification manager
-		nm=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		// create notification manager
+		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.cancel(uniqueId);
 	}
 
@@ -143,43 +151,99 @@ public class Report extends Activity implements View.OnClickListener,
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			String location = et1.getText().toString();
-			if (c3.isChecked()) {
-				myIntent = new Intent(Report.this, OfficialReport.class);
-				Bundle returnBundle=new Bundle();
-				returnBundle.putStringArray("checkedOptions", checked);
-				returnBundle.putString("StrLocation", location);
-				myIntent.putExtras(returnBundle);
-				startActivity(myIntent);
-			} else {
-				String emailaddress[] = { "eladcoo@gmail.com" };
-				String message = "Hello, \n" + "The Report about " + location
-						+ " Has been Sent! \n"
-						+ "The Reasons you've pointed were:\n";
-				for (int j = 0; j < checked.length; j++) {
-					message += checked[j].toString() + "\n";
+			 String location = et1.getText().toString();
+			/*
+			 * String location = et1.getText().toString(); if (c3.isChecked()) {
+			 * myIntent = new Intent(Report.this, OfficialReport.class); Bundle
+			 * returnBundle=new Bundle();
+			 * returnBundle.putStringArray("checkedOptions", checked);
+			 * returnBundle.putString("StrLocation", location);
+			 * myIntent.putExtras(returnBundle); startActivity(myIntent); } else
+			 * { String emailaddress[] = { "eladcoo@gmail.com" }; String message
+			 * = "Hello, \n" + "The Report about " + location +
+			 * " Has been Sent! \n" + "The Reasons you've pointed were:\n"; for
+			 * (int j = 0; j < checked.length; j++) { message +=
+			 * checked[j].toString() + "\n"; } message +=
+			 * "Have a pleasant Day!"; myIntent = new
+			 * Intent(android.content.Intent.ACTION_SEND);
+			 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+			 * emailaddress);
+			 * myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+			 * "Smoking-Not Update!"); myIntent.setType("plain/text");
+			 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+			 */
+
+			// pop-up view
+			Dialog d = new Dialog(this);
+			d.setCanceledOnTouchOutside(true);
+			d.setTitle("Your Report Has Been Sent!");
+			TextView sTV = new TextView(this);
+			sTV.setText("please check out your profile.");
+			d.setContentView(sTV);
+			d.show();
+			/* startActivity(myIntent); */
+
+			// send notification to user
+			Intent new_intent = new Intent(this, Profile.class);
+			PendingIntent pi = PendingIntent
+					.getActivity(this, 0, new_intent, 0);
+			String body = "You sccore has been increased by 1 point!";
+			String title = "New Message";
+			Notification n = new Notification(R.drawable.statusbar, title,
+					System.currentTimeMillis());
+			n.setLatestEventInfo(this, title, body, pi);
+			// n.defaults=Notification.
+			nm.notify(uniqueId, n);
+			finish();
+			
+			int score=0;
+			//read data from sd card
+			try {
+				File myReadFile = new File("/sdcard/mysdfile.txt");
+				if(myReadFile.exists())
+				{
+					FileInputStream fIn = new FileInputStream(myReadFile);
+					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+					String aDataRow = "";
+					String[] aBuffer = new String[3];
+					for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
+						aBuffer[i] = aDataRow;
+					}
+					score=Integer.parseInt(aBuffer[2]);
+					myReader.close();
+					fIn.close();
 				}
-				message += "Have a pleasant Day!";
-				myIntent = new Intent(android.content.Intent.ACTION_SEND);
-				myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-						emailaddress);
-				myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-						"Smoking-Not Update!");
-				myIntent.setType("plain/text");
-				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-
-				// pop-up view
-				Dialog d = new Dialog(this);
-				d.setCanceledOnTouchOutside(true);
-				d.setTitle("Your Report Has Been Sent!");
-				TextView sTV = new TextView(this);
-				sTV.setText("please check out your profile.");
-				d.setContentView(sTV);
-				d.show();
-				startActivity(myIntent);
 				
-
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			
+			//calculate new score
+			String reason=s1.getSelectedItem().toString();
+			if(reason.compareTo("Positive Report")==0)
+				score+=2;
+			if(reason.compareTo("Complaint")==0)
+				score+=1;
+			
+			// save data to the sd card
+			try {
+				String sdData = location+'\n'
+								+reason+'\n'
+								+score;
+				File myFile = new File("/sdcard/mysdfile.txt");
+				if(!myFile.exists())
+					myFile.createNewFile();
+				FileOutputStream fOut = new FileOutputStream(myFile);
+				OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
+				myOutWriter.append(sdData);
+				myOutWriter.close();
+				fOut.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			// }
+			
+			
 			break;
 		case R.id.tvRep:
 			break;
@@ -198,19 +262,6 @@ public class Report extends Activity implements View.OnClickListener,
 			}
 			break;
 		}
-		
-		//send notification to user
-		Intent new_intent= new Intent(this,Profile.class);
-		PendingIntent pi = PendingIntent.getActivity(this, 0, new_intent, 0);
-		String body= "You sccore has been increased by 1 point!";
-		String title= "New Message";
-		Notification n = new Notification(R.drawable.statusbar,title,System.currentTimeMillis());
-		n.setLatestEventInfo(this, title, body, pi);
-		//n.defaults=Notification.
-		nm.notify(uniqueId,n);
-		finish();
-		
-		
 
 	}
 
