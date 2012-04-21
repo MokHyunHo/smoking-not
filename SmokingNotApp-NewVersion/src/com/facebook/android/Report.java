@@ -10,6 +10,9 @@ import android.widget.Button;
 import java.io.InputStream;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.AdapterView;
@@ -37,6 +40,8 @@ public class Report extends Activity implements View.OnClickListener,
 	Bitmap bmp;
 	String[] cbl = { "Good Report", "Complaint" };
 	private Button exitButton;
+	static final int uniqueId = 1234;
+	NotificationManager nm;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,9 @@ public class Report extends Activity implements View.OnClickListener,
 				startActivity(myIntent);
 			}
 		});
+		//create notification manager
+		nm=(NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.cancel(uniqueId);
 	}
 
 	private void Init() {
@@ -190,6 +198,19 @@ public class Report extends Activity implements View.OnClickListener,
 			}
 			break;
 		}
+		
+		//send notification to user
+		Intent new_intent= new Intent(this,Profile.class);
+		PendingIntent pi = PendingIntent.getActivity(this, 0, new_intent, 0);
+		String body= "You sccore has been increased by 1 point!";
+		String title= "New Message";
+		Notification n = new Notification(R.drawable.statusbar,title,System.currentTimeMillis());
+		n.setLatestEventInfo(this, title, body, pi);
+		//n.defaults=Notification.
+		nm.notify(uniqueId,n);
+		finish();
+		
+		
 
 	}
 
