@@ -2,9 +2,12 @@ package com.facebook.android;
 
 //import java.io.IOException;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+
 import com.facebook.android.R;
-import com.facebook.android.R.id;
-import com.facebook.android.R.layout;
 import com.facebook.android.FacebookMain;
 
 import android.app.Activity;
@@ -29,7 +32,7 @@ public class Profile extends Activity implements View.OnClickListener {
 	 private ProgressBar pb;
 	 private TextView total_score;
 	 private int stage;
-	 private int score=70; //should be in data base
+	 private int score; //should be in data base
 	 
 
 	@Override
@@ -46,6 +49,25 @@ public class Profile extends Activity implements View.OnClickListener {
 		tvPlaces.setOnClickListener(this);
 		tvProfile.setOnClickListener(this);
 		
+		//Set Score
+		try {
+			File myFile = new File("/sdcard/mysdfile.txt");
+			if(myFile.exists())
+			{
+				FileInputStream fIn = new FileInputStream(myFile);
+				BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+				String aDataRow = "";
+				String[] aBuffer = new String[3];
+				for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
+					aBuffer[i] = aDataRow;
+				}
+				score=Integer.parseInt(aBuffer[2]);
+				myReader.close();
+				fIn.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		 //user's progress
         pb=(ProgressBar) findViewById(R.id.progressbar);
