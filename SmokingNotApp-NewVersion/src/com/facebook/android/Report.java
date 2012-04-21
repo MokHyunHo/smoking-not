@@ -135,28 +135,32 @@ public class Report extends Activity implements View.OnClickListener,
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			// passing values to the 'Send' action
-
-			/*
-			 * Bundle nextBundle = new Bundle(); String[] ways=new String[3];
-			 * int j=0; String location = et1.getText().toString();
-			 * nextBundle.putString("keyLocation", location);
-			 * 
-			 * if(c1.isChecked()) { ways[j]=c1.getText().toString(); j++; }
-			 * if(c2.isChecked()) { ways[j]=c2.getText().toString(); j++; }
-			 * if(c3.isChecked()) { ways[j]=c3.getText().toString(); j++; }
-			 * nextBundle.putStringArray("PublishWays", ways); if(checked!=null)
-			 * nextBundle.putStringArray("chosenReasons", checked); else {
-			 * String[] reason=new String[2]; reason[0]=
-			 * s1.getSelectedItem().toString();
-			 * nextBundle.putStringArray("chosenReasons",reason); } Intent int_a
-			 * = new Intent(Report.this, AcceptReport.class);
-			 * int_a.putExtras(nextBundle); startActivity(int_a);
-			 */
+			String location = et1.getText().toString();
 			if (c3.isChecked()) {
 				myIntent = new Intent(Report.this, OfficialReport.class);
-				startActivity(myIntent);	
+				Bundle returnBundle=new Bundle();
+				returnBundle.putStringArray("checkedOptions", checked);
+				returnBundle.putString("StrLocation", location);
+				myIntent.putExtras(returnBundle);
+				startActivity(myIntent);
 			} else {
+				String emailaddress[] = { "eladcoo@gmail.com" };
+				String message = "Hello, \n" + "The Report about " + location
+						+ " Has been Sent! \n"
+						+ "The Reasons you've pointed were:\n";
+				for (int j = 0; j < checked.length; j++) {
+					message += checked[j].toString() + "\n";
+				}
+				message += "Have a pleasant Day!";
+				myIntent = new Intent(android.content.Intent.ACTION_SEND);
+				myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+						emailaddress);
+				myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						"Smoking-Not Update!");
+				myIntent.setType("plain/text");
+				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+
+				// pop-up view
 				Dialog d = new Dialog(this);
 				d.setCanceledOnTouchOutside(true);
 				d.setTitle("Your Report Has Been Sent!");
@@ -164,9 +168,10 @@ public class Report extends Activity implements View.OnClickListener,
 				sTV.setText("please check out your profile.");
 				d.setContentView(sTV);
 				d.show();
-			}
+				startActivity(myIntent);
+				
 
-			
+			}
 			break;
 		case R.id.tvRep:
 			break;
@@ -178,10 +183,6 @@ public class Report extends Activity implements View.OnClickListener,
 			}
 			break;
 		case R.id.tvPro:
-			/*
-			 * tvProfile.setBackgroundResource(R.drawable.orange);
-			 * tvProfile.setBackgroundColor(android.R.color.black);
-			 */
 			myIntent = new Intent(getApplicationContext(), Profile.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
@@ -211,20 +212,12 @@ public class Report extends Activity implements View.OnClickListener,
 		int position = s1.getSelectedItemPosition();
 		switch (position) {
 		case 1:
-			try {
-				Class cbClass = Class
-						.forName("com.facebook.android.ExtendedCheckBoxList");
-				i = new Intent(Report.this, cbClass);
-				Bundle cbBundle = new Bundle();
-				String strlocation = et1.getText().toString();
-				cbBundle.putString("StrLocation", strlocation);
-				i.putExtras(cbBundle);
-				startActivityForResult(i, iData);
-
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			i = new Intent(Report.this, ExtendedCheckBoxList.class);
+			Bundle cbBundle = new Bundle();
+			String strlocation = et1.getText().toString();
+			cbBundle.putString("StrLocation", strlocation);
+			i.putExtras(cbBundle);
+			startActivityForResult(i, iData);
 			break;
 
 		}
