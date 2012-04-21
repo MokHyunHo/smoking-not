@@ -282,12 +282,11 @@ public class FoursquareApp implements LocationListener {
 	}
 	
 	public ArrayList<FsqVenue> getNearby(double latitude, double longitude,
-			int radius) throws Exception {
+			int radius) throws Throwable {
 
 		ArrayList<FsqVenue> venueList = new ArrayList<FsqVenue>();
 
 		try {
-			Log.d("ERIC", "Kaki1");
 			String ll = String.valueOf(latitude) + ","
 					+ String.valueOf(longitude);
 			URL url = new URL(
@@ -355,7 +354,7 @@ public class FoursquareApp implements LocationListener {
 					venueList.add(venue);
 				}
 			}
-		} catch (Exception ex) {
+		} catch (Throwable ex) {
 			throw ex;
 		}
 
@@ -454,7 +453,7 @@ public class FoursquareApp implements LocationListener {
 	}
 	
 	public boolean isLocationEnabled() {
-		return this.locEnabled;
+		return (this.locEnabled && (mLocation != null));
 	}
 	
 	private void showDialog(String title, String message)

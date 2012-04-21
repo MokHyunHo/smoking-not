@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <AutoCompleteTextView android:id="@+id/AutoCompleteTextView1"
+        style="@android:style/Widget.AutoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionHint="Search..."
+        android:ems="10"
+        android:text="Search..." android:enabled="true" android:singleLine="true" android:completionThreshold="1" android:textColor="@color/grey">
+
+        <requestFocus />
+    </AutoCompleteTextView>
+
+    <ListView
+        android:id="@+id/venue_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

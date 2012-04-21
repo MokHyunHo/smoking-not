@@ -112,8 +112,12 @@ public class Places extends Activity implements View.OnClickListener {
 				if (mFsqApp.isLocationEnabled()) {
 
 					mLocation = mFsqApp.getLocation();
-					latitudeEt.setText(String.valueOf(mLocation.getLatitude()));
-					longitudeEt.setText(String.valueOf(mLocation.getLongitude()));
+					if (mLocation != null) {
+						latitudeEt.setText(String.valueOf(mLocation
+								.getLatitude()));
+						longitudeEt.setText(String.valueOf(mLocation
+								.getLongitude()));
+					}
 				}
 			}
 		});
@@ -187,7 +191,7 @@ public class Places extends Activity implements View.OnClickListener {
 				try {
 					mNearbyList = mFsqApp
 							.getNearby(latitude, longitude, radius);
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					what = 1;
 					e.printStackTrace();
 				}
