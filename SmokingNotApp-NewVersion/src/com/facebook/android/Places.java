@@ -14,6 +14,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -75,34 +76,33 @@ public class Places extends Activity implements View.OnClickListener {
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				/*
-				 * String latitude = latitudeEt.getText().toString(); String
-				 * longitude = longitudeEt.getText().toString(); String radius =
-				 * radiusEt.getText().toString();
-				 * 
-				 * if (latitude.equals("") || longitude.equals("")) {
-				 * Toast.makeText(Places.this, "Latitude or longitude is empty",
-				 * Toast.LENGTH_SHORT).show(); return; }
-				 */
+
 				double lat, lon;
+				String radius = radiusEt.getText().toString();
+				int rad = Integer.valueOf(radius);
+				
 				if (mFsqApp.isLocationEnabled()) {
 					lat = mLocation.getLatitude();
 					lon = mLocation.getLatitude();
+					loadNearbyPlaces(lat, lon, rad);
 				} else {
 					String latitude = latitudeEt.getText().toString();
 					String longitude = longitudeEt.getText().toString();
-					if (latitude.equals("") || longitude.equals("")) {
+					Log.i("ERIC", "vals: " + latitude + " " + longitude);
+					if (latitude.isEmpty() || longitude.isEmpty()) {
 						Toast.makeText(Places.this,
 								"Latitude or longitude is empty",
 								Toast.LENGTH_SHORT).show();
+					} else {
+						lat = Double.valueOf(latitude);
+						lon = Double.valueOf(longitude);
+						loadNearbyPlaces(lat, lon, rad);
 					}
-					lat = Double.valueOf(latitude);
-					lon = Double.valueOf(longitude);
 				}
 
-				String radius = radiusEt.getText().toString();
-				int rad = Integer.valueOf(radius);
-				loadNearbyPlaces(lat, lon, rad);
+				
+				
+				
 			}
 		});
 
