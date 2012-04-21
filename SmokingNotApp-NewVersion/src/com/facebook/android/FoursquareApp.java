@@ -19,6 +19,7 @@ import org.json.JSONTokener;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 
@@ -96,19 +97,25 @@ public class FoursquareApp implements LocationListener {
 		
 		lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
+		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+		mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (mLocation == null)
+			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		
-		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+		/*if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
 		{
 			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
 		} 
 		else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
 		{
-			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
+			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
 		}
-		else
-			locEnabled = false;
+		*/
+		//else
+			//locEnabled = false;
 		
 		/*mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (mLocation == null)
@@ -298,6 +305,7 @@ public class FoursquareApp implements LocationListener {
 							+ "&limit="
 							+ 50
 							+ "&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
+			//Toast.makeText(context, "url: " + url.toString(), Toast.LENGTH_LONG).show();
 			// URL url = new
 			// URL("https://api.foursquare.com/v2/venues/search?ll=40.7,-74&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
 			Log.d(TAG, "Opening URL " + url.toString());
@@ -331,7 +339,7 @@ public class FoursquareApp implements LocationListener {
 
 					JSONObject location = item.getJSONObject("location");
 
-					Location loc = new Location(LocationManager.GPS_PROVIDER);
+					Location loc = new Location(LocationManager.PASSIVE_PROVIDER);
 
 					loc.setLatitude(Double.valueOf(location.getString("lat")));
 					loc.setLongitude(Double.valueOf(location.getString("lng")));
@@ -355,7 +363,9 @@ public class FoursquareApp implements LocationListener {
 				}
 			}
 		} catch (Throwable ex) {
-			throw ex;
+			Toast.makeText(context,
+			"catched",
+			Toast.LENGTH_SHORT).show();
 		}
 
 		Collections.sort(venueList, new distanceComparator());
@@ -403,7 +413,7 @@ public class FoursquareApp implements LocationListener {
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		if (provider == LocationManager.GPS_PROVIDER)
+		/*if (provider == LocationManager.GPS_PROVIDER)
 		{
 			lm.removeUpdates(this);
 			if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -416,13 +426,13 @@ public class FoursquareApp implements LocationListener {
 				locEnabled = false;
 		}
 		showDialog("Location Manager", "Provider disabled: " + provider);
-		
+		*/
 	}
 	
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		if (provider == LocationManager.GPS_PROVIDER)
+		/*if (provider == LocationManager.GPS_PROVIDER)
 		{
 			lm.removeUpdates(this);
 			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
@@ -438,7 +448,7 @@ public class FoursquareApp implements LocationListener {
 		}
 		
 		showDialog("Location Manager", "Provider enabled: " + provider);	
-		
+		*/
 	}
 
 	@Override
@@ -453,7 +463,7 @@ public class FoursquareApp implements LocationListener {
 	}
 	
 	public boolean isLocationEnabled() {
-		return (this.locEnabled && (mLocation != null));
+		return (mLocation != null);
 	}
 	
 	private void showDialog(String title, String message)

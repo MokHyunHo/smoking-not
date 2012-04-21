@@ -80,30 +80,33 @@ public class Places extends Activity implements View.OnClickListener {
 				double lat, lon;
 				String radius = radiusEt.getText().toString();
 				int rad = Integer.valueOf(radius);
-				
-				if (mFsqApp.isLocationEnabled()) {
-					lat = mLocation.getLatitude();
-					lon = mLocation.getLatitude();
-					loadNearbyPlaces(lat, lon, rad);
-				} else {
-					String latitude = latitudeEt.getText().toString();
-					String longitude = longitudeEt.getText().toString();
-					Log.i("ERIC", "vals: " + latitude + " " + longitude);
-					if (latitude.isEmpty() || longitude.isEmpty()) {
-						Toast.makeText(Places.this,
-								"Latitude or longitude is empty",
-								Toast.LENGTH_SHORT).show();
-					} else {
-						lat = Double.valueOf(latitude);
-						lon = Double.valueOf(longitude);
-						loadNearbyPlaces(lat, lon, rad);
-					}
-				}
 
-				
-				
-				
+				if (mFsqApp.isLocationEnabled())
+					updateLocationFields();
+				// updLocBtn.
+				/*
+				 * lat = mLocation.getLatitude(); lon = mLocation.getLatitude();
+				 * Toast.makeText(Places.this, "geting by location" + lat + " "
+				 * + lon, Toast.LENGTH_SHORT).show(); loadNearbyPlaces(lat, lon,
+				 * rad);
+				 */
+
+				String latitude = latitudeEt.getText().toString();
+				String longitude = longitudeEt.getText().toString();
+				Log.i("ERIC", "vals: " + latitude + " " + longitude);
+				if (latitude.isEmpty() || longitude.isEmpty()) {
+					Toast.makeText(Places.this,
+							"Latitude or longitude is empty",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					lat = Double.valueOf(latitude);
+					lon = Double.valueOf(longitude);
+					loadNearbyPlaces(lat, lon, rad);
+					//Toast.makeText(Places.this, "geting by manual location",
+						//	Toast.LENGTH_SHORT).show();
+				}
 			}
+
 		});
 
 		updLocBtn.setOnClickListener(new OnClickListener() {
@@ -111,17 +114,19 @@ public class Places extends Activity implements View.OnClickListener {
 			public void onClick(View v) {
 				if (mFsqApp.isLocationEnabled()) {
 
-					mLocation = mFsqApp.getLocation();
-					if (mLocation != null) {
-						latitudeEt.setText(String.valueOf(mLocation
-								.getLatitude()));
-						longitudeEt.setText(String.valueOf(mLocation
-								.getLongitude()));
-					}
+					updateLocationFields();
 				}
 			}
 		});
 
+	}
+
+	private void updateLocationFields() {
+		mLocation = mFsqApp.getLocation();
+		if (mLocation != null) {
+			latitudeEt.setText(String.valueOf(mLocation.getLatitude()));
+			longitudeEt.setText(String.valueOf(mLocation.getLongitude()));
+		}
 	}
 
 	private void Init() {
