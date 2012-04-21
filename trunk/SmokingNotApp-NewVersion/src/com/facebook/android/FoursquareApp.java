@@ -47,7 +47,7 @@ public class FoursquareApp implements LocationListener {
 	private String mAccessToken;
 	private Location mLocation;
 	private LocationManager lm;
-	private boolean locEnabled;
+	private boolean locEnabled = true;
 
 	/**
 	 * Callback url, as set in 'Manage OAuth Costumers' page
@@ -97,21 +97,38 @@ public class FoursquareApp implements LocationListener {
 		lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		
 		
-		mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		if (mLocation == null)
+		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
 		{
-			Log.i("ERIC", "Netwrok location couldn't be retrieved");
 			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
+		} 
+		else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+		{
+			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
 		}
+		else
+			locEnabled = false;
+		
+		/*mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (mLocation == null)
 		{
 			Log.i("ERIC", "GPS location couldn't be retrieved");
-			locEnabled = false;
+			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			
 		}
-		else
-			locEnabled = true;
 		
-		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+		if (mLocation == null)
+		{
+			
+			Log.i("ERIC", "Netwrok location couldn't be retrieved");
+			locEnabled = false;
+			
+		}
+		*/
+			
+		
+		
 		
 		//Log.i("ERIC", "Location manager configured: " + mLocation.toString());
 		
@@ -390,7 +407,14 @@ public class FoursquareApp implements LocationListener {
 		if (provider == LocationManager.GPS_PROVIDER)
 		{
 			lm.removeUpdates(this);
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+			if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+			{
+				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+				mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				locEnabled = (mLocation != null);
+			}
+			else
+				locEnabled = false;
 		}
 		showDialog("Location Manager", "Provider disabled: " + provider);
 		
@@ -403,7 +427,17 @@ public class FoursquareApp implements LocationListener {
 		{
 			lm.removeUpdates(this);
 			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
+			mLocation = lm.getLastKnownLocation(provider);
+			locEnabled = (mLocation != null);
 		}
+		else if (!locEnabled && (provider == LocationManager.NETWORK_PROVIDER))
+		{
+			lm.removeUpdates(this);
+			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
+			mLocation = lm.getLastKnownLocation(provider);
+			locEnabled = (mLocation != null);
+		}
+		
 		showDialog("Location Manager", "Provider enabled: " + provider);	
 		
 	}
