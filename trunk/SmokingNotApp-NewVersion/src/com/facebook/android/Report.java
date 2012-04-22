@@ -16,8 +16,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -35,8 +33,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 public class Report extends Activity implements View.OnClickListener,
 		OnItemSelectedListener {
+	
+	public static FsqVenue[] places=new FsqVenue[10];
+	
 	String[] checked;
 	TextView tvReport, tvPlaces, tvProfile;
 	Button report;
@@ -182,28 +184,16 @@ public class Report extends Activity implements View.OnClickListener,
 			// pop-up view
 			showDialog();
 			
-			/* startActivity(myIntent); */
+			/* startActivityForResult(myIntent); */
 
 			// send notification to user
-			Intent new_intent = new Intent(this, Profile.class);
-			PendingIntent pi = PendingIntent
-					.getActivity(this, 0, new_intent, 0);
-			String body = "You sccore has been increased by 1 point!";
-			String title = "New Message";
-			Notification n = new Notification(R.drawable.statusbar, title,
-					System.currentTimeMillis());
-			n.setLatestEventInfo(this, title, body, pi);
-			// n.defaults=Notification.
-			nm.notify(uniqueId, n);
+			sendNotification();
 
 			int score = 0;
 			// read data from sd card
 			try {
 				File myReadFile = new File("/sdcard/sdprofilefile.txt");
 				if (myReadFile.exists()) {
-					//RandomAccessFile rafile = new RandomAccessFile(myReadFile,
-					//		"rw");
-					//rafile.seek(rafile.length() - 1);
 					FileInputStream fIn = new FileInputStream(myReadFile);
 					BufferedReader myReader = new BufferedReader(
 							new InputStreamReader(fIn));
@@ -244,48 +234,11 @@ public class Report extends Activity implements View.OnClickListener,
 				e.printStackTrace();
 			}
 			// }
-
-			/*try {
-				int rate = 0;
-				File myPlaceFile = new File("/sdcard/myplacesfile.txt");
-				if (!myPlaceFile.exists()) {
-					myPlaceFile.createNewFile();
-					FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
-					OutputStreamWriter myOutWriter1 = new OutputStreamWriter(
-							fOut1);
-					myOutWriter1.append(location + '\n' + rate);
-					myOutWriter1.close();
-					fOut1.close();
-				} else {
-					FileInputStream fIn = new FileInputStream(myPlaceFile);
-					BufferedReader myReader = new BufferedReader(
-							new InputStreamReader(fIn));
-					String aDataRow = "";
-					while ((aDataRow = myReader.readLine()) != null) {
-						if (aDataRow.compareTo(location) == 0) {
-							aDataRow = myReader.readLine();
-							rate = Integer.parseInt(aDataRow);
-							break;
-						}
-					}
-					myReader.close();
-					fIn.close();
-
-					if (reason.compareTo("Positive Report") == 0)
-						rate++;
-					if (reason.compareTo("Complaint") == 0)
-						rate--;
-
-					FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
-					OutputStreamWriter myOutWriter1 = new OutputStreamWriter(
-							fOut1);
-					myOutWriter1.append("" + rate);
-					myOutWriter1.close();
-					fOut1.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
+			
+			
+			//set place info
+			setPlaceRating(reason,location);
+			
 			break;
 		case R.id.tvRep:
 			break;
@@ -371,5 +324,37 @@ public class Report extends Activity implements View.OnClickListener,
 		sTV.setText("please check out your profile.");
 		d.setContentView(sTV);
 		d.show();
+	}
+	private void setPlaceRating(String reason,String location)
+	{
+		int j,myRate=0;
+		for(j=0;places[j]!=null;j++)
+			if(places[j].name.compareTo(location)==0)
+				myRate=places[j].rate;
+		
+		if (reason.compareTo("Positive Report") == 0)
+			myRate++;
+		if (reason.compareTo("Complaint") == 0)
+		{
+			myRate--;
+			if(myRate<0)
+				myRate=0;
+		}
+		if(places[j]==null)
+			places[j]= mFsqVenue;
+		places[j].rate=myRate;
+	}
+	private void sendNotification()
+	{
+		Intent new_intent = new Intent(this, Profile.class);
+		PendingIntent pi = PendingIntent
+				.getActivity(this, 0, new_intent, 0);
+		String body = "You sccore has been increased by 1 point!";
+		String title = "New Message";
+		Notification n = new Notification(R.drawable.statusbar, title,
+				System.currentTimeMillis());
+		n.setLatestEventInfo(this, title, body, pi);
+		// n.defaults=Notification.
+		nm.notify(uniqueId, n);
 	}
 }
