@@ -32,9 +32,9 @@ public class NearbyAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private Context caller;
 	private boolean isShortAdapter = false;
-	
-	//rate for a place should be in database
-	private int rate=0;
+
+	// rate for a place should be in database
+	private int rate = 0;
 
 	public NearbyAdapter(Context c) {
 		mInflater = LayoutInflater.from(c);
@@ -79,8 +79,7 @@ public class NearbyAdapter extends BaseAdapter {
 				convertView = mInflater.inflate(R.layout.nearby_list, null);
 			else
 				convertView = mInflater.inflate(R.layout.venue_list, null);
-			
-			
+
 			holder = new ViewHolder();
 
 			holder.mNameTxt = (TextView) convertView.findViewById(R.id.tv_name);
@@ -95,6 +94,8 @@ public class NearbyAdapter extends BaseAdapter {
 						.findViewById(R.id.pb_Raiting);
 				holder.mShowOnMap = (ImageButton) convertView
 						.findViewById(R.id.ib_ShowOnMap);
+				holder.mNumberRatings = (TextView) convertView
+						.findViewById(R.id.tv_raitings);
 			}
 			convertView.setTag(holder);
 		} else {
@@ -102,7 +103,7 @@ public class NearbyAdapter extends BaseAdapter {
 		}
 
 		final FsqVenue venue = mVenueList.get(position);
-		Log.i("ERIC", "venue: " +venue.name);
+		Log.i("ERIC", "venue: " + venue.name);
 		holder.position = position;
 		holder.mNameTxt.setText(venue.name);
 		holder.mAddressTxt.setText(venue.address);
@@ -111,14 +112,20 @@ public class NearbyAdapter extends BaseAdapter {
 		holder.mDistanceTxt.setText(formatDistance((double) venue.distance));
 		// holder.mDistanceTxt.setText(String.valueOf(venue.distance));
 		if (!isShortAdapter) {
-			//find rating of corresponding place
-			for (int i=0; i<10; i++){
-				if (Report.places[i].name.compareTo(venue.name)==0)
-					holder.mRaiting.setProgress(Report.places[i].rate);
+			// find rating of corresponding place
+			holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
+			try {
+			for (int i = 0; i < 10; i++) {
+				if (Report.places[i].name != null) {
+					if (Report.places[i].name.compareTo(venue.name) == 0)
+
+						holder.mRaiting.setProgress(Report.places[i].rate);
 				}
-			
-			
-			//holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
+			}
+			} catch (Exception Ex) {
+				Log.i("ERIC", "Bad! places ratings... " + Ex.getMessage());
+			}
+			// holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
 			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					try {
@@ -165,6 +172,7 @@ public class NearbyAdapter extends BaseAdapter {
 		TextView mNameTxt;
 		TextView mAddressTxt;
 		TextView mDistanceTxt;
+		TextView mNumberRatings;
 		ProgressBar mRaiting;
 		ImageButton mShowOnMap;
 	}

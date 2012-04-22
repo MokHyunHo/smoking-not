@@ -12,6 +12,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -23,22 +26,18 @@ import android.widget.Toast;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.Geocoder;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-
-
-/**
- * 
- * @author Lorensius W. L. T <lorenz@londatiga.net>
- * 
- */
 public class FoursquareApp implements LocationListener {
-	
+
 	private Context context;
 	private FoursquareSession mSession;
 	private FoursquareDialog mDialog;
@@ -48,8 +47,8 @@ public class FoursquareApp implements LocationListener {
 	private String mAccessToken;
 	private Location mLocation;
 	private LocationManager lm;
-	private boolean locEnabled = true;
-
+	private Geocoder gc;
+	private String addressString = "(Address not available)";
 	/**
 	 * Callback url, as set in 'Manage OAuth Costumers' page
 	 * (https://developer.foursquare.com/)
@@ -65,7 +64,7 @@ public class FoursquareApp implements LocationListener {
 
 	public FoursquareApp(Context context, String clientId, String clientSecret) {
 		this.context = context;
-		
+
 		mSession = new FoursquareSession(context);
 
 		mAccessToken = mSession.getAccessToken();
@@ -94,51 +93,53 @@ public class FoursquareApp implements LocationListener {
 		mProgress = new ProgressDialog(context);
 
 		mProgress.setCancelable(false);
-		
-		lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
-		lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
-		mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (mLocation == null)
-			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		
-		/*if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
-		{
+
+		lm = (LocationManager) context
+				.getSystemService(Context.LOCATION_SERVICE);
+		gc = new Geocoder(context, Locale.getDefault());
+		// lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f,
+		// this);
+		// lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
+		// 50.0f, this);
+		// mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		// if (mLocation == null)
+		mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f, this);
-		} 
-		else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-		{
-			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
+			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
+					50.0f, this);
 		}
-		*/
-		//else
-			//locEnabled = false;
-		
-		/*mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if (mLocation == null)
-		{
-			Log.i("ERIC", "GPS location couldn't be retrieved");
-			mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			
+
+		else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			mLocation = lm
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
+					50.0f, this);
 		}
-		
-		if (mLocation == null)
-		{
-			
-			Log.i("ERIC", "Netwrok location couldn't be retrieved");
-			locEnabled = false;
-			
-		}
-		*/
-			
-		
-		
-		
-		//Log.i("ERIC", "Location manager configured: " + mLocation.toString());
-		
+
+		// else
+		// locEnabled = false;
+
+		/*
+		 * mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER); if
+		 * (mLocation == null) { Log.i("ERIC",
+		 * "GPS location couldn't be retrieved"); mLocation =
+		 * lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		 * 
+		 * }
+		 * 
+		 * if (mLocation == null) {
+		 * 
+		 * Log.i("ERIC", "Netwrok location couldn't be retrieved"); locEnabled =
+		 * false;
+		 * 
+		 * }
+		 */
+
+		// Log.i("ERIC", "Location manager configured: " +
+		// mLocation.toString());
+
 	}
 
 	private void getAccessToken(final String code) {
@@ -268,26 +269,14 @@ public class FoursquareApp implements LocationListener {
 	public void authorize() {
 		mDialog.show();
 	}
-	
-	/*public class distanceComparator implements Comparable<FsqVenue> {
-		
-		private FsqVenue venue;
-		public distanceComparator(FsqVenue venue)
-		{
-			this.venue = venue;
-		}
-	    public int compareTo(FsqVenue venue) {
-	        return this.venue.distance - venue.distance;
-	    }
-	}
-*/
+
 	public class distanceComparator implements Comparator<FsqVenue> {
-		
-	    public int compare(FsqVenue venue1, FsqVenue venue2) {
-	        return venue1.distance - venue2.distance;
-	    }
+
+		public int compare(FsqVenue venue1, FsqVenue venue2) {
+			return venue1.distance - venue2.distance;
+		}
 	}
-	
+
 	public ArrayList<FsqVenue> getNearby(double latitude, double longitude,
 			int radius) throws Throwable {
 
@@ -305,7 +294,8 @@ public class FoursquareApp implements LocationListener {
 							+ "&limit="
 							+ 50
 							+ "&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
-			//Toast.makeText(context, "url: " + url.toString(), Toast.LENGTH_LONG).show();
+			// Toast.makeText(context, "url: " + url.toString(),
+			// Toast.LENGTH_LONG).show();
 			// URL url = new
 			// URL("https://api.foursquare.com/v2/venues/search?ll=40.7,-74&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
 			Log.d(TAG, "Opening URL " + url.toString());
@@ -339,7 +329,8 @@ public class FoursquareApp implements LocationListener {
 
 					JSONObject location = item.getJSONObject("location");
 
-					Location loc = new Location(LocationManager.PASSIVE_PROVIDER);
+					Location loc = new Location(
+							LocationManager.PASSIVE_PROVIDER);
 
 					loc.setLatitude(Double.valueOf(location.getString("lat")));
 					loc.setLongitude(Double.valueOf(location.getString("lng")));
@@ -350,22 +341,20 @@ public class FoursquareApp implements LocationListener {
 						venue.address = location.getString("address");
 						Log.i("ERIC", "HAS ADDRESS");
 						Log.i("ERIC", location.getString("address"));
-					}
-					else
+					} else
 						venue.address = "(No address)";
 
 					venue.distance = Integer.valueOf(location
 							.getString("distance"));
-					//venue.herenow = item.getJSONObject("hereNow").getInt("count");
+					// venue.herenow =
+					// item.getJSONObject("hereNow").getInt("count");
 					// venue.type = group.getString("type");
 					//
 					venueList.add(venue);
 				}
 			}
 		} catch (Throwable ex) {
-			Toast.makeText(context,
-			"catched",
-			Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "catched", Toast.LENGTH_SHORT).show();
 		}
 
 		Collections.sort(venueList, new distanceComparator());
@@ -407,67 +396,92 @@ public class FoursquareApp implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		this.mLocation = location;
-		showDialog("Location Manager", "Location updated: " + location.toString());
-		
+		// showDialog("Location Manager", "Location updated: " +
+		// location.toString());
+
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		/*if (provider == LocationManager.GPS_PROVIDER)
-		{
+		if (provider == LocationManager.GPS_PROVIDER) {
 			lm.removeUpdates(this);
-			if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-			{
-				lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L, 50.0f, this);
-				mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-				locEnabled = (mLocation != null);
-			}
-			else
-				locEnabled = false;
+			/*
+			 * if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			 * lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+			 * 1000L, 50.0f, this); mLocation =
+			 * lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); }
+			 */
+			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
+					50.0f, this);
 		}
+
+		else if (provider == LocationManager.NETWORK_PROVIDER) {
+			lm.removeUpdates(this);
+			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
+					50.0f, this);
+		}
+
 		showDialog("Location Manager", "Provider disabled: " + provider);
-		*/
 	}
-	
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		/*if (provider == LocationManager.GPS_PROVIDER)
-		{
+		if (provider == LocationManager.GPS_PROVIDER) {
 			lm.removeUpdates(this);
 			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
-			mLocation = lm.getLastKnownLocation(provider);
-			locEnabled = (mLocation != null);
-		}
-		else if (!locEnabled && (provider == LocationManager.NETWORK_PROVIDER))
-		{
+		} else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+				&& (provider == LocationManager.NETWORK_PROVIDER)) {
 			lm.removeUpdates(this);
 			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
-			mLocation = lm.getLastKnownLocation(provider);
-			locEnabled = (mLocation != null);
 		}
-		
-		showDialog("Location Manager", "Provider enabled: " + provider);	
-		*/
+
+		showDialog("Location Manager", "Provider enabled: " + provider);
+
 	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public Location getLocation() {
 		return mLocation;
-		
+
 	}
-	
+
+	public String getAddress() {
+		List<Address> addresses;
+		try {
+			if (mLocation == null)
+				addresses = gc.getFromLocation(32.06, 34.77, 1);
+			else
+				addresses = gc.getFromLocation(mLocation.getLatitude(),
+						mLocation.getLongitude(), 1);
+
+			StringBuilder sb = new StringBuilder();
+			Log.i("ERRIC", "addresses size: " + String.valueOf(addresses.size()));
+			if (addresses.size() > 0) {
+				Address address = addresses.get(0);
+
+				for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+					sb.append(address.getAddressLine(i)).append("\n");
+
+				sb.append(address.getCountryName());
+			}
+			addressString = sb.toString();
+		} catch (IOException e) {
+			Log.i("ERIC", "BAD! address: " + e.getMessage());
+		}
+
+		return addressString;
+	}
+
 	public boolean isLocationEnabled() {
 		return (mLocation != null);
 	}
-	
-	private void showDialog(String title, String message)
-	{
+
+	private void showDialog(String title, String message) {
 		Dialog d = new Dialog(this.context);
 		d.setCanceledOnTouchOutside(true);
 		d.setTitle(title);
