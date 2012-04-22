@@ -14,6 +14,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +32,9 @@ public class NearbyAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private Context caller;
 	private boolean isShortAdapter = false;
+	
+	//rate for a place should be in database
+	private int rate=0;
 
 	public NearbyAdapter(Context c) {
 		mInflater = LayoutInflater.from(c);
@@ -99,7 +111,36 @@ public class NearbyAdapter extends BaseAdapter {
 		holder.mDistanceTxt.setText(formatDistance((double) venue.distance));
 		// holder.mDistanceTxt.setText(String.valueOf(venue.distance));
 		if (!isShortAdapter) {
-			holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
+			//find rating in file
+			try {
+				int rate=0;
+				File myPlaceFile = new File("/sdcard/myplacesfile.txt");
+				if(!myPlaceFile.exists())
+					myPlaceFile.createNewFile();
+				else
+				{
+					FileInputStream fIn = new FileInputStream(myPlaceFile);
+					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+					String aDataRow = "";
+					while ((aDataRow = myReader.readLine()) != null) {
+						if(aDataRow.compareTo(venue.name)==0)
+						{
+							aDataRow = myReader.readLine();
+							rate=Integer.parseInt(aDataRow);
+							break;
+						}
+					}
+					myReader.close();
+					fIn.close();
+				}
+				
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
+			
+			holder.mRaiting.setProgress(rate);
+			//holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
 			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					try {

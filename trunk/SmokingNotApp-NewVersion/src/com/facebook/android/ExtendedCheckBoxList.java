@@ -24,11 +24,21 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 		
 		// initialization of the list options
 		mListAdapter = new ExtendedCheckBoxListAdapter(this);
-		for (int i = 1; i < NumOfOptions; i++) {
-			String newItem = "No Smoking Rule num. " + i;
-			// adding a new checkbox (with the string, unchecked) to the list
+		
+		// adding a new checkbox (with the string, unchecked) to the list
+	
+			String newItem = "Place owner didn't act against a client who was smoking in a forbidden place";
 			mListAdapter.addItem(new ExtendedCheckBox(newItem, false));
-		}
+			newItem="Ashtrays are placed in a not completely separated smoking room.";
+			mListAdapter.addItem(new ExtendedCheckBox(newItem, false));
+			newItem="Noticeable smell of cigarettes in the area where smoking is prohibited.";
+			mListAdapter.addItem(new ExtendedCheckBox(newItem, false));
+			newItem="Smoking room is not valid because it isn't in a completely separate area.";
+			mListAdapter.addItem(new ExtendedCheckBox(newItem, false));
+			newItem="There isn't a smoking sign";
+			mListAdapter.addItem(new ExtendedCheckBox(newItem, false));
+					
+	
 		setListAdapter(mListAdapter);
 		
 		select.setOnClickListener(this);
@@ -76,6 +86,7 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 			Intent int_a=new Intent(getApplicationContext(),Report.class);
 			int_a.putExtras(returnBundle);
 			startActivity(int_a);
+			//finish();
 			break;
 		}
 		
