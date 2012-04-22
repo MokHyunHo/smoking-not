@@ -50,19 +50,19 @@ public class Profile extends Activity implements View.OnClickListener {
 		
 		//Set Score
 		try {
-			File myFile = new File("/sdcard/mysdfile.txt");
+			File myFile = new File("/sdcard/sdprofilefile.txt");
 			if(myFile.exists())
 			{
-				FileInputStream fIn = new FileInputStream(myFile);
-				BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+				FileInputStream profileIn = new FileInputStream(myFile);
+				BufferedReader ScoreReader = new BufferedReader(new InputStreamReader(profileIn));
 				String aDataRow = "";
-				String[] aBuffer = new String[3];
-				for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
+				String[] aBuffer = new String[2];
+				for (int i=0;(aDataRow = ScoreReader.readLine()) != null;i++) {
 					aBuffer[i] = aDataRow;
 				}
-				score=Integer.parseInt(aBuffer[2]);
-				myReader.close();
-				fIn.close();
+				score=Integer.parseInt(aBuffer[1]);
+				ScoreReader.close();
+				profileIn.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
