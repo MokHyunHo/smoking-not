@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.RandomAccessFile;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -205,14 +206,13 @@ public class Report extends Activity implements View.OnClickListener,
 				File myReadFile = new File("/sdcard/mysdfile.txt");
 				if(myReadFile.exists())
 				{
+					RandomAccessFile rafile=new RandomAccessFile(myReadFile,"rw");
+					rafile.seek(rafile.length()-1);
 					FileInputStream fIn = new FileInputStream(myReadFile);
 					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
 					String aDataRow = "";
-					String[] aBuffer = new String[3];
-					for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
-						aBuffer[i] = aDataRow;
-					}
-					score=Integer.parseInt(aBuffer[2]);
+					aDataRow = myReader.readLine();
+					score=Integer.parseInt(aDataRow);
 					myReader.close();
 					fIn.close();
 				}
@@ -230,8 +230,7 @@ public class Report extends Activity implements View.OnClickListener,
 			
 			// save data to the sd card
 			try {
-				String sdData = location+'\n'
-								+reason+'\n'
+				String sdData = reason+'\n'
 								+score;
 				File myFile = new File("/sdcard/mysdfile.txt");
 				if(!myFile.exists())
@@ -241,12 +240,50 @@ public class Report extends Activity implements View.OnClickListener,
 				myOutWriter.append(sdData);
 				myOutWriter.close();
 				fOut.close();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			// }
 			
-			
+			try {
+				int rate=0;
+				String sdPlaces= location + '\n';
+				File myPlaceFile = new File("/sdcard/myplacesfile.txt");
+				if(!myPlaceFile.exists())
+					myPlaceFile.createNewFile();
+				else
+				{
+					FileInputStream fIn = new FileInputStream(myPlaceFile);
+					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+					String aDataRow = "";
+					while ((aDataRow = myReader.readLine()) != null) {
+						if(aDataRow.compareTo(location)==0)
+						{
+							aDataRow = myReader.readLine();
+							rate=Integer.parseInt(aDataRow);
+							break;
+						}
+					}
+					myReader.close();
+					fIn.close();
+				}
+				if(reason.compareTo("Positive Report")==0)
+					rate++;
+				if(reason.compareTo("Complaint")==0)
+					rate--;
+				
+				
+				
+				FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
+				OutputStreamWriter myOutWriter1 = new OutputStreamWriter(fOut1);
+				myOutWriter1.append(sdPlaces);
+				myOutWriter1.close();
+				fOut1.close();
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
 			break;
 		case R.id.tvRep:
 			break;

@@ -11,4 +11,5 @@ public class FsqVenue {
 	public int direction;
 	public int distance;
 	public int herenow;
+	public int rate;
 }
