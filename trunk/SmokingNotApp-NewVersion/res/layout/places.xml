@@ -22,7 +22,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textView2"
         android:ems="10"
         android:hint="latitude"
         android:inputType="number|numberDecimal|textPostalAddress"
@@ -99,20 +99,21 @@
         android:layout_below="@+id/et_latitude"
         android:layout_toLeftOf="@+id/et_longitude"
         android:autoLink="map"
-        android:text=" Get Nearby Places " />
+        android:text=" Get Nearby Places " >
+         <requestFocus />
+    </Button>     
 
     <EditText
         android:id="@+id/et_longitude"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/textView2"
         android:layout_toRightOf="@+id/et_latitude"
         android:ems="10"
         android:hint="longitude"
         android:inputType="number"
         android:text="34.77" >
 
-        <requestFocus />
     </EditText>
 
     <EditText
@@ -146,5 +147,16 @@
         android:layout_alignTop="@+id/b_updateLocation"
         android:layout_toRightOf="@+id/b_updateLocation"
         android:text="@string/exit" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
+        android:gravity="center"
+        android:text="Address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

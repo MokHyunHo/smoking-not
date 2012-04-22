@@ -28,7 +28,7 @@ import android.widget.TextView;
 public class Places extends Activity implements View.OnClickListener {
 	/** Called when the activity is first created. */
 
-	private TextView tvReport, tvPlaces, tvProfile;
+	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	private EditText latitudeEt, longitudeEt, radiusEt;
 	private Button exitButton, goBtn, updLocBtn;
 
@@ -51,6 +51,7 @@ public class Places extends Activity implements View.OnClickListener {
 		setContentView(R.layout.places);
 		Init();
 
+		updateLocationFields();
 		// connection between XML & JAVA
 
 		// first-up menu
@@ -73,14 +74,16 @@ public class Places extends Activity implements View.OnClickListener {
 			}
 		});
 
+		
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
 				double lat, lon;
-				String radius = radiusEt.getText().toString();
-				int rad = Integer.valueOf(radius);
-
+				/*String radius = radiusEt.getText().toString();
+				int rad = Integer.valueOf(radius);*/
+				int rad = 100;
+				try {
 				if (mFsqApp.isLocationEnabled())
 					updateLocationFields();
 				// updLocBtn.
@@ -105,6 +108,10 @@ public class Places extends Activity implements View.OnClickListener {
 					//Toast.makeText(Places.this, "geting by manual location",
 						//	Toast.LENGTH_SHORT).show();
 				}
+				} catch (Exception ex) {
+					Toast.makeText(Places.this, "Something bad happened: " + ex.getMessage(),
+						Toast.LENGTH_SHORT).show();
+				}
 			}
 
 		});
@@ -122,10 +129,16 @@ public class Places extends Activity implements View.OnClickListener {
 	}
 
 	private void updateLocationFields() {
+		try {
 		mLocation = mFsqApp.getLocation();
 		if (mLocation != null) {
 			latitudeEt.setText(String.valueOf(mLocation.getLatitude()));
 			longitudeEt.setText(String.valueOf(mLocation.getLongitude()));
+		}
+		tvAddress.setText(mFsqApp.getAddress());
+		} catch (Exception Ex)
+		{
+			Log.i("ERIC", "BAD! " + Ex.getMessage());
 		}
 	}
 
@@ -133,7 +146,8 @@ public class Places extends Activity implements View.OnClickListener {
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
 		tvProfile = (TextView) findViewById(R.id.tvPlaProfile);
-
+		
+		tvAddress = (TextView) findViewById(R.id.textView2);
 		latitudeEt = (EditText) findViewById(R.id.et_latitude);
 		longitudeEt = (EditText) findViewById(R.id.et_longitude);
 		radiusEt = (EditText) findViewById(R.id.et_radius);
