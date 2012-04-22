@@ -54,7 +54,7 @@ public class Report extends Activity implements View.OnClickListener,
 	static final int uniqueId = 1234;
 	NotificationManager nm;
 	private FsqVenue mFsqVenue = new FsqVenue();
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -155,7 +155,9 @@ public class Report extends Activity implements View.OnClickListener,
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			 String location = et1.getText().toString();
+			String location = et1.getText().toString();
+			
+			//send email
 			/*
 			 * String location = et1.getText().toString(); if (c3.isChecked()) {
 			 * myIntent = new Intent(Report.this, OfficialReport.class); Bundle
@@ -178,13 +180,8 @@ public class Report extends Activity implements View.OnClickListener,
 			 */
 
 			// pop-up view
-			Dialog d = new Dialog(this);
-			d.setCanceledOnTouchOutside(true);
-			d.setTitle("Your Report Has Been Sent!");
-			TextView sTV = new TextView(this);
-			sTV.setText("please check out your profile.");
-			d.setContentView(sTV);
-			d.show();
+			showDialog();
+			
 			/* startActivity(myIntent); */
 
 			// send notification to user
@@ -198,92 +195,97 @@ public class Report extends Activity implements View.OnClickListener,
 			n.setLatestEventInfo(this, title, body, pi);
 			// n.defaults=Notification.
 			nm.notify(uniqueId, n);
-			finish();
-			
-			int score=0;
-			//read data from sd card
+
+			int score = 0;
+			// read data from sd card
 			try {
-				File myReadFile = new File("/sdcard/mysdfile.txt");
-				if(myReadFile.exists())
-				{
-					RandomAccessFile rafile=new RandomAccessFile(myReadFile,"rw");
-					rafile.seek(rafile.length()-1);
+				File myReadFile = new File("/sdcard/sdprofilefile.txt");
+				if (myReadFile.exists()) {
+					//RandomAccessFile rafile = new RandomAccessFile(myReadFile,
+					//		"rw");
+					//rafile.seek(rafile.length() - 1);
 					FileInputStream fIn = new FileInputStream(myReadFile);
-					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+					BufferedReader myReader = new BufferedReader(
+							new InputStreamReader(fIn));
 					String aDataRow = "";
-					aDataRow = myReader.readLine();
-					score=Integer.parseInt(aDataRow);
+					String[] aBuffer = new String[2];
+					for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
+						aBuffer[i] = aDataRow;
+					}
+					score = Integer.parseInt(aBuffer[1]);
 					myReader.close();
 					fIn.close();
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			//calculate new score
-			String reason=s1.getSelectedItem().toString();
-			if(reason.compareTo("Positive Report")==0)
-				score+=2;
-			if(reason.compareTo("Complaint")==0)
-				score+=1;
-			
+
+			// calculate new score
+			String reason = s1.getSelectedItem().toString();
+			if (reason.compareTo("Positive Report") == 0)
+				score += 2;
+			if (reason.compareTo("Complaint") == 0)
+				score += 1;
+
 			// save data to the sd card
 			try {
-				String sdData = reason+'\n'
-								+score;
-				File myFile = new File("/sdcard/mysdfile.txt");
-				if(!myFile.exists())
+				String sdData = reason + '\n' + score;
+				File myFile = new File("/sdcard/sdprofilefile.txt");
+				if (!myFile.exists())
 					myFile.createNewFile();
 				FileOutputStream fOut = new FileOutputStream(myFile);
 				OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
 				myOutWriter.append(sdData);
 				myOutWriter.close();
 				fOut.close();
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			// }
-			
-			try {
-				int rate=0;
-				String sdPlaces= location + '\n';
+
+			/*try {
+				int rate = 0;
 				File myPlaceFile = new File("/sdcard/myplacesfile.txt");
-				if(!myPlaceFile.exists())
+				if (!myPlaceFile.exists()) {
 					myPlaceFile.createNewFile();
-				else
-				{
+					FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
+					OutputStreamWriter myOutWriter1 = new OutputStreamWriter(
+							fOut1);
+					myOutWriter1.append(location + '\n' + rate);
+					myOutWriter1.close();
+					fOut1.close();
+				} else {
 					FileInputStream fIn = new FileInputStream(myPlaceFile);
-					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+					BufferedReader myReader = new BufferedReader(
+							new InputStreamReader(fIn));
 					String aDataRow = "";
 					while ((aDataRow = myReader.readLine()) != null) {
-						if(aDataRow.compareTo(location)==0)
-						{
+						if (aDataRow.compareTo(location) == 0) {
 							aDataRow = myReader.readLine();
-							rate=Integer.parseInt(aDataRow);
+							rate = Integer.parseInt(aDataRow);
 							break;
 						}
 					}
 					myReader.close();
 					fIn.close();
+
+					if (reason.compareTo("Positive Report") == 0)
+						rate++;
+					if (reason.compareTo("Complaint") == 0)
+						rate--;
+
+					FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
+					OutputStreamWriter myOutWriter1 = new OutputStreamWriter(
+							fOut1);
+					myOutWriter1.append("" + rate);
+					myOutWriter1.close();
+					fOut1.close();
 				}
-				if(reason.compareTo("Positive Report")==0)
-					rate++;
-				if(reason.compareTo("Complaint")==0)
-					rate--;
-				
-				
-				
-				FileOutputStream fOut1 = new FileOutputStream(myPlaceFile);
-				OutputStreamWriter myOutWriter1 = new OutputStreamWriter(fOut1);
-				myOutWriter1.append(sdPlaces);
-				myOutWriter1.close();
-				fOut1.close();
-			}
-			catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
 			break;
 		case R.id.tvRep:
 			break;
@@ -313,25 +315,24 @@ public class Report extends Activity implements View.OnClickListener,
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
-			Bundle extras = data.getExtras();
-			switch (requestCode)
-			{
-			case iData:
-				bmp = (Bitmap) extras.get("data");
-				iv.setImageBitmap(bmp);
-				break;
-			case iVenue:
-				Log.i("ERIC", "getting venue");
-				Log.i("ERIC", "bundle: " + extras.getString("venueName"));
-				mFsqVenue.id = extras.getString("venueID");
-				mFsqVenue.name = extras.getString("venueName");
-				Log.i("ERIC", "name: " + mFsqVenue.name);
-				et1.setText(mFsqVenue.name);
-				break;
+			super.onActivityResult(requestCode, resultCode, data);
+			if (resultCode == RESULT_OK) {
+				Bundle extras = data.getExtras();
+				switch (requestCode) {
+				case iData:
+					bmp = (Bitmap) extras.get("data");
+					iv.setImageBitmap(bmp);
+					break;
+				case iVenue:
+					Log.i("ERIC", "getting venue");
+					Log.i("ERIC", "bundle: " + extras.getString("venueName"));
+					mFsqVenue.id = extras.getString("venueID");
+					mFsqVenue.name = extras.getString("venueName");
+					Log.i("ERIC", "name: " + mFsqVenue.name);
+					et1.setText(mFsqVenue.name);
+					break;
+				}
 			}
-		}
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
 		}
@@ -359,5 +360,16 @@ public class Report extends Activity implements View.OnClickListener,
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private void showDialog()
+	{
+		Dialog d = new Dialog(this);
+		d.setCanceledOnTouchOutside(true);
+		d.setTitle("Your Report Has Been Sent!");
+		TextView sTV = new TextView(this);
+		sTV.setText("please check out your profile.");
+		d.setContentView(sTV);
+		d.show();
 	}
 }
