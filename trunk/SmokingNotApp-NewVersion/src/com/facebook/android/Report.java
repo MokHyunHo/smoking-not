@@ -50,6 +50,7 @@ public class Report extends Activity implements View.OnClickListener,
 	Intent i, profileIntent;
 	final static int iData = 0;
 	final static int iVenue = 1;
+	final static int iEmail = 2;
 	Bitmap bmp;
 	String[] cbl = { "Positive Report", "Complaint" };
 	private Button exitButton;
@@ -184,7 +185,7 @@ public class Report extends Activity implements View.OnClickListener,
 			// pop-up view
 			showDialog();
 			
-			/* startActivityForResult(myIntent); */
+			/* startActivityForResult(myIntent,iEmail); */
 
 			// send notification to user
 			sendNotification();
@@ -283,6 +284,9 @@ public class Report extends Activity implements View.OnClickListener,
 					mFsqVenue.name = extras.getString("venueName");
 					Log.i("ERIC", "name: " + mFsqVenue.name);
 					et1.setText(mFsqVenue.name);
+					break;
+				case iEmail:
+					
 					break;
 				}
 			}
