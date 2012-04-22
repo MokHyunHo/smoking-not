@@ -31,7 +31,6 @@ public class Profile extends Activity implements View.OnClickListener {
 	private ImageView ratingbar1,ratingbar2,ratingbar3,ratingbar4,ratingbar5,ratingbarfull;
 	 private ProgressBar pb;
 	 private TextView total_score;
-	 private int stage;
 	 private int score; //should be in data base
 	 
 
@@ -78,10 +77,10 @@ public class Profile extends Activity implements View.OnClickListener {
         ratingbar4=(ImageView)findViewById(R.id.iv_ratingbar4);
         ratingbar5=(ImageView)findViewById(R.id.iv_ratingbar5);
         ratingbarfull=(ImageView)findViewById(R.id.iv_ratingbarfull);
-    
+        
+      
         pb.setProgress(score);
         total_score.setText(score+"/100");
-        stage=score / 20;
         ratingbar1.setVisibility(View.INVISIBLE);
     	ratingbar2.setVisibility(View.INVISIBLE);
     	ratingbar3.setVisibility(View.INVISIBLE);
@@ -90,26 +89,18 @@ public class Profile extends Activity implements View.OnClickListener {
     	ratingbarfull.setVisibility(View.INVISIBLE);
         
         //display current stage
-        switch(stage) {
-        case 0:
+        if ((score>=0) && (score <15))
         	ratingbar1.setVisibility(View.VISIBLE);
-        	break;
-        case 1:
+        if ((score>=15) && (score <45))
         	ratingbar2.setVisibility(View.VISIBLE);
-        	break;
-        case 2:
-        	ratingbar3.setVisibility(View.VISIBLE);
-        	break;
-        case 3:
+        if ((score>=45) && (score <135))
+        	ratingbar3.setVisibility(View.VISIBLE); 	
+        if ((score>=135) && (score <405))
         	ratingbar4.setVisibility(View.VISIBLE);
-        	break;
-        case 4:
+        if ((score>=405) && (score <1215))
         	ratingbar5.setVisibility(View.VISIBLE);
-        	break;
-        case 5:
+        if (score>=1215) 
         	ratingbarfull.setVisibility(View.VISIBLE);
-        	break;
-        }
         
 		// PROFILE INFORMATION
 		mText.setText("Welcome " + FacebookMain.name);
