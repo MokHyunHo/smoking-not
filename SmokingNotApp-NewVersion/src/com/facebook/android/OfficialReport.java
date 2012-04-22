@@ -1,7 +1,17 @@
 package com.facebook.android;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +27,8 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	private Button bRep,exitButton;
 	private String[] checked;
 	private String loc;
+	static final int uniqueId = 1234;
+	NotificationManager nm;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +67,10 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		//Submit Button
 		bRep.setOnClickListener(this);
 		
+		// create notification manager
+		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		nm.cancel(uniqueId);
+		
 	}
 	
 	private void Init() {
@@ -83,17 +99,24 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 			myIntent.setType("plain/text");
 			myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
 			
-			Dialog d=new Dialog(this);
-			d.setCanceledOnTouchOutside(true);
-			d.setTitle("Your Report Has Been Sent!");
-			TextView sTV=new TextView(this);
-			sTV.setText("please check out your profile.");
-			d.setContentView(sTV);
-			d.show();
+			// pop-up view
+			showDialog();
+			
 			startActivity(myIntent);
+			
 			break;
 		}
 		
+	}
+	private void showDialog()
+	{
+		Dialog d = new Dialog(this);
+		d.setCanceledOnTouchOutside(true);
+		d.setTitle("Your Report Has Been Sent!");
+		TextView sTV = new TextView(this);
+		sTV.setText("please check out your profile.");
+		d.setContentView(sTV);
+		d.show();
 	}
 
 }
