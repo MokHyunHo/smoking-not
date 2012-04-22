@@ -111,35 +111,13 @@ public class NearbyAdapter extends BaseAdapter {
 		holder.mDistanceTxt.setText(formatDistance((double) venue.distance));
 		// holder.mDistanceTxt.setText(String.valueOf(venue.distance));
 		if (!isShortAdapter) {
-			//find rating in file
-			try {
-				int rate=0;
-				File myPlaceFile = new File("/sdcard/myplacesfile.txt");
-				if(!myPlaceFile.exists())
-					myPlaceFile.createNewFile();
-				else
-				{
-					FileInputStream fIn = new FileInputStream(myPlaceFile);
-					BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
-					String aDataRow = "";
-					while ((aDataRow = myReader.readLine()) != null) {
-						if(aDataRow.compareTo(venue.name)==0)
-						{
-							aDataRow = myReader.readLine();
-							rate=Integer.parseInt(aDataRow);
-							break;
-						}
-					}
-					myReader.close();
-					fIn.close();
+			//find rating of corresponding place
+			for (int i=0; i<10; i++){
+				if (Report.places[i].name.compareTo(venue.name)==0)
+					holder.mRaiting.setProgress(Report.places[i].rate);
 				}
-				
-			}
-			catch (Exception e){
-				e.printStackTrace();
-			}
 			
-			holder.mRaiting.setProgress(rate);
+			
 			//holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
 			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
