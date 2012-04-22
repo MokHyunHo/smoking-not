@@ -35,7 +35,8 @@ public class NearbyAdapter extends BaseAdapter {
 
 	// rate for a place should be in database
 	private int rate = 0;
-
+	Random rnd;
+	
 	public NearbyAdapter(Context c) {
 		mInflater = LayoutInflater.from(c);
 		caller = c;
@@ -71,8 +72,6 @@ public class NearbyAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-
-		Random rnd = new Random();
 
 		if (convertView == null) {
 			if (!isShortAdapter)

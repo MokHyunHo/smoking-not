@@ -56,7 +56,7 @@ public class Report extends Activity implements View.OnClickListener,
 	private Button exitButton;
 	static final int uniqueId = 1234;
 	NotificationManager nm;
-	private FsqVenue mFsqVenue = new FsqVenue();
+	public static FsqVenue mFsqVenue = new FsqVenue();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -161,13 +161,14 @@ public class Report extends Activity implements View.OnClickListener,
 			String location = et1.getText().toString();
 			
 			//send email
-			/*
-			 * String location = et1.getText().toString(); if (c3.isChecked()) {
-			 * myIntent = new Intent(Report.this, OfficialReport.class); Bundle
-			 * returnBundle=new Bundle();
-			 * returnBundle.putStringArray("checkedOptions", checked);
-			 * returnBundle.putString("StrLocation", location);
-			 * myIntent.putExtras(returnBundle); startActivity(myIntent); } else
+			  if (c3.isChecked()) {
+			  myIntent = new Intent(Report.this, OfficialReport.class); Bundle
+			  returnBundle=new Bundle();
+			  returnBundle.putStringArray("checkedOptions", checked);
+			  returnBundle.putString("StrLocation", location);
+			  myIntent.putExtras(returnBundle); startActivity(myIntent); 
+			  } 
+			  /*else
 			 * { String emailaddress[] = { "eladcoo@gmail.com" }; String message
 			 * = "Hello, \n" + "The Report about " + location +
 			 * " Has been Sent! \n" + "The Reasons you've pointed were:\n"; for
@@ -185,7 +186,7 @@ public class Report extends Activity implements View.OnClickListener,
 			// pop-up view
 			showDialog();
 			
-			/* startActivityForResult(myIntent,iEmail); */
+			/* startActivity(myIntent); */
 
 			// send notification to user
 			sendNotification();
