@@ -47,6 +47,7 @@ public class ChooseVenue extends Activity {
 			mLocation.setLatitude(32.06);
 			mLocation.setLongitude(34.77);
 		}
+		mProgress.setMessage("Getting venue around...");
 		mProgress.show();
 		new Thread() {
 			@Override
