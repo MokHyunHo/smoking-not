@@ -43,15 +43,18 @@ public class LocationEngine implements LocationListener {
 		Log.i("ERIC", "geocoder enabled = " + geocoderEnabled);
 
 		setLocationSent(false);
-		mLocation = lm.getLastKnownLocation(provider);
-		locationEnabled = (lm != null);
-
-		lm.requestLocationUpdates(provider, 1000L, 20F, this);
 		
 		/*Debug only*/
 		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
 		mLocation.setLatitude(32.06);
 		mLocation.setLongitude(34.77);
+		
+		mLocation = lm.getLastKnownLocation(provider);
+		locationEnabled = (lm != null);
+
+		lm.requestLocationUpdates(provider, 1000L, 20F, this);
+		
+
 	}
 
 	@Override
