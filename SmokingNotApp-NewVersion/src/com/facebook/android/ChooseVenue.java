@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ChooseVenue extends Activity {
 	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
 
 	private FoursquareApp mFsqApp;
+	private LocationEngine mLocEng;
 	private ListView mListView;
 	private ArrayList<FsqVenue> mNearbyList;
 	private NearbyAdapter mAdapter;
@@ -34,12 +36,13 @@ public class ChooseVenue extends Activity {
 		setContentView(R.layout.choose_venue);
 
 		mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		mLocEng = new LocationEngine(this);
 		mAdapter = new NearbyAdapter(this, true);
 		mProgress = new ProgressDialog(this);
 		mListView = (ListView) findViewById(R.id.venue_list);
 		mNearbyList = new ArrayList<FsqVenue>();
-		if (mFsqApp.isLocationEnabled())
-			mLocation = mFsqApp.getLocation();
+		if (mLocEng.isLocationEnabled())
+			mLocation = mLocEng.getCurrentLocation();
 		else {
 			mLocation.setLatitude(32.06);
 			mLocation.setLongitude(34.77);
@@ -49,7 +52,7 @@ public class ChooseVenue extends Activity {
 			@Override
 			public void run() {
 				int what = 0;
-
+				Looper.prepare();
 				try {
 					mNearbyList = mFsqApp.getNearby(mLocation.getLatitude(),
 							mLocation.getLongitude(), rad);

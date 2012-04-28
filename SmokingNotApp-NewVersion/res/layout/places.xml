@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tvCaption"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TableLayout"
@@ -17,28 +17,18 @@
         android:textSize="30dp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/et_latitude"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:ems="10"
-        android:hint="latitude"
-        android:inputType="number|numberDecimal|textPostalAddress"
-        android:text="32.06" />
-
     <TableLayout
         android:id="@+id/TableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
+
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/grey"
-            android:baselineAligned="true" >
+            android:baselineAligned="true"
+            android:weightSum="3" >
 
             <TextView
                 android:id="@+id/tvPlaReport"
@@ -76,8 +66,7 @@
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>
-
-
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
@@ -90,73 +79,46 @@
 
     </ListView>
 
-
-    <Button
-        android:id="@+id/b_go"
+    <TextView
+        android:id="@+id/tvAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/et_latitude"
-        android:layout_toLeftOf="@+id/et_longitude"
-        android:autoLink="map"
-        android:text=" Get Nearby Places " >
-         <requestFocus />
-    </Button>     
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvAddressCaption"
+        android:gravity="center"
+        android:text="(not available)"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/et_longitude"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_toRightOf="@+id/et_latitude"
-        android:ems="10"
-        android:hint="longitude"
-        android:inputType="number"
-        android:text="34.77" >
-
-    </EditText>
-
-    <EditText
-        android:id="@+id/et_radius"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/b_go"
-        android:layout_toRightOf="@+id/et_longitude"
-        android:ems="10"
-        android:hint="radius"
-        android:inputType="number"
-        android:text="100" />
-
-
-    <Button
-        android:id="@+id/b_updateLocation"
+    <TextView
+        android:id="@+id/tvAddressCaption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/et_longitude"
-        android:layout_alignTop="@+id/b_go"
-        android:layout_toRightOf="@+id/b_go"
-        android:text="Update my location" />
-
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvCaption"
+        android:gravity="center"
+        android:text="My address:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="10dp" />
 
     <Button
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lv_places"
-        android:layout_alignRight="@+id/et_radius"
-        android:layout_alignTop="@+id/b_updateLocation"
-        android:layout_toRightOf="@+id/b_updateLocation"
-        android:text="@string/exit" />
-
-    <TextView
-        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/tvAddressCaption"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TableLayout"
+        android:text="Home" />
+
+    <Button
+        android:id="@+id/b_go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
-        android:gravity="center"
-        android:text="Address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@+id/tvAddress"
+        android:autoLink="map"
+        android:text=" Get Nearby Places " />
 
 </RelativeLayout>

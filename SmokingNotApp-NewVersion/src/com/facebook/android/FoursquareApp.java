@@ -12,9 +12,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -26,17 +23,12 @@ import android.widget.Toast;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 
-import android.location.Address;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.Geocoder;
-
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-public class FoursquareApp implements LocationListener {
+public class FoursquareApp {
 
 	private Context context;
 	private FoursquareSession mSession;
@@ -45,19 +37,12 @@ public class FoursquareApp implements LocationListener {
 	private ProgressDialog mProgress;
 	private String mTokenUrl;
 	private String mAccessToken;
-	private Location mLocation;
-	private LocationManager lm;
-	private Geocoder gc;
-	private String addressString = "(Address not available)";
-	/**
-	 * Callback url, as set in 'Manage OAuth Costumers' page
-	 * (https://developer.foursquare.com/)
-	 */
+
+
 	public static final String CALLBACK_URL = "http://code.google.com/p/smoking-not/";
 	private static final String AUTH_URL = "https://foursquare.com/oauth2/authenticate?response_type=code";
 	private static final String TOKEN_URL = "https://foursquare.com/oauth2/access_token?grant_type=authorization_code";
-	// private static final String TOKEN_URL =
-	// "https://foursquare.com/oauth2/authenticate";
+	
 	private static final String API_URL = "https://api.foursquare.com/v2";
 
 	private static final String TAG = "FoursquareApi";
@@ -74,8 +59,7 @@ public class FoursquareApp implements LocationListener {
 
 		String url = AUTH_URL + "&client_id=" + clientId + "&redirect_uri="
 				+ CALLBACK_URL;
-		// mTokenUrl = AUTH_URL + "&client_id=" + clientId + "&redirect_uri=" +
-		// CALLBACK_URL;
+		
 
 		FsqDialogListener listener = new FsqDialogListener() {
 			@Override
@@ -94,52 +78,7 @@ public class FoursquareApp implements LocationListener {
 
 		mProgress.setCancelable(false);
 
-		lm = (LocationManager) context
-				.getSystemService(Context.LOCATION_SERVICE);
-		gc = new Geocoder(context, Locale.getDefault());
-		// lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 50.0f,
-		// this);
-		// lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
-		// 50.0f, this);
-		// mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		// if (mLocation == null)
-		mLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
-					50.0f, this);
-		}
-
-		else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			mLocation = lm
-					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
-					50.0f, this);
-		}
-
-		// else
-		// locEnabled = false;
-
-		/*
-		 * mLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER); if
-		 * (mLocation == null) { Log.i("ERIC",
-		 * "GPS location couldn't be retrieved"); mLocation =
-		 * lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		 * 
-		 * }
-		 * 
-		 * if (mLocation == null) {
-		 * 
-		 * Log.i("ERIC", "Netwrok location couldn't be retrieved"); locEnabled =
-		 * false;
-		 * 
-		 * }
-		 */
-
-		// Log.i("ERIC", "Location manager configured: " +
-		// mLocation.toString());
-
+		
 	}
 
 	private void getAccessToken(final String code) {
@@ -393,72 +332,24 @@ public class FoursquareApp implements LocationListener {
 		public abstract void onFail(String error);
 	}
 
-	@Override
-	public void onLocationChanged(Location location) {
-		this.mLocation = location;
-		// showDialog("Location Manager", "Location updated: " +
-		// location.toString());
 
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		if (provider == LocationManager.GPS_PROVIDER) {
-			lm.removeUpdates(this);
-			/*
-			 * if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			 * lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-			 * 1000L, 50.0f, this); mLocation =
-			 * lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); }
-			 */
-			lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000L,
-					50.0f, this);
-		}
-
-		else if (provider == LocationManager.NETWORK_PROVIDER) {
-			lm.removeUpdates(this);
-			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L,
-					50.0f, this);
-		}
-
-		showDialog("Location Manager", "Provider disabled: " + provider);
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		if (provider == LocationManager.GPS_PROVIDER) {
-			lm.removeUpdates(this);
-			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
-		} else if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-				&& (provider == LocationManager.NETWORK_PROVIDER)) {
-			lm.removeUpdates(this);
-			lm.requestLocationUpdates(provider, 1000L, 50.0f, this);
-		}
-
-		showDialog("Location Manager", "Provider enabled: " + provider);
-
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public Location getLocation() {
+	/*public Location getLocation() {
 		return mLocation;
 
 	}
 
-	public String getAddress() {
+	public void obtainAddress() {
 		List<Address> addresses;
 		try {
+			
 			if (mLocation == null)
 				addresses = gc.getFromLocation(32.06, 34.77, 1);
 			else
 				addresses = gc.getFromLocation(mLocation.getLatitude(),
 						mLocation.getLongitude(), 1);
-
+			if (addresses == null)
+				return;
+			
 			StringBuilder sb = new StringBuilder();
 			Log.i("ERRIC", "addresses size: " + String.valueOf(addresses.size()));
 			if (addresses.size() > 0) {
@@ -474,13 +365,25 @@ public class FoursquareApp implements LocationListener {
 			Log.i("ERIC", "BAD! address: " + e.getMessage());
 		}
 
+		
+	}
+	
+	public String getAddress() {
+		Log.i("ERIC", "getAddress: " + addressString);
 		return addressString;
 	}
 
+	public void setLocation(double lat, double lon) {
+		mLocation.setProvider(LocationManager.PASSIVE_PROVIDER);
+		mLocation.setLatitude(lat);
+		mLocation.setLongitude(lon);
+		
+	}
+	
 	public boolean isLocationEnabled() {
 		return (mLocation != null);
 	}
-
+*/
 	private void showDialog(String title, String message) {
 		Dialog d = new Dialog(this.context);
 		d.setCanceledOnTouchOutside(true);
