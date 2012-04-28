@@ -108,11 +108,10 @@ public class LocationEngine implements LocationListener {
 				break OBTAIN;
 			
 			Address address = addresses.get(0);
-
-			for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+			int i;
+			for (i = 0; i < address.getMaxAddressLineIndex() - 1; i++)
 				sb.append(address.getAddressLine(i)).append(",");
-
-				//sb.append(address.getCountryName());
+			sb.append(address.getAddressLine(i));
 			
 			addressString = sb.toString();   
 		} catch (IOException e) {
