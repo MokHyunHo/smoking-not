@@ -3,6 +3,7 @@ package com.facebook.android;
 //import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
@@ -13,12 +14,12 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 //import android.widget.ImageView;
@@ -29,10 +30,11 @@ public class Places extends Activity implements View.OnClickListener {
 	/** Called when the activity is first created. */
 
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
-	private EditText latitudeEt, longitudeEt, radiusEt;
-	private Button exitButton, goBtn, updLocBtn;
+	// private EditText latitudeEt, longitudeEt, radiusEt;
+	private Button exitButton, goBtn;// , updLocBtn;
 
 	private FoursquareApp mFsqApp;
+	private LocationEngine mLocEng;
 	private ListView mListView;
 	private NearbyAdapter mAdapter;
 	private ArrayList<FsqVenue> mNearbyList;
@@ -40,6 +42,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 	private Location mLocation;
 
+	CountDownLatch latch = new CountDownLatch(1);
 	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
 	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
 
@@ -50,8 +53,11 @@ public class Places extends Activity implements View.OnClickListener {
 		// initialization of all the objects
 		setContentView(R.layout.places);
 		Init();
-
-		updateLocationFields();
+		try {
+			updateLocation();
+		} catch (InterruptedException Ex) {
+			;
+		}
 		// connection between XML & JAVA
 
 		// first-up menu
@@ -69,93 +75,92 @@ public class Places extends Activity implements View.OnClickListener {
 				if (Utility.mFacebook.isSessionValid()) {
 					Utility.objectID = "me";
 				}
+				finish();
 				startActivity(myIntent);
 
 			}
 		});
 
-		
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				double lat, lon;
-				/*String radius = radiusEt.getText().toString();
-				int rad = Integer.valueOf(radius);*/
-				int rad = 100;
+				int rad = 150;
 				try {
-				if (mFsqApp.isLocationEnabled())
-					updateLocationFields();
-				// updLocBtn.
-				/*
-				 * lat = mLocation.getLatitude(); lon = mLocation.getLatitude();
-				 * Toast.makeText(Places.this, "geting by location" + lat + " "
-				 * + lon, Toast.LENGTH_SHORT).show(); loadNearbyPlaces(lat, lon,
-				 * rad);
-				 */
+					if (!mLocEng.isLocationEnabled()) {
+						Toast.makeText(Places.this, "Location is unknown",
+								Toast.LENGTH_SHORT).show();
+						return;
+					}
+					if (mLocEng.isLocationSent())
+						updateLocation();
 
-				String latitude = latitudeEt.getText().toString();
-				String longitude = longitudeEt.getText().toString();
-				Log.i("ERIC", "vals: " + latitude + " " + longitude);
-				if (latitude.isEmpty() || longitude.isEmpty()) {
-					Toast.makeText(Places.this,
-							"Latitude or longitude is empty",
-							Toast.LENGTH_SHORT).show();
-				} else {
-					lat = Double.valueOf(latitude);
-					lon = Double.valueOf(longitude);
-					loadNearbyPlaces(lat, lon, rad);
-					//Toast.makeText(Places.this, "geting by manual location",
-						//	Toast.LENGTH_SHORT).show();
-				}
+					loadNearbyPlaces(mLocation.getLatitude(),
+							mLocation.getLongitude(), rad);
+
 				} catch (Exception ex) {
-					Toast.makeText(Places.this, "Something bad happened: " + ex.getMessage(),
-						Toast.LENGTH_SHORT).show();
+					Toast.makeText(Places.this,
+							"Something bad happened: " + ex.getMessage(),
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 
-		});
-
-		updLocBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (mFsqApp.isLocationEnabled()) {
-
-					updateLocationFields();
-				}
-			}
 		});
 
 	}
 
-	private void updateLocationFields() {
-		try {
-		mLocation = mFsqApp.getLocation();
-		if (mLocation != null) {
-			latitudeEt.setText(String.valueOf(mLocation.getLatitude()));
-			longitudeEt.setText(String.valueOf(mLocation.getLongitude()));
-		}
-		tvAddress.setText(mFsqApp.getAddress());
-		} catch (Exception Ex)
-		{
-			Log.i("ERIC", "BAD! " + Ex.getMessage());
-		}
+	public void updateLocation() throws InterruptedException {
+		mProgress.setMessage("Retrieving location...");
+		mProgress.show();
+
+		new Thread() {
+			@Override
+			public void run() {
+				int what = 0;
+				Log.i("ERIC", "Thread started");
+				Looper.prepare();
+				try {
+
+					int counter = 0;
+					if (!mLocEng.isLocationEnabled()) {
+						Toast.makeText(Places.this,
+								"Location service is not available",
+								Toast.LENGTH_SHORT);
+
+					} else {
+						while ((mLocation == null) && (counter < 5)) {
+							mLocation = mLocEng.getCurrentLocation();
+							if (mLocation != null)
+								break;
+							sleep(1000);
+							counter++;
+							Log.i("ERIC", "counter=" + counter);
+						}
+					}
+
+				} catch (Exception Ex) {
+					what = 1;
+					Log.i("ERIC", "BAD UPDATE LOC: " + Ex.getMessage());
+
+				}
+				mHandler.sendMessage(mHandler.obtainMessage(what));
+
+			}
+		}.start();
+
 	}
 
 	private void Init() {
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
 		tvProfile = (TextView) findViewById(R.id.tvPlaProfile);
-		
-		tvAddress = (TextView) findViewById(R.id.textView2);
-		latitudeEt = (EditText) findViewById(R.id.et_latitude);
-		longitudeEt = (EditText) findViewById(R.id.et_longitude);
-		radiusEt = (EditText) findViewById(R.id.et_radius);
+
+		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
-		updLocBtn = (Button) findViewById(R.id.b_updateLocation);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
 		mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		mLocEng = new LocationEngine(this);
 
 		mAdapter = new NearbyAdapter(this);
 		mNearbyList = new ArrayList<FsqVenue>();
@@ -164,14 +169,10 @@ public class Places extends Activity implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
+
 		Intent myIntent;
 		switch (v.getId()) {
 		case R.id.tvPlaReport:
-			/*
-			 * tvReport.setBackgroundResource(R.drawable.orange);
-			 * tvReport.setBackgroundColor(android.R.color.black);
-			 */
 			myIntent = new Intent(getApplicationContext(), Report.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
@@ -179,16 +180,8 @@ public class Places extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.tvPlaPlaces:
-			/*
-			 * tvPlaces.setBackgroundResource(R.drawable.orange);
-			 * tvPlaces.setBackgroundColor(android.R.color.black);
-			 */
 			break;
 		case R.id.tvPlaProfile:
-			/*
-			 * tvProfile.setBackgroundResource(R.drawable.orange);
-			 * tvProfile.setBackgroundColor(android.R.color.black);
-			 */
 			myIntent = new Intent(getApplicationContext(), Profile.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
@@ -200,24 +193,27 @@ public class Places extends Activity implements View.OnClickListener {
 
 	private void loadNearbyPlaces(final double latitude,
 			final double longitude, final int radius) {
+		mProgress.setMessage("Retrieving nearby places");
 		mProgress.show();
 
-		new Thread() {
-			@Override
-			public void run() {
-				int what = 0;
+		try {
+			mNearbyList = mFsqApp.getNearby(latitude, longitude, radius);
 
-				try {
-					mNearbyList = mFsqApp
-							.getNearby(latitude, longitude, radius);
-				} catch (Throwable e) {
-					what = 1;
-					e.printStackTrace();
-				}
-
-				mHandler.sendMessage(mHandler.obtainMessage(what));
+			if (mNearbyList.size() == 0) {
+				Toast.makeText(Places.this, "No nearby places available",
+						Toast.LENGTH_SHORT).show();
+				return;
 			}
-		}.start();
+
+			mAdapter.setData(mNearbyList);
+			mListView.setAdapter(mAdapter);
+
+		} catch (Throwable e) {
+			Toast.makeText(Places.this, "Failed to load nearby places",
+					Toast.LENGTH_SHORT).show();
+		}
+		mProgress.dismiss();
+
 	}
 
 	private Handler mHandler = new Handler() {
@@ -226,19 +222,31 @@ public class Places extends Activity implements View.OnClickListener {
 			mProgress.dismiss();
 
 			if (msg.what == 0) {
-				if (mNearbyList.size() == 0) {
-					Toast.makeText(Places.this, "No nearby places available",
-							Toast.LENGTH_SHORT).show();
-					return;
-				}
+				if (mLocation != null) {
+					tvAddress
+							.setText(mLocEng.getAddressFromLocation(mLocation));
+					Log.i("ERIC", "location: " + mLocation.toString());
+				} else
+					Toast.makeText(Places.this, "Unable to get location",
+							Toast.LENGTH_LONG).show();
 
-				mAdapter.setData(mNearbyList);
-				mListView.setAdapter(mAdapter);
+				/*
+				 * if (mNearbyList.size() == 0) { Toast.makeText(Places.this,
+				 * "No nearby places available", Toast.LENGTH_SHORT).show();
+				 * return; }
+				 * 
+				 * mAdapter.setData(mNearbyList);
+				 * mListView.setAdapter(mAdapter);
+				 */
 			} else {
-				Toast.makeText(Places.this,
-						"Failed to load nearby places: " + msg.what,
-						Toast.LENGTH_SHORT).show();
+				/*
+				 * Toast.makeText(Places.this, "Failed to load nearby places: "
+				 * + msg.what, Toast.LENGTH_SHORT).show();
+				 */
+				Toast.makeText(Places.this, "Error while getting location",
+						Toast.LENGTH_LONG).show();
 			}
 		}
 	};
+
 }

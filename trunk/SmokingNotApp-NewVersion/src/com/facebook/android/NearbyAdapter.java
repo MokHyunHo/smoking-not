@@ -112,15 +112,17 @@ public class NearbyAdapter extends BaseAdapter {
 		// holder.mDistanceTxt.setText(String.valueOf(venue.distance));
 		if (!isShortAdapter) {
 			// find rating of corresponding place
-			holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
+			
 			try {
-			for (int i = 0; i < 10; i++) {
+				holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
+			/*for (int i = 0; i < 10; i++) {
 				if (Report.places[i].name != null) {
 					if (Report.places[i].name.compareTo(venue.name) == 0)
 
 						holder.mRaiting.setProgress(Report.places[i].rate);
 				}
 			}
+			*/
 			} catch (Exception Ex) {
 				Log.i("ERIC", "Bad! places ratings... " + Ex.getMessage());
 			}
