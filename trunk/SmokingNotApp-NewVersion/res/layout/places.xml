@@ -20,10 +20,8 @@
     <TableLayout
         android:id="@+id/TableLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
+        android:layout_height="wrap_content" >
+
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="match_parent"
@@ -112,15 +110,43 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/TableLayout"
         android:text="Home" />
-
-    <Button
-        android:id="@+id/b_go"
+
+    <MultiAutoCompleteTextView
+        android:id="@+id/et_Search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvAddress"
-        android:autoLink="map"
+        android:ems="10"
+        android:text="" />
+
+    <Button
+        android:id="@+id/b_go"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/et_Search"
         android:text=" Get Nearby Places " />
+
+    <ImageButton
+        android:id="@+id/ib_ShowMeOnMap"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvCaption"
+        android:layout_marginLeft="5dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/show_on_map" />
+
+    <Button
+        android:id="@+id/b_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/et_Search"
+        android:layout_toRightOf="@+id/b_go"
+        android:text="Search" />
 
 </RelativeLayout>

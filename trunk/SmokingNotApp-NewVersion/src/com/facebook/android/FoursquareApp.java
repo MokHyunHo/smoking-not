@@ -38,11 +38,10 @@ public class FoursquareApp {
 	private String mTokenUrl;
 	private String mAccessToken;
 
-
 	public static final String CALLBACK_URL = "http://code.google.com/p/smoking-not/";
 	private static final String AUTH_URL = "https://foursquare.com/oauth2/authenticate?response_type=code";
 	private static final String TOKEN_URL = "https://foursquare.com/oauth2/access_token?grant_type=authorization_code";
-	
+
 	private static final String API_URL = "https://api.foursquare.com/v2";
 
 	private static final String TAG = "FoursquareApi";
@@ -59,7 +58,6 @@ public class FoursquareApp {
 
 		String url = AUTH_URL + "&client_id=" + clientId + "&redirect_uri="
 				+ CALLBACK_URL;
-		
 
 		FsqDialogListener listener = new FsqDialogListener() {
 			@Override
@@ -78,7 +76,6 @@ public class FoursquareApp {
 
 		mProgress.setCancelable(false);
 
-		
 	}
 
 	private void getAccessToken(final String code) {
@@ -219,26 +216,47 @@ public class FoursquareApp {
 	public ArrayList<FsqVenue> getNearby(double latitude, double longitude,
 			int radius) throws Throwable {
 
+		String ll = String.valueOf(latitude) + "," + String.valueOf(longitude);
+		URL url = new URL(
+				API_URL
+						+ "/venues/search?ll="
+						+ ll
+						+ "&intent=browse&radius="
+						+ radius
+						+ "&limit="
+						+ 50
+						+ "&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
+
+		return getVenues(url);
+	}
+
+	public ArrayList<FsqVenue> searchVenues(double latitude, double longitude,
+			int radius, String searchStr) throws Throwable {
+
+		String ll = String.valueOf(latitude) + "," + String.valueOf(longitude);
+		URL url = new URL(
+				API_URL
+						+ "/venues/search?ll="
+						+ ll
+						+ "&query="
+						+ searchStr
+						+ "&intent=browse"
+						+ "&radius=100000"
+						+ "&limit="
+						+ 50
+						+ "&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
+
+		return getVenues(url);
+	}
+
+	public ArrayList<FsqVenue> getVenues(URL url) throws Throwable {
+
 		ArrayList<FsqVenue> venueList = new ArrayList<FsqVenue>();
 
 		try {
-			String ll = String.valueOf(latitude) + ","
-					+ String.valueOf(longitude);
-			URL url = new URL(
-					API_URL
-							+ "/venues/search?ll="
-							+ ll
-							+ "&intent=browse&radius="
-							+ radius
-							+ "&limit="
-							+ 50
-							+ "&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
-			// Toast.makeText(context, "url: " + url.toString(),
-			// Toast.LENGTH_LONG).show();
-			// URL url = new
-			// URL("https://api.foursquare.com/v2/venues/search?ll=40.7,-74&oauth_token=WZ3B1CIMNVEPEEOJ1RNMF32515ETOCCEMRAQPMGFBK0QX4BI&v=20120331");
+
 			Log.d(TAG, "Opening URL " + url.toString());
-			// 37/2Toast.makeText(Caller, "Kaki", Toast.LENGTH_SHORT).show();
+
 			HttpURLConnection urlConnection = (HttpURLConnection) url
 					.openConnection();
 
@@ -273,23 +291,26 @@ public class FoursquareApp {
 
 					loc.setLatitude(Double.valueOf(location.getString("lat")));
 					loc.setLongitude(Double.valueOf(location.getString("lng")));
-					// loc.se (Double.valueOf(location.getString("lat")));
 
 					venue.location = loc;
-					if (location.has("address")) {
-						venue.address = location.getString("address");
-						Log.i("ERIC", "HAS ADDRESS");
-						Log.i("ERIC", location.getString("address"));
-					} else
+					StringBuilder sb = new StringBuilder();
+					if (location.has("address"))
+						sb.append(location.getString("address"));
+					if (location.has("city"))
+					{
+						if (!sb.toString().isEmpty())
+							sb.append(", ");
+						sb.append(location.getString("city"));
+					}
+					if (sb.toString().isEmpty())
 						venue.address = "(No address)";
+					else
+						venue.address = sb.toString();
 
 					venue.distance = Integer.valueOf(location
 							.getString("distance"));
-					// venue.herenow =
-					// item.getJSONObject("hereNow").getInt("count");
-					// venue.type = group.getString("type");
-					//
 					venueList.add(venue);
+
 				}
 			}
 		} catch (Throwable ex) {
@@ -332,58 +353,42 @@ public class FoursquareApp {
 		public abstract void onFail(String error);
 	}
 
-
-	/*public Location getLocation() {
-		return mLocation;
-
-	}
-
-	public void obtainAddress() {
-		List<Address> addresses;
-		try {
-			
-			if (mLocation == null)
-				addresses = gc.getFromLocation(32.06, 34.77, 1);
-			else
-				addresses = gc.getFromLocation(mLocation.getLatitude(),
-						mLocation.getLongitude(), 1);
-			if (addresses == null)
-				return;
-			
-			StringBuilder sb = new StringBuilder();
-			Log.i("ERRIC", "addresses size: " + String.valueOf(addresses.size()));
-			if (addresses.size() > 0) {
-				Address address = addresses.get(0);
-
-				for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-					sb.append(address.getAddressLine(i)).append("\n");
-
-				sb.append(address.getCountryName());
-			}
-			addressString = sb.toString();
-		} catch (IOException e) {
-			Log.i("ERIC", "BAD! address: " + e.getMessage());
-		}
-
-		
-	}
-	
-	public String getAddress() {
-		Log.i("ERIC", "getAddress: " + addressString);
-		return addressString;
-	}
-
-	public void setLocation(double lat, double lon) {
-		mLocation.setProvider(LocationManager.PASSIVE_PROVIDER);
-		mLocation.setLatitude(lat);
-		mLocation.setLongitude(lon);
-		
-	}
-	
-	public boolean isLocationEnabled() {
-		return (mLocation != null);
-	}
-*/
+	/*
+	 * public Location getLocation() { return mLocation;
+	 * 
+	 * }
+	 * 
+	 * public void obtainAddress() { List<Address> addresses; try {
+	 * 
+	 * if (mLocation == null) addresses = gc.getFromLocation(32.06, 34.77, 1);
+	 * else addresses = gc.getFromLocation(mLocation.getLatitude(),
+	 * mLocation.getLongitude(), 1); if (addresses == null) return;
+	 * 
+	 * StringBuilder sb = new StringBuilder(); Log.i("ERRIC", "addresses size: "
+	 * + String.valueOf(addresses.size())); if (addresses.size() > 0) { Address
+	 * address = addresses.get(0);
+	 * 
+	 * for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+	 * sb.append(address.getAddressLine(i)).append("\n");
+	 * 
+	 * sb.append(address.getCountryName()); } addressString = sb.toString(); }
+	 * catch (IOException e) { Log.i("ERIC", "BAD! address: " + e.getMessage());
+	 * }
+	 * 
+	 * 
+	 * }
+	 * 
+	 * public String getAddress() { Log.i("ERIC", "getAddress: " +
+	 * addressString); return addressString; }
+	 * 
+	 * public void setLocation(double lat, double lon) {
+	 * mLocation.setProvider(LocationManager.PASSIVE_PROVIDER);
+	 * mLocation.setLatitude(lat); mLocation.setLongitude(lon);
+	 * 
+	 * }
+	 * 
+	 * public boolean isLocationEnabled() { return (mLocation != null); }
+	 */
 	private void showDialog(String title, String message) {
 		Dialog d = new Dialog(this.context);
 		d.setCanceledOnTouchOutside(true);
