@@ -29,7 +29,7 @@ public class ChooseVenue extends Activity {
 	private NearbyAdapter mAdapter;
 	private ProgressDialog mProgress;
 	private final int rad = 100;
-	private Location mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
+	private Location mLocation;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,10 +44,11 @@ public class ChooseVenue extends Activity {
 		if (mLocEng.isLocationEnabled())
 			mLocation = mLocEng.getCurrentLocation();
 		else {
+			mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
 			mLocation.setLatitude(32.06);
 			mLocation.setLongitude(34.77);
 		}
-		mProgress.setMessage("Getting venue around...");
+		mProgress.setMessage("Getting venues around...");
 		mProgress.show();
 		new Thread() {
 			@Override

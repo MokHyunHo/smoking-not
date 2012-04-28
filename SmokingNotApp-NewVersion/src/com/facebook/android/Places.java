@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +21,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 //import android.widget.ImageView;
 //import android.widget.TextView;
@@ -43,10 +46,12 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_ADDRESS_OK = 4;
 	private final int M_GET_PLACES_ERR = 5;
 	private final int M_GET_PLACES_OK = 6;
+	
+	private final int rad = 150;
 
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	// private EditText latitudeEt, longitudeEt, radiusEt;
-	private Button exitButton, goBtn;// , updLocBtn;
+	private Button exitButton, goBtn, searchBtn;
 
 	private FoursquareApp mFsqApp;
 	private LocationEngine mLocEng;
@@ -54,9 +59,9 @@ public class Places extends Activity implements View.OnClickListener {
 	private NearbyAdapter mAdapter;
 	private ArrayList<FsqVenue> mNearbyList;
 	private ProgressDialog mProgress;
-
+	private ImageButton mShowMeOnMap;
 	private Location mLocation;
-
+	private MultiAutoCompleteTextView etSearch;
 	CountDownLatch latch = new CountDownLatch(1);
 	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
 	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
@@ -68,6 +73,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
+		searchBtn = (Button) findViewById(R.id.b_search);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
 		mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
@@ -76,7 +82,10 @@ public class Places extends Activity implements View.OnClickListener {
 		mAdapter = new NearbyAdapter(this);
 		mNearbyList = new ArrayList<FsqVenue>();
 		mProgress = new ProgressDialog(this);
-		
+		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
+		etSearch = (MultiAutoCompleteTextView) findViewById(R.id.et_Search);
+		mShowMeOnMap.setVisibility(View.INVISIBLE);
+		goBtn.setEnabled(false);
 		// connection between XML & JAVA
 
 		// first-up menu
@@ -141,7 +150,7 @@ public class Places extends Activity implements View.OnClickListener {
 			@Override
 			public void onClick(View v) {
 
-				int rad = 150;
+
 				try {
 					if (!mLocEng.isLocationEnabled()) {
 						Toast.makeText(Places.this, "Location is unknown",
@@ -155,8 +164,11 @@ public class Places extends Activity implements View.OnClickListener {
 						latch.await();
 					}
 					if (mLocation != null)
+					{
+						mProgress.setMessage("Retrieving nearby venues...");
 						loadNearbyPlaces(mLocation.getLatitude(),
-								mLocation.getLongitude(), rad);
+								mLocation.getLongitude(), rad, false, null);
+					}
 					else
 						Toast.makeText(Places.this, "Location is unknown",
 								Toast.LENGTH_SHORT).show();
@@ -168,6 +180,42 @@ public class Places extends Activity implements View.OnClickListener {
 				}
 			}
 
+		});
+		
+		searchBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String searchStr = etSearch.getText().toString(); 
+				if (searchStr.isEmpty()) return;
+				
+				try
+				{
+					mProgress.setMessage("Searching for venues...");
+					loadNearbyPlaces(mLocation.getLatitude(),
+							mLocation.getLongitude(), rad, true, searchStr);
+
+				} catch (Exception ex) {
+					Toast.makeText(Places.this,
+							"Something bad happened: " + ex.getMessage(),
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+
+		});
+		
+		mShowMeOnMap.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				try {
+					Uri mUri = Uri.parse("geo:0,0?q="
+							+ mLocation.getLatitude() + ","
+							+ mLocation.getLongitude());
+					Intent i = new Intent(Intent.ACTION_VIEW, mUri);
+					startActivity(i);
+				} catch (Throwable t) {
+					;
+				}
+
+			}
 		});
 
 	}
@@ -181,6 +229,7 @@ public class Places extends Activity implements View.OnClickListener {
 			public void run() {
 				int what = M_LOC_OK;
 				Looper.prepare();
+				Log.i("ERIC", "upc loc thread");
 				try {
 
 					int counter = 0;
@@ -197,6 +246,18 @@ public class Places extends Activity implements View.OnClickListener {
 							counter++;
 							Log.i("ERIC", "counter=" + counter);
 						}
+						counter = 0;
+						mProgress.setMessage("Obtaining your address");
+						while ((!mLocEng.addressEnabled) && (counter < 5)) 
+						{
+							mLocEng.getAddressFromLocation(mLocation);
+							if (mLocEng.addressEnabled)
+								break;
+							sleep(1000);
+							counter++;
+							Log.i("ERIC", "counter=" + counter);
+						}
+						
 					}
 
 				} catch (Exception Ex) {
@@ -204,18 +265,19 @@ public class Places extends Activity implements View.OnClickListener {
 					Log.i("ERIC", "BAD UPDATE LOC: " + Ex.getMessage());
 
 				}
+				latch.countDown();
 				mHandler.sendMessage(mHandler.obtainMessage(what));
 
 			}
 		}.start();
-
+		Log.i("ERIC", "upd loc thread started");
 	}
 
 
 
 	private void loadNearbyPlaces(final double latitude,
-			final double longitude, final int radius) {
-		mProgress.setMessage("Retrieving nearby places");
+			final double longitude, final int radius, final boolean query, final String searchStr) {
+		
 		mProgress.show();
 		new Thread() {
 			@Override
@@ -223,12 +285,17 @@ public class Places extends Activity implements View.OnClickListener {
 				int what = M_GET_PLACES_OK;
 				Looper.prepare();
 				try {
+					if (query == true)
+						mNearbyList = mFsqApp
+						.searchVenues(latitude, longitude, radius, searchStr);
+					else
 					mNearbyList = mFsqApp
 							.getNearby(latitude, longitude, radius);
 
 				} catch (Throwable e) {
 					what = M_GET_PLACES_ERR;
 				}
+				
 				mHandler.sendMessage(mHandler.obtainMessage(what));
 			}
 		}.start();
@@ -244,16 +311,20 @@ public class Places extends Activity implements View.OnClickListener {
 			case M_LS_DOWN:
 				Toast.makeText(Places.this, "Location Service is unavailable",
 						Toast.LENGTH_LONG).show();
+				
 				break;
 			case M_UPD_LOC_ERR:
 				Toast.makeText(Places.this, "Error while getting location",
 						Toast.LENGTH_LONG).show();
+				mShowMeOnMap.setVisibility(View.INVISIBLE);
 				break;
 			case M_LOC_OK:
 				if (mLocation != null) {
 					tvAddress
 							.setText(mLocEng.getAddressFromLocation(mLocation));
 					Log.i("ERIC", "location: " + mLocation.toString());
+					goBtn.setEnabled(true);
+					mShowMeOnMap.setVisibility(View.VISIBLE);
 				} else
 					Toast.makeText(Places.this, "Unable to get location",
 							Toast.LENGTH_LONG).show();
@@ -261,7 +332,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 			case M_GET_PLACES_OK:
 				if (mNearbyList.size() == 0) {
-					Toast.makeText(Places.this, "No nearby places available",
+					Toast.makeText(Places.this, "No venues",
 							Toast.LENGTH_LONG).show();
 					break;
 				}
@@ -271,7 +342,7 @@ public class Places extends Activity implements View.OnClickListener {
 				break;
 
 			case M_GET_PLACES_ERR:
-				Toast.makeText(Places.this, "Failed to load nearby places",
+				Toast.makeText(Places.this, "Failed to load venues",
 						Toast.LENGTH_LONG).show();
 				break;
 

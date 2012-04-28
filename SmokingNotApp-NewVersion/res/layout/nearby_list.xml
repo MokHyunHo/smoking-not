@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/pb_Raiting"
         android:layout_alignParentRight="true"
-        android:background="@color/black"
+        android:background="@android:color/transparent"
         android:src="@drawable/show_on_map" />
 
 </RelativeLayout>
