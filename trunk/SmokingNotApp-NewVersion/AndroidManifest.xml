@@ -79,7 +79,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChooseVenue"
+            android:name=".ChoosePlace"
             android:configChanges="keyboardHidden"
             android:label="@string/app_name" >
             <intent-filter>
