@@ -18,14 +18,14 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ChooseVenue extends Activity {
+public class ChoosePlace extends Activity {
 	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
 	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
 
-	private FoursquareApp mFsqApp;
+	private GooglePlacesAPI mGooglePlacesAPI; 
 	private LocationEngine mLocEng;
 	private ListView mListView;
-	private ArrayList<FsqVenue> mNearbyList;
+	private ArrayList<GooglePlace> mNearbyList;
 	private NearbyAdapter mAdapter;
 	private ProgressDialog mProgress;
 	private final int rad = 100;
@@ -35,12 +35,13 @@ public class ChooseVenue extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_venue);
 
-		mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		//GooglePlacesAPI = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		mLocEng = new LocationEngine(this);
 		mAdapter = new NearbyAdapter(this, true);
 		mProgress = new ProgressDialog(this);
-		mListView = (ListView) findViewById(R.id.venue_list);
-		mNearbyList = new ArrayList<FsqVenue>();
+		mListView = (ListView) findViewById(R.id.places_list);
+		mNearbyList = new ArrayList<GooglePlace>();
 		if (mLocEng.isLocationEnabled())
 			mLocation = mLocEng.getCurrentLocation();
 		else {
@@ -56,8 +57,7 @@ public class ChooseVenue extends Activity {
 				int what = 0;
 				Looper.prepare();
 				try {
-					mNearbyList = mFsqApp.getNearby(mLocation.getLatitude(),
-							mLocation.getLongitude(), rad);
+					mNearbyList = mGooglePlacesAPI.getNearby(mLocation);
 				} catch (Throwable e) {
 					what = 1;
 					// e.printStackTrace();
@@ -72,12 +72,12 @@ public class ChooseVenue extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				FsqVenue venue = (FsqVenue) mAdapter.getItem(position);
+				GooglePlace place = (GooglePlace) mAdapter.getItem(position);
 
 				Intent data = new Intent();
 
-				data.putExtra("venueID", venue.id);
-				data.putExtra("venueName", venue.name);
+				data.putExtra("placeID", place.id);
+				data.putExtra("placeName", place.name);
 				setResult(RESULT_OK, data);
 				Log.i("ERIC", "set result: " + data.getExtras().toString());
 				finish();
@@ -94,7 +94,7 @@ public class ChooseVenue extends Activity {
 
 			if (msg.what == 0) {
 				if (mNearbyList.size() == 0) {
-					Toast.makeText(ChooseVenue.this,
+					Toast.makeText(ChoosePlace.this,
 							"No nearby places available", Toast.LENGTH_SHORT)
 							.show();
 					return;
@@ -106,7 +106,7 @@ public class ChooseVenue extends Activity {
 				mListView.setAdapter(mAdapter);
 
 			} else {
-				Toast.makeText(ChooseVenue.this,
+				Toast.makeText(ChoosePlace.this,
 						"Failed to load nearby places: " + msg.what,
 						Toast.LENGTH_SHORT).show();
 			}

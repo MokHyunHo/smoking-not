@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,15 +50,18 @@ public class Places extends Activity implements View.OnClickListener {
 	
 	private final int rad = 150;
 
+	private final int CYCLES_TO_WAIT = 2;
+	
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	// private EditText latitudeEt, longitudeEt, radiusEt;
 	private Button exitButton, goBtn, searchBtn;
 
-	private FoursquareApp mFsqApp;
+	//private FoursquareApp mFsqApp;
+	private GooglePlacesAPI mGooglePlacesAPI; 
 	private LocationEngine mLocEng;
 	private ListView mListView;
 	private NearbyAdapter mAdapter;
-	private ArrayList<FsqVenue> mNearbyList;
+	private ArrayList<GooglePlace> mNearbyList;
 	private ProgressDialog mProgress;
 	private ImageButton mShowMeOnMap;
 	private Location mLocation;
@@ -76,11 +80,12 @@ public class Places extends Activity implements View.OnClickListener {
 		searchBtn = (Button) findViewById(R.id.b_search);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
-		mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		//mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		mLocEng = new LocationEngine(this);
 
 		mAdapter = new NearbyAdapter(this);
-		mNearbyList = new ArrayList<FsqVenue>();
+		mNearbyList = new ArrayList<GooglePlace>();
 		mProgress = new ProgressDialog(this);
 		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
 		etSearch = (MultiAutoCompleteTextView) findViewById(R.id.et_Search);
@@ -166,8 +171,7 @@ public class Places extends Activity implements View.OnClickListener {
 					if (mLocation != null)
 					{
 						mProgress.setMessage("Retrieving nearby venues...");
-						loadNearbyPlaces(mLocation.getLatitude(),
-								mLocation.getLongitude(), rad, false, null);
+						loadNearbyPlaces(mLocation, false, null);
 					}
 					else
 						Toast.makeText(Places.this, "Location is unknown",
@@ -190,9 +194,9 @@ public class Places extends Activity implements View.OnClickListener {
 				
 				try
 				{
-					mProgress.setMessage("Searching for venues...");
-					loadNearbyPlaces(mLocation.getLatitude(),
-							mLocation.getLongitude(), rad, true, searchStr);
+					mProgress.setMessage("Searching for places...");
+					
+					loadNearbyPlaces(mLocation, true, searchStr);
 
 				} catch (Exception ex) {
 					Toast.makeText(Places.this,
@@ -237,7 +241,7 @@ public class Places extends Activity implements View.OnClickListener {
 						what = M_LS_DOWN;
 
 					} else {
-						while ((mLocation == null) && (counter < 5)) 
+						while ((mLocation == null) && (counter < CYCLES_TO_WAIT)) 
 						{
 							mLocation = mLocEng.getCurrentLocation();
 							if (mLocation != null)
@@ -248,7 +252,7 @@ public class Places extends Activity implements View.OnClickListener {
 						}
 						counter = 0;
 						mProgress.setMessage("Obtaining your address");
-						while ((!mLocEng.addressEnabled) && (counter < 5)) 
+						while ((!mLocEng.addressEnabled) && (counter < CYCLES_TO_WAIT)) 
 						{
 							mLocEng.getAddressFromLocation(mLocation);
 							if (mLocEng.addressEnabled)
@@ -275,22 +279,27 @@ public class Places extends Activity implements View.OnClickListener {
 
 
 
-	private void loadNearbyPlaces(final double latitude,
-			final double longitude, final int radius, final boolean query, final String searchStr) {
+	private void loadNearbyPlaces(final Location location, final boolean query, final String searchStr) {
 		
 		mProgress.show();
+
 		new Thread() {
 			@Override
 			public void run() {
 				int what = M_GET_PLACES_OK;
+
 				Looper.prepare();
 				try {
+					mNearbyList.clear();
+					mAdapter.setData(mNearbyList);
+					mListView.setAdapter(mAdapter);
 					if (query == true)
-						mNearbyList = mFsqApp
-						.searchVenues(latitude, longitude, radius, searchStr);
+						mNearbyList = mGooglePlacesAPI
+						.searchPlaces(mLocation, mLocEng.isLocationEnabled(), searchStr);
+						
 					else
-					mNearbyList = mFsqApp
-							.getNearby(latitude, longitude, radius);
+					mNearbyList = mGooglePlacesAPI
+							.getNearby(location);
 
 				} catch (Throwable e) {
 					what = M_GET_PLACES_ERR;
@@ -342,7 +351,7 @@ public class Places extends Activity implements View.OnClickListener {
 				break;
 
 			case M_GET_PLACES_ERR:
-				Toast.makeText(Places.this, "Failed to load venues",
+				Toast.makeText(Places.this, "Failed to load places",
 						Toast.LENGTH_LONG).show();
 				break;
 
