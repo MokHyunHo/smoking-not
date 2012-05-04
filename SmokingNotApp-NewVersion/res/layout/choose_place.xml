@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <AutoCompleteTextView
+        android:id="@+id/et_Search"
+        style="@android:style/Widget.AutoCompleteTextView"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:completionHint="Search..."
+        android:completionThreshold="1"
+        android:editable="false"
+        android:ems="10"
+        android:enabled="false"
+        android:singleLine="true"
+        android:text="Search..."
+        android:textColor="@color/grey" >
+
+        <requestFocus />
+    </AutoCompleteTextView>
+
+    <ListView
+        android:id="@+id/places_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/et_Search" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/b_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/et_Search"
+        android:text="Add place..." />
+
+</RelativeLayout>

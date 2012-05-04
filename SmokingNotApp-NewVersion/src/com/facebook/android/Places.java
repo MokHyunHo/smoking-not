@@ -50,11 +50,11 @@ public class Places extends Activity implements View.OnClickListener {
 	
 	private final int rad = 150;
 
-	private final int CYCLES_TO_WAIT = 2;
+	private final int CYCLES_TO_WAIT = 5;
 	
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	// private EditText latitudeEt, longitudeEt, radiusEt;
-	private Button exitButton, goBtn, searchBtn;
+	private Button goBtn, searchBtn;
 
 	//private FoursquareApp mFsqApp;
 	private GooglePlacesAPI mGooglePlacesAPI; 
@@ -63,7 +63,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private NearbyAdapter mAdapter;
 	private ArrayList<GooglePlace> mNearbyList;
 	private ProgressDialog mProgress;
-	private ImageButton mShowMeOnMap;
+	private ImageButton exitButton, mShowMeOnMap, mRefreshButton;
 	private Location mLocation;
 	private MultiAutoCompleteTextView etSearch;
 	CountDownLatch latch = new CountDownLatch(1);
@@ -88,6 +88,7 @@ public class Places extends Activity implements View.OnClickListener {
 		mNearbyList = new ArrayList<GooglePlace>();
 		mProgress = new ProgressDialog(this);
 		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
+		mRefreshButton = (ImageButton) findViewById(R.id.ib_Refresh);
 		etSearch = (MultiAutoCompleteTextView) findViewById(R.id.et_Search);
 		mShowMeOnMap.setVisibility(View.INVISIBLE);
 		goBtn.setEnabled(false);
@@ -99,7 +100,7 @@ public class Places extends Activity implements View.OnClickListener {
 		tvProfile.setOnClickListener(this);
 
 		// START MENU BUTTON
-		exitButton = (Button) findViewById(R.id.exitButton);
+		exitButton = (ImageButton) findViewById(R.id.exitButton);
 		
 		exitButton.setOnClickListener(new OnClickListener() {
 
@@ -170,7 +171,7 @@ public class Places extends Activity implements View.OnClickListener {
 					}
 					if (mLocation != null)
 					{
-						mProgress.setMessage("Retrieving nearby venues...");
+						mProgress.setMessage("Retrieving nearby places...");
 						loadNearbyPlaces(mLocation, false, null);
 					}
 					else
@@ -221,6 +222,18 @@ public class Places extends Activity implements View.OnClickListener {
 
 			}
 		});
+		
+		mRefreshButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				try {
+					updateLocation();
+				} catch (Throwable t) {
+					;
+				}
+
+			}
+		});		
+		
 
 	}
 
@@ -338,7 +351,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 			case M_GET_PLACES_OK:
 				if (mNearbyList.size() == 0) {
-					Toast.makeText(Places.this, "No venues",
+					Toast.makeText(Places.this, "No places",
 							Toast.LENGTH_LONG).show();
 					break;
 				}

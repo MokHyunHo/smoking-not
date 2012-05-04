@@ -279,10 +279,10 @@ public class Report extends Activity implements View.OnClickListener,
 					iv.setImageBitmap(bmp);
 					break;
 				case iVenue:
-					Log.i("ERIC", "getting venue");
-					Log.i("ERIC", "bundle: " + extras.getString("venueName"));
-					mGooglePlace.id = extras.getString("venueID");
-					mGooglePlace.name = extras.getString("venueName");
+					Log.i("ERIC", "getting place");
+					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
+					mGooglePlace.id = extras.getString("placeID");
+					mGooglePlace.name = extras.getString("placeName");
 					Log.i("ERIC", "name: " + mGooglePlace.name);
 					et1.setText(mGooglePlace.name);
 					break;

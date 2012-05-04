@@ -6,17 +6,6 @@
     android:gravity="center_horizontal"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/tvCaption"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/TableLayout"
-        android:gravity="center"
-        android:text="@string/places"
-        android:textColor="#ffffff"
-        android:textSize="30dp"
-        android:textStyle="bold" />
-
     <TableLayout
         android:id="@+id/TableLayout"
         android:layout_width="match_parent"
@@ -65,8 +54,47 @@
                 android:textSize="15dp"
                 android:textStyle="bold" />
         </TableRow>
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" >
+
+            <ImageButton
+                android:id="@+id/exitButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/home" />
+
+            <ImageButton
+                android:id="@+id/ib_Refresh"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/refresh_yellow" />
+
+            <ImageButton
+                android:id="@+id/ib_ShowMeOnMap"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/ib_Refresh"
+                android:background="@android:color/transparent"
+                android:src="@drawable/map_icon" />
+
+        </RelativeLayout>
+
     </TableLayout>
-
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
@@ -76,77 +104,56 @@
         android:layout_below="@+id/b_go"
         android:layout_weight="0.04"
         android:background="@color/black" >
-
     </ListView>
-
-    <TextView
-        android:id="@+id/tvAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvAddressCaption"
-        android:gravity="center"
-        android:text="(not available)"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tvAddressCaption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvCaption"
+        android:layout_below="@+id/TableLayout"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="My address:"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="10dp" />
 
-    <Button
-        android:id="@+id/exitButton"
+    <TextView
+        android:id="@+id/tvAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tvAddressCaption"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/TableLayout"
-        android:text="Home" />
-
+        android:layout_below="@+id/tvAddressCaption"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="(not available)"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <MultiAutoCompleteTextView
         android:id="@+id/et_Search"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tvAddress"
         android:ems="10"
-        android:text="" />
-
+        android:textSize="14dp" >
+
+        <requestFocus />
+    </MultiAutoCompleteTextView>
+
     <Button
         android:id="@+id/b_go"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/et_Search"
         android:text=" Get Nearby Places " />
-
-    <ImageButton
-        android:id="@+id/ib_ShowMeOnMap"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvCaption"
-        android:layout_marginLeft="5dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/show_on_map" />
-
+
     <Button
         android:id="@+id/b_search"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_Search"
-        android:layout_toRightOf="@+id/b_go"
         android:text="Search" />
 
 </RelativeLayout>
