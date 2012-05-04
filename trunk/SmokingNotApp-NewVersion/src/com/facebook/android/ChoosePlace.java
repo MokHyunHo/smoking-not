@@ -33,7 +33,7 @@ public class ChoosePlace extends Activity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.choose_venue);
+		setContentView(R.layout.choose_place);
 
 		//GooglePlacesAPI = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
@@ -49,7 +49,7 @@ public class ChoosePlace extends Activity {
 			mLocation.setLatitude(32.06);
 			mLocation.setLongitude(34.77);
 		}
-		mProgress.setMessage("Getting venues around...");
+		mProgress.setMessage("Getting places around...");
 		mProgress.show();
 		new Thread() {
 			@Override

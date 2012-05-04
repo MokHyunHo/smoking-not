@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class LocationEngine implements LocationListener {
 
@@ -44,16 +45,24 @@ public class LocationEngine implements LocationListener {
 
 		setLocationSent(false);
 		
-		/*Debug only*/
-		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
-		mLocation.setLatitude(32.0226977);
-		mLocation.setLongitude(34.7749996);
+
 		
 		//uncoment in release
-		//mLocation = lm.getLastKnownLocation(provider);
+
+		/*		Debug only*/
+		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
+		mLocation.setLatitude(32.06);
+		mLocation.setLongitude(34.77);
 		
-		//locationEnabled = (lm != null);
-		locationEnabled = true; //debug
+		Location newLocation = lm.getLastKnownLocation(provider);
+		
+		if (newLocation != null)
+			mLocation = newLocation;
+		else
+			Toast.makeText(context, "Location is unavailable. Placing you somewhere is Tel Aviv... (debug)", Toast.LENGTH_LONG);
+		
+		locationEnabled = (mLocation != null);
+		//locationEnabled = true; //debug
 
 		lm.requestLocationUpdates(provider, 1000L, 20F, this);
 		
