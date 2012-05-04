@@ -46,11 +46,14 @@ public class LocationEngine implements LocationListener {
 		
 		/*Debug only*/
 		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
-		mLocation.setLatitude(32.06);
-		mLocation.setLongitude(34.77);
+		mLocation.setLatitude(32.0226977);
+		mLocation.setLongitude(34.7749996);
 		
-		mLocation = lm.getLastKnownLocation(provider);
-		locationEnabled = (lm != null);
+		//uncoment in release
+		//mLocation = lm.getLastKnownLocation(provider);
+		
+		//locationEnabled = (lm != null);
+		locationEnabled = true; //debug
 
 		lm.requestLocationUpdates(provider, 1000L, 20F, this);
 		

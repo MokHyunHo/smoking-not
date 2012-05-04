@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class NearbyAdapter extends BaseAdapter {
-	private ArrayList<FsqVenue> mVenueList;
+	private ArrayList<GooglePlace> mPlacesList;
 	private LayoutInflater mInflater;
 	private Context caller;
 	private boolean isShortAdapter = false;
@@ -50,18 +50,18 @@ public class NearbyAdapter extends BaseAdapter {
 		Log.i("ERIC", "Created short adapter: " + isShortAdapter);
 	}
 
-	public void setData(ArrayList<FsqVenue> poolList) {
-		mVenueList = poolList;
+	public void setData(ArrayList<GooglePlace> poolList) {
+		mPlacesList = poolList;
 	}
 
 	@Override
 	public int getCount() {
-		return mVenueList.size();
+		return mPlacesList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mVenueList.get(position);
+		return mPlacesList.get(position);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class NearbyAdapter extends BaseAdapter {
 			if (!isShortAdapter)
 				convertView = mInflater.inflate(R.layout.nearby_list, null);
 			else
-				convertView = mInflater.inflate(R.layout.venue_list, null);
+				convertView = mInflater.inflate(R.layout.places_list, null);
 
 			holder = new ViewHolder();
 
@@ -101,15 +101,15 @@ public class NearbyAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final FsqVenue venue = mVenueList.get(position);
-		Log.i("ERIC", "venue: " + venue.name);
+		final GooglePlace place = mPlacesList.get(position);
+		Log.i("ERIC", "place: " + place.name);
 		holder.position = position;
-		holder.mNameTxt.setText(venue.name);
-		holder.mAddressTxt.setText(venue.address);
-		// holder.mHereNowTxt.setText("(" + String.valueOf(venue.herenow) +
+		holder.mNameTxt.setText(place.name);
+		holder.mAddressTxt.setText(place.vicinity);
+		// holder.mHereNowTxt.setText("(" + String.valueOf(place.herenow) +
 		// " people here)");
-		holder.mDistanceTxt.setText(formatDistance((double) venue.distance));
-		// holder.mDistanceTxt.setText(String.valueOf(venue.distance));
+		holder.mDistanceTxt.setText(formatDistance((double) place.distance));
+		// holder.mDistanceTxt.setText(String.valueOf(place.distance));
 		if (!isShortAdapter) {
 			// find rating of corresponding place
 			
@@ -117,7 +117,7 @@ public class NearbyAdapter extends BaseAdapter {
 				holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
 			/*for (int i = 0; i < 10; i++) {
 				if (Report.places[i].name != null) {
-					if (Report.places[i].name.compareTo(venue.name) == 0)
+					if (Report.places[i].name.compareTo(place.name) == 0)
 
 						holder.mRaiting.setProgress(Report.places[i].rate);
 				}
@@ -131,8 +131,8 @@ public class NearbyAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					try {
 						Uri mUri = Uri.parse("geo:0,0?q="
-								+ venue.location.getLatitude() + ","
-								+ venue.location.getLongitude());
+								+ place.location.getLatitude() + ","
+								+ place.location.getLongitude());
 						Log.i("Eric", mUri.toString());
 						Intent i = new Intent(Intent.ACTION_VIEW, mUri);
 						caller.startActivity(i);
@@ -145,7 +145,7 @@ public class NearbyAdapter extends BaseAdapter {
 
 			Log.i("ERIC", String.valueOf(holder.mRaiting.getProgress()));
 
-			// holder.mRibbonImg.setVisibility((venue.type.equals("trending")) ?
+			// holder.mRibbonImg.setVisibility((place.type.equals("trending")) ?
 			// View.VISIBLE : View.INVISIBLE);
 		}
 		return convertView;
@@ -156,11 +156,13 @@ public class NearbyAdapter extends BaseAdapter {
 
 		DecimalFormat dF = new DecimalFormat("00");
 
-		dF.applyPattern("0.#");
-
 		if (distance < 1000)
+		{
+			dF.applyPattern("0");
 			result = dF.format(distance) + " m";
+		}
 		else {
+			dF.applyPattern("0.#");
 			distance = distance / 1000.0;
 			result = dF.format(distance) + " km";
 		}

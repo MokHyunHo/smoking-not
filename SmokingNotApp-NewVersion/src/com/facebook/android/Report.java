@@ -37,7 +37,7 @@ import android.widget.TextView;
 public class Report extends Activity implements View.OnClickListener,
 		OnItemSelectedListener {
 	
-	public static FsqVenue[] places=new FsqVenue[10];
+	public static GooglePlace[] places=new GooglePlace[10];
 	
 	String[] checked;
 	TextView tvReport, tvPlaces, tvProfile;
@@ -56,7 +56,7 @@ public class Report extends Activity implements View.OnClickListener,
 	private Button exitButton;
 	static final int uniqueId = 1234;
 	NotificationManager nm;
-	public static FsqVenue mFsqVenue = new FsqVenue();
+	public static GooglePlace mGooglePlace = new GooglePlace();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -259,7 +259,7 @@ public class Report extends Activity implements View.OnClickListener,
 			}
 			break;
 		case R.id.etLocation:
-			myIntent = new Intent(getApplicationContext(), ChooseVenue.class);
+			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
 			break;
@@ -281,10 +281,10 @@ public class Report extends Activity implements View.OnClickListener,
 				case iVenue:
 					Log.i("ERIC", "getting venue");
 					Log.i("ERIC", "bundle: " + extras.getString("venueName"));
-					mFsqVenue.id = extras.getString("venueID");
-					mFsqVenue.name = extras.getString("venueName");
-					Log.i("ERIC", "name: " + mFsqVenue.name);
-					et1.setText(mFsqVenue.name);
+					mGooglePlace.id = extras.getString("venueID");
+					mGooglePlace.name = extras.getString("venueName");
+					Log.i("ERIC", "name: " + mGooglePlace.name);
+					et1.setText(mGooglePlace.name);
 					break;
 				case iEmail:
 					
@@ -332,7 +332,8 @@ public class Report extends Activity implements View.OnClickListener,
 	}
 	private void setPlaceRating(String reason,String location)
 	{
-		int j,myRate=0;
+		int j;
+		double myRate=0;
 		for(j=0;places[j]!=null;j++)
 			if(places[j].name.compareTo(location)==0)
 				myRate=places[j].rate;
@@ -346,7 +347,7 @@ public class Report extends Activity implements View.OnClickListener,
 				myRate=0;
 		}
 		if(places[j]==null)
-			places[j]= mFsqVenue;
+			places[j]= mGooglePlace;
 		places[j].rate=myRate;
 	}
 	private void sendNotification()
