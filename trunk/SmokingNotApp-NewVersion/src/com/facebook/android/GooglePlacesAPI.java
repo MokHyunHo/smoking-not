@@ -98,6 +98,7 @@ public class GooglePlacesAPI {
 			JSONObject jsonObj = (JSONObject) new JSONTokener(response)
 					.nextValue();
 
+			Log.d("ERIC", jsonObj.toString());
 			JSONArray places = jsonObj.getJSONArray(
 					"results");
 

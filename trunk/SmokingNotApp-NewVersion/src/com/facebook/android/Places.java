@@ -290,9 +290,6 @@ public class Places extends Activity implements View.OnClickListener {
 
 				Looper.prepare();
 				try {
-					mNearbyList.clear();
-					mAdapter.setData(mNearbyList);
-					mListView.setAdapter(mAdapter);
 					if (query == true)
 						mNearbyList = mGooglePlacesAPI
 						.searchPlaces(mLocation, mLocEng.isLocationEnabled(), searchStr);
