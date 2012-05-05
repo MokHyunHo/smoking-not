@@ -89,7 +89,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/ib_Refresh"
                 android:background="@android:color/transparent"
-                android:src="@drawable/Map_icon" />
+                android:src="@drawable/map_icon" />
 
         </RelativeLayout>
 
