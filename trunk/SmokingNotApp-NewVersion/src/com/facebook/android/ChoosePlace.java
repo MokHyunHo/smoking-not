@@ -7,14 +7,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,12 +33,16 @@ public class ChoosePlace extends Activity {
 	private ProgressDialog mProgress;
 	private final int rad = 100;
 	private Location mLocation;
+	private ImageButton mSearch, mAdd;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_place);
 
-		//GooglePlacesAPI = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
+		
+		mSearch = (ImageButton) findViewById(R.id.ib_Search);	
+		mAdd = (ImageButton) findViewById(R.id.ib_Add);
+		
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		mLocEng = new LocationEngine(this);
 		mAdapter = new NearbyAdapter(this, true);
@@ -81,6 +88,18 @@ public class ChoosePlace extends Activity {
 				setResult(RESULT_OK, data);
 				Log.i("ERIC", "set result: " + data.getExtras().toString());
 				finish();
+
+			}
+		});
+		
+		mAdd.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				try {
+	 				 Intent myIntent = new Intent(getApplicationContext(), AddPlace.class);
+                     startActivity(myIntent);
+				} catch (Throwable t) {
+					;
+				}
 
 			}
 		});

@@ -4,25 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
-    <AutoCompleteTextView
+
+    <EditText
         android:id="@+id/et_Search"
-        style="@android:style/Widget.AutoCompleteTextView"
-        android:layout_width="202dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:completionHint="Search..."
-        android:completionThreshold="1"
-        android:editable="false"
+        android:layout_toLeftOf="@+id/ib_Add"
         android:ems="10"
-        android:enabled="false"
-        android:singleLine="true"
-        android:text="Search..."
-        android:textColor="@color/grey" >
+        android:hint="Search..." >
 
         <requestFocus />
-    </AutoCompleteTextView>
+    </EditText>
+
+    <ImageButton
+        android:id="@+id/ib_Search"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_Search"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/et_Search"
+        android:layout_marginRight="5dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/search" />
+
+    <ImageButton
+        android:id="@+id/ib_Add"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_Search"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/add_place" />
 
     <ListView
         android:id="@+id/places_list"
@@ -32,13 +48,5 @@
         android:layout_below="@+id/et_Search" >
 
     </ListView>
-
-    <Button
-        android:id="@+id/b_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/et_Search"
-        android:text="Add place..." />
 
 </RelativeLayout>
