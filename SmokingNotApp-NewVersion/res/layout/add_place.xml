@@ -34,11 +34,11 @@
         android:ems="10" />
 
     <com.google.android.maps.MapView
-        android:id="@+id/myGMap"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:apiKey="AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw"
-        android:clickable="true"
-        android:enabled="true" />
+        android:clickable="true" />
 
 </LinearLayout>
