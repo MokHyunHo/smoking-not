@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+
     <EditText
         android:id="@+id/et_Search"
         android:layout_width="match_parent"
@@ -12,7 +12,8 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/ib_Add"
         android:ems="10"
-        android:hint="Search..." >
+        android:hint="Search..."
+        android:paddingRight="10dp" >
 
         <requestFocus />
     </EditText>
