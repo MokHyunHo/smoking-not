@@ -54,6 +54,8 @@ public class LocationEngine implements LocationListener {
 		mLocation.setLatitude(32.06);
 		mLocation.setLongitude(34.77);
 		
+		lm.requestLocationUpdates(provider, 0, 0, this);
+		
 		Location newLocation = lm.getLastKnownLocation(provider);
 		
 		if (newLocation != null)
@@ -64,7 +66,7 @@ public class LocationEngine implements LocationListener {
 		locationEnabled = (mLocation != null);
 		//locationEnabled = true; //debug
 
-		lm.requestLocationUpdates(provider, 1000L, 20F, this);
+		
 		
 
 	}
