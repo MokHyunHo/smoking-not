@@ -96,6 +96,9 @@ public class ChoosePlace extends Activity {
 			public void onClick(View v) {
 				try {
 	 				 Intent myIntent = new Intent(getApplicationContext(), AddPlace.class);
+	 				 
+	 				 Log.i("ERIC", mLocation.toString());
+	 				 myIntent.putExtra("location", mLocation);
                      startActivity(myIntent);
 				} catch (Throwable t) {
 					;

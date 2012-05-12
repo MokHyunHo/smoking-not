@@ -15,7 +15,7 @@
         android:text="Name *" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/et_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,42 +24,34 @@
 
         <requestFocus />
     </EditText>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
-        android:layout_marginLeft="5dp"
-        android:text="Address" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:ems="10" />
-
+
     <com.google.android.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
         android:layout_height="136dp"
+        android:layout_above="@+id/btn_submit"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText2"
-        android:apiKey="AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw"
+        android:layout_below="@+id/TextView01"
+        android:apiKey="0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q"
         android:clickable="true" />
-
+
     <Button
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/mapview"
-        android:layout_marginTop="14dp"
         android:text="Submit" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/et_Name"
+        android:text="Tap location on map:" />
 
 </RelativeLayout>
