@@ -9,8 +9,11 @@ import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -21,6 +24,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -49,12 +53,14 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_GET_PLACES_OK = 6;
 	
 	private final int rad = 150;
+	
+	private final int iCat = 0;
 
 	private final int CYCLES_TO_WAIT = 5;
 	
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	// private EditText latitudeEt, longitudeEt, radiusEt;
-	private Button goBtn, searchBtn;
+	private Button goBtn, searchBtn, btnCategories;
 
 	//private FoursquareApp mFsqApp;
 	private GooglePlacesAPI mGooglePlacesAPI; 
@@ -78,6 +84,7 @@ public class Places extends Activity implements View.OnClickListener {
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (Button) findViewById(R.id.b_search);
+		btnCategories = (Button) findViewById(R.id.b_categoies);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
 		//mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
@@ -172,7 +179,7 @@ public class Places extends Activity implements View.OnClickListener {
 					if (mLocation != null)
 					{
 						mProgress.setMessage("Retrieving nearby places...");
-						loadNearbyPlaces(mLocation, false, null);
+						loadNearbyPlaces(mLocation, false, null, (int)mLocation.getAccuracy());
 					}
 					else
 						Toast.makeText(Places.this, "Location is unknown",
@@ -197,7 +204,7 @@ public class Places extends Activity implements View.OnClickListener {
 				{
 					mProgress.setMessage("Searching for places...");
 					
-					loadNearbyPlaces(mLocation, true, searchStr);
+					loadNearbyPlaces(mLocation, true, searchStr, GooglePlacesAPI.MAX_RADIUS);
 
 				} catch (Exception ex) {
 					Toast.makeText(Places.this,
@@ -232,7 +239,44 @@ public class Places extends Activity implements View.OnClickListener {
 				}
 
 			}
-		});		
+		});	
+		
+		btnCategories.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				try {					
+					ArrayAdapter<CharSequence> adapter = ArrayAdapter
+							.createFromResource(getApplicationContext(), R.array.types_array,
+									android.R.layout.simple_spinner_item);
+					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							getApplicationContext());
+					builder.setTitle("Categories");
+					builder.setNeutralButton("Apply",
+							new DialogInterface.OnClickListener() {
+								public void onClick(
+										DialogInterface dialogInterface,
+										int item) {
+									;
+								}
+							});
+					builder.setAdapter(mAdapter,
+							new DialogInterface.OnClickListener() {
+								public void onClick(
+										DialogInterface dialogInterface,
+										int item) {
+									return;
+								}
+							});
+					builder.create().show();
+					
+				} catch (Throwable t) {
+					t.printStackTrace();
+				}
+
+			}
+		});	
+
 		
 
 	}
@@ -292,7 +336,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 
 
-	private void loadNearbyPlaces(final Location location, final boolean query, final String searchStr) {
+	private void loadNearbyPlaces(final Location location, final boolean query, final String searchStr, final int radius) {
 		
 		mProgress.show();
 
@@ -305,11 +349,12 @@ public class Places extends Activity implements View.OnClickListener {
 				try {
 					if (query == true)
 						mNearbyList = mGooglePlacesAPI
-						.searchPlaces(mLocation, mLocEng.isLocationEnabled(), searchStr);
+						.searchPlaces(mLocation, mLocEng.isLocationEnabled(), searchStr, radius);
 						
 					else
 					mNearbyList = mGooglePlacesAPI
-							.getNearby(location);
+							.getNearby(location, radius);
+					
 
 				} catch (Throwable e) {
 					what = M_GET_PLACES_ERR;

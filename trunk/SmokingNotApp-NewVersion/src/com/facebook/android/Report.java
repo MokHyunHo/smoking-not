@@ -56,7 +56,7 @@ public class Report extends Activity implements View.OnClickListener,
 	private Button exitButton;
 	static final int uniqueId = 1234;
 	NotificationManager nm;
-	public static GooglePlace mGooglePlace = new GooglePlace();
+	private static GooglePlace mGooglePlace = new GooglePlace();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package com.facebook.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 
 import android.net.Uri;
 import android.util.Log;
@@ -32,24 +33,32 @@ public class NearbyAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private Context caller;
 	private boolean isShortAdapter = false;
-
+	private boolean recolor = false;
+	private int new_color;
 	// rate for a place should be in database
 	private int rate = 0;
 	Random rnd;
 	
-	public NearbyAdapter(Context c) {
+	private void init(Context c)
+	{
 		mInflater = LayoutInflater.from(c);
 		caller = c;
-
+	}
+	
+	public NearbyAdapter(Context c) {
+		init(c);
 	}
 
 	public NearbyAdapter(Context c, boolean shortAdapter) {
-		mInflater = LayoutInflater.from(c);
-		caller = c;
+		init(c);
 		isShortAdapter = shortAdapter;
-		Log.i("ERIC", "Created short adapter: " + isShortAdapter);
 	}
 
+	public void Recolor(int color)
+	{
+		recolor = true;
+		new_color = color;
+	}
 	public void setData(ArrayList<GooglePlace> poolList) {
 		mPlacesList = poolList;
 	}
@@ -84,8 +93,7 @@ public class NearbyAdapter extends BaseAdapter {
 			holder.mNameTxt = (TextView) convertView.findViewById(R.id.tv_name);
 			holder.mAddressTxt = (TextView) convertView
 					.findViewById(R.id.tv_address);
-			// holder.mHereNowTxt = (TextView)
-			// convertView.findViewById(R.id.tv_here_now);
+			
 			holder.mDistanceTxt = (TextView) convertView
 					.findViewById(R.id.tv_distance);
 			if (!isShortAdapter) {
@@ -96,6 +104,15 @@ public class NearbyAdapter extends BaseAdapter {
 				holder.mNumberRatings = (TextView) convertView
 						.findViewById(R.id.tv_raitings);
 			}
+			
+			if (recolor)
+			{
+				
+				holder.mNameTxt.setTextColor(new_color);
+				holder.mAddressTxt.setTextColor(new_color);
+				
+			}
+			
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -106,27 +123,17 @@ public class NearbyAdapter extends BaseAdapter {
 		holder.position = position;
 		holder.mNameTxt.setText(place.name);
 		holder.mAddressTxt.setText(place.vicinity);
-		// holder.mHereNowTxt.setText("(" + String.valueOf(place.herenow) +
-		// " people here)");
+		holder.mAddressTxt.setTextColor(Color.BLACK);
 		holder.mDistanceTxt.setText(formatDistance((double) place.distance));
-		// holder.mDistanceTxt.setText(String.valueOf(place.distance));
 		if (!isShortAdapter) {
 			// find rating of corresponding place
 			
 			try {
 				holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
-			/*for (int i = 0; i < 10; i++) {
-				if (Report.places[i].name != null) {
-					if (Report.places[i].name.compareTo(place.name) == 0)
 
-						holder.mRaiting.setProgress(Report.places[i].rate);
-				}
-			}
-			*/
 			} catch (Exception Ex) {
 				Log.i("ERIC", "Bad! places ratings... " + Ex.getMessage());
 			}
-			// holder.mRaiting.setProgress(rnd.nextInt(holder.mRaiting.getMax()));
 			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					try {
@@ -144,9 +151,6 @@ public class NearbyAdapter extends BaseAdapter {
 			});
 
 			Log.i("ERIC", String.valueOf(holder.mRaiting.getProgress()));
-
-			// holder.mRibbonImg.setVisibility((place.type.equals("trending")) ?
-			// View.VISIBLE : View.INVISIBLE);
 		}
 		return convertView;
 	}

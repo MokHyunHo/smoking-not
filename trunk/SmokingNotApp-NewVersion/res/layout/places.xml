@@ -155,5 +155,14 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_Search"
         android:text="Search" />
+
+    <Button
+        android:id="@+id/b_categoies"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_above="@+id/lv_places"
+        android:layout_below="@+id/et_Search"
+        android:layout_toLeftOf="@+id/b_search"
+        android:text="Categories" />
 
 </RelativeLayout>

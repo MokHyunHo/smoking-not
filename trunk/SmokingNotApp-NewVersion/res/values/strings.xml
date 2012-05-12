@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_desc">Checkout out Hackbook for Android to learn how you can make your android apps social using Facebook Platform.</string>
     <string name="app_action">I am using the Hackbook for Android</string>
     <string name="request_message">Learn how to make your android apps social.</string>
     <string name="request">Request!</string>
-    <string name="upload">Upload Photo</string><string name="post">Wall Post!</string>
+    <string name="upload">Upload Photo</string>
+    <string name="post">Wall Post!</string>
     <string name="delete">Delete Post</string>
     <string name="no_login">Graph API Explorer</string>
     <string name="get_permissions">Get Permissions</string>
@@ -45,10 +46,10 @@
     <string name="no">No</string>
     <string name="save">Save</string>
     <string name="reset">Reset</string>
-    <string  name="get_fields">Get Fields</string>
+    <string name="get_fields">Get Fields</string>
     <string name="fields">Fields</string>
     <string name="connections">Connections</string>
-    <string  name="checkin">Check-in</string>
+    <string name="checkin">Check-in</string>
     <string name="cancel">Cancel</string>
     <string name="user">User Data</string>
     <string name="friend">Friends Data</string>
@@ -85,8 +86,6 @@
     <string name="refresh_token_binding_error">Binding to the Facebook Android Application failed (is it installed?).</string>
     <string name="access_token_label">Current access token:</string>
     <string name="access_token_expires_label">Token expires at:</string>
-    
-    
     <string name="app_name">Smoking Not APP for Android!</string>
     <string name="profile">Profile</string>
     <string name="places">Places</string>
@@ -95,6 +94,15 @@
     <string name="ReportWays">Choose the Publishing Ways</string>
     <string name="ReportReason">Choose the Reason of the Report</string>
     <string name="Thanks">Your Report has been accepted!</string>
-    
+
+    <string-array name="types_array">
+        <item>bar</item>
+        <item>cafe</item>
+        <item>food</item>
+        <item>night_club</item>
+        <item>restaurant</item>
+        <item>store</item>
+        <item>other</item>
+    </string-array>
 
 </resources>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -33,13 +35,18 @@ public class ChoosePlace extends Activity {
 	private ProgressDialog mProgress;
 	private final int rad = 100;
 	private Location mLocation;
+	private EditText etSearch;
 	private ImageButton mSearch, mAdd;
+	
+	private String searchStr;
+	
+	final static int iAddPlace = 0;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.choose_place);
 
-		
+		etSearch = (EditText) findViewById(R.id.et_Search);
 		mSearch = (ImageButton) findViewById(R.id.ib_Search);	
 		mAdd = (ImageButton) findViewById(R.id.ib_Add);
 		
@@ -57,23 +64,8 @@ public class ChoosePlace extends Activity {
 			mLocation.setLongitude(34.77);
 		}
 		mProgress.setMessage("Getting places around...");
-		mProgress.show();
-		new Thread() {
-			@Override
-			public void run() {
-				int what = 0;
-				Looper.prepare();
-				try {
-					mNearbyList = mGooglePlacesAPI.getNearby(mLocation);
-				} catch (Throwable e) {
-					what = 1;
-					// e.printStackTrace();
-					Log.i("ERIC", "Catched " + e.toString());
-				}
-
-				mHandler.sendMessage(mHandler.obtainMessage(what));
-			}
-		}.start();
+		loadPlaces(false);
+		
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -92,6 +84,25 @@ public class ChoosePlace extends Activity {
 			}
 		});
 		
+		mSearch.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchStr = etSearch.getText().toString(); 
+				if (searchStr.isEmpty()) return;
+				
+				try
+				{
+					mProgress.setMessage("Searching for places...");
+					
+					loadPlaces(true);
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+
+		});
+		
 		mAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
@@ -99,7 +110,8 @@ public class ChoosePlace extends Activity {
 	 				 
 	 				 Log.i("ERIC", mLocation.toString());
 	 				 myIntent.putExtra("location", mLocation);
-                     startActivity(myIntent);
+	 				 
+                     startActivityForResult(myIntent, iAddPlace);
 				} catch (Throwable t) {
 					;
 				}
@@ -108,17 +120,61 @@ public class ChoosePlace extends Activity {
 		});
 		
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		try {
+			super.onActivityResult(requestCode, resultCode, data);
+			if (resultCode == RESULT_OK) {
+				//Bundle extras = data.getExtras();
+				switch (requestCode) {
+				case iAddPlace:
+					setResult(RESULT_OK, data);
+					Log.i("ERIC", "set result: " + data.getExtras().toString());
+					finish();
+					break;
+				}
+			}
+		} catch (Throwable Ex) {
+			Log.i("ERIC", "msg: " + Ex.toString());
+		}
+	}
 
+	private void loadPlaces(final boolean query)
+	{
+		mProgress.show();
+		new Thread() {
+			@Override
+			public void run() {
+				int what = 0;
+				Looper.prepare();
+				try {
+					//int radius = GooglePlacesAPI.ALLOWED_RADIUS;
+					int radius = (int)mLocation.getAccuracy() + GooglePlacesAPI.ALLOWED_RADIUS; 
+					if (!query)
+						mNearbyList = mGooglePlacesAPI.getNearby(mLocation, radius);
+					else
+						mNearbyList = mGooglePlacesAPI.searchPlaces(mLocation, (mLocation != null), searchStr, radius);
+					
+				} catch (Throwable e) {
+					what = 1;
+					e.printStackTrace();
+				}
+
+				mHandler.sendMessage(mHandler.obtainMessage(what));
+			}
+		}.start();
+	}
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			mProgress.dismiss();
 
 			if (msg.what == 0) {
 				if (mNearbyList.size() == 0) {
 					Toast.makeText(ChoosePlace.this,
-							"No nearby places available", Toast.LENGTH_SHORT)
+							"No places available", Toast.LENGTH_SHORT)
 							.show();
+					mProgress.dismiss();
 					return;
 				}
 
@@ -132,6 +188,7 @@ public class ChoosePlace extends Activity {
 						"Failed to load nearby places: " + msg.what,
 						Toast.LENGTH_SHORT).show();
 			}
+			mProgress.dismiss();
 		}
 	};
 
