@@ -24,7 +24,7 @@
 
         <requestFocus />
     </EditText>
-
+
     <com.google.android.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mapview"
@@ -33,9 +33,13 @@
         android:layout_above="@+id/btn_submit"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/TextView01"
-        android:apiKey="0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q"
+        android:apiKey="0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ"
         android:clickable="true" />
-
+    
+        <!--debug key-->
+        <!--android:apiKey="0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q"-->
+        <!-- release key -->
+
     <Button
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
@@ -44,14 +48,30 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:text="Submit" />
-
+
     <TextView
-        android:id="@+id/TextView01"
+        android:id="@+id/tvChooseType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/et_Name"
+        android:text="Name *" />
+
+    <Spinner
+        android:id="@+id/lst_types"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvChooseType" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/lst_types"
         android:text="Tap location on map:" />
 
 </RelativeLayout>
