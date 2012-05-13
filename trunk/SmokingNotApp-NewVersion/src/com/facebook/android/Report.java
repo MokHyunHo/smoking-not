@@ -9,15 +9,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -33,12 +30,11 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
 public class Report extends Activity implements View.OnClickListener,
 		OnItemSelectedListener {
-	
-	public static GooglePlace[] places=new GooglePlace[10];
-	
+
+	public static GooglePlace[] places = new GooglePlace[10];
+
 	String[] checked;
 	TextView tvReport, tvPlaces, tvProfile;
 	Button report;
@@ -46,7 +42,7 @@ public class Report extends Activity implements View.OnClickListener,
 	ImageView iv;
 	EditText et1;
 	Spinner s1;
-	CheckBox c1, c2, c3;
+	CheckBox c1, c3;
 	Intent i, profileIntent;
 	final static int iData = 0;
 	final static int iVenue = 1;
@@ -70,6 +66,8 @@ public class Report extends Activity implements View.OnClickListener,
 		Bundle gotChecked = getIntent().getExtras();
 		try {
 			checked = gotChecked.getStringArray("checkedOptions");
+			if (checked != null)
+				c3.setVisibility(View.VISIBLE);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -77,6 +75,12 @@ public class Report extends Activity implements View.OnClickListener,
 			String loc;
 			loc = gotChecked.getString("StrLocation");
 			et1.setText(loc);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		try {
+			bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
+			iv.setImageBitmap(bmp);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -142,10 +146,9 @@ public class Report extends Activity implements View.OnClickListener,
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
 		tvProfile = (TextView) findViewById(R.id.tvPro);
 		s1 = (Spinner) findViewById(R.id.ReasonSp);
-		c1 = (CheckBox) findViewById(R.id.checkBox1);
-		c2 = (CheckBox) findViewById(R.id.checkBox2);
-		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		et1 = (EditText) findViewById(R.id.etLocation);
+		c1 = (CheckBox) findViewById(R.id.checkBox1);
+		c3 = (CheckBox) findViewById(R.id.checkBox3);
 	}
 
 	@Override
@@ -159,88 +162,53 @@ public class Report extends Activity implements View.OnClickListener,
 			break;
 		case R.id.bReport:
 			String location = et1.getText().toString();
-			
-			//send email
-			  if (c3.isChecked()) {
-			  myIntent = new Intent(Report.this, OfficialReport.class); Bundle
-			  returnBundle=new Bundle();
-			  returnBundle.putStringArray("checkedOptions", checked);
-			  returnBundle.putString("StrLocation", location);
-			  myIntent.putExtras(returnBundle); startActivity(myIntent); 
-			  } 
-			  /*else
-			 * { String emailaddress[] = { "eladcoo@gmail.com" }; String message
-			 * = "Hello, \n" + "The Report about " + location +
-			 * " Has been Sent! \n" + "The Reasons you've pointed were:\n"; for
-			 * (int j = 0; j < checked.length; j++) { message +=
-			 * checked[j].toString() + "\n"; } message +=
-			 * "Have a pleasant Day!"; myIntent = new
-			 * Intent(android.content.Intent.ACTION_SEND);
-			 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-			 * emailaddress);
-			 * myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-			 * "Smoking-Not Update!"); myIntent.setType("plain/text");
-			 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-			 */
 
-			// pop-up view
-			showDialog();
-			
-			/* startActivity(myIntent); */
-
-			// send notification to user
-			sendNotification();
-
-			int score = 0;
-			// read data from sd card
-			try {
-				File myReadFile = new File("/sdcard/sdprofilefile.txt");
-				if (myReadFile.exists()) {
-					FileInputStream fIn = new FileInputStream(myReadFile);
-					BufferedReader myReader = new BufferedReader(
-							new InputStreamReader(fIn));
-					String aDataRow = "";
-					String[] aBuffer = new String[2];
-					for (int i=0;(aDataRow = myReader.readLine()) != null;i++) {
-						aBuffer[i] = aDataRow;
-					}
-					score = Integer.parseInt(aBuffer[1]);
-					myReader.close();
-					fIn.close();
+			// send email
+			if (c3.isChecked()) {
+				myIntent = new Intent(Report.this, OfficialReport.class);
+				Bundle returnBundle = new Bundle();
+				returnBundle.putStringArray("checkedOptions", checked);
+				returnBundle.putString("StrLocation", location);
+				myIntent.putExtras(returnBundle);
+				startActivity(myIntent);
+			} else {
+				String emailaddress[] = { "eladcoo@gmail.com" };
+				String message = "Hello, \n" + "The Report about " + location
+						+ " Has been Sent! \n"
+						+ "The Reasons you've pointed were:\n";
+				for (int j = 0; j < checked.length; j++) {
+					if (checked[j] != null)
+						message += checked[j].toString() + "\n";
 				}
+				message += "Have a pleasant Day!";
+				myIntent = new Intent(android.content.Intent.ACTION_SEND);
+				myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+						emailaddress);
+				myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+						"Smoking-Not Update!");
+				myIntent.setType("plain/text");
+				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
 
-			} catch (Exception e) {
-				e.printStackTrace();
+				// pop-up view
+				showDialog(v);
+
+				startActivity(myIntent);
+
+				// send notification to user
+				sendNotification();
+
+				int score = 0;
+
+				// calculate new score
+				String reason = s1.getSelectedItem().toString();
+				if (reason.compareTo("Positive Report") == 0)
+					score += 2;
+				if (reason.compareTo("Complaint") == 0)
+					score += 1;
+
+				// set place info
+				setPlaceRating(reason, location);
 			}
-
-			// calculate new score
-			String reason = s1.getSelectedItem().toString();
-			if (reason.compareTo("Positive Report") == 0)
-				score += 2;
-			if (reason.compareTo("Complaint") == 0)
-				score += 1;
-
-			// save data to the sd card
-			try {
-				String sdData = reason + '\n' + score;
-				File myFile = new File("/sdcard/sdprofilefile.txt");
-				if (!myFile.exists())
-					myFile.createNewFile();
-				FileOutputStream fOut = new FileOutputStream(myFile);
-				OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-				myOutWriter.append(sdData);
-				myOutWriter.close();
-				fOut.close();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// }
-			
-			
-			//set place info
-			setPlaceRating(reason,location);
-			
 			break;
 		case R.id.tvRep:
 			break;
@@ -287,7 +255,7 @@ public class Report extends Activity implements View.OnClickListener,
 					et1.setText(mGooglePlace.name);
 					break;
 				case iEmail:
-					
+
 					break;
 				}
 			}
@@ -302,6 +270,11 @@ public class Report extends Activity implements View.OnClickListener,
 		// TODO Auto-generated method stub
 		int position = s1.getSelectedItemPosition();
 		switch (position) {
+		case 0:
+			c3.setVisibility(View.INVISIBLE);
+			c3.setChecked(false);
+			break;
+
 		case 1:
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			Bundle cbBundle = new Bundle();
@@ -319,42 +292,49 @@ public class Report extends Activity implements View.OnClickListener,
 		// TODO Auto-generated method stub
 
 	}
-	
-	private void showDialog()
-	{
-		Dialog d = new Dialog(this);
-		d.setCanceledOnTouchOutside(true);
-		d.setTitle("Your Report Has Been Sent!");
-		TextView sTV = new TextView(this);
-		sTV.setText("please check out your profile.");
-		d.setContentView(sTV);
-		d.show();
+
+	private void showDialog(View v) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+		builder.setTitle("Your Report Has Been Sent!");
+		builder.setMessage("please check out your profile.");
+		builder.setCancelable(true);
+
+		final AlertDialog dlg = builder.create();
+		dlg.show();
+		final Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			public void run() {
+				dlg.dismiss(); // when the task active then close the dialog
+				t.cancel(); // also just top the timer thread, otherwise, you
+							// may receive a crash report
+			}
+		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
+					// active
+
 	}
-	private void setPlaceRating(String reason,String location)
-	{
+
+	private void setPlaceRating(String reason, String location) {
 		int j;
-		double myRate=0;
-		for(j=0;places[j]!=null;j++)
-			if(places[j].name.compareTo(location)==0)
-				myRate=places[j].rate;
-		
+		double myRate = 0;
+		for (j = 0; places[j] != null; j++)
+			if (places[j].name.compareTo(location) == 0)
+				myRate = places[j].rate;
+
 		if (reason.compareTo("Positive Report") == 0)
 			myRate++;
-		if (reason.compareTo("Complaint") == 0)
-		{
+		if (reason.compareTo("Complaint") == 0) {
 			myRate--;
-			if(myRate<0)
-				myRate=0;
+			if (myRate < 0)
+				myRate = 0;
 		}
-		if(places[j]==null)
-			places[j]= mGooglePlace;
-		places[j].rate=myRate;
+		if (places[j] == null)
+			places[j] = mGooglePlace;
+		places[j].rate = myRate;
 	}
-	private void sendNotification()
-	{
+
+	private void sendNotification() {
 		Intent new_intent = new Intent(this, Profile.class);
-		PendingIntent pi = PendingIntent
-				.getActivity(this, 0, new_intent, 0);
+		PendingIntent pi = PendingIntent.getActivity(this, 0, new_intent, 0);
 		String body = "You sccore has been increased by 1 point!";
 		String title = "New Message";
 		Notification n = new Notification(R.drawable.statusbar, title,

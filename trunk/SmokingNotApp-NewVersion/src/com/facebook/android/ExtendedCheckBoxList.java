@@ -3,6 +3,7 @@ package com.facebook.android;
 import com.facebook.android.R;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -83,10 +84,12 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 			Bundle returnBundle=new Bundle();
 			returnBundle.putStringArray("checkedOptions", checked);
 			returnBundle.putString("StrLocation", loc);
+			Bitmap bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
 			Intent int_a=new Intent(getApplicationContext(),Report.class);
 			int_a.putExtras(returnBundle);
+			int_a.putExtra("BitmapImage", bmp);
 			startActivity(int_a);
-			//finish();
+			finish();
 			break;
 		}
 		

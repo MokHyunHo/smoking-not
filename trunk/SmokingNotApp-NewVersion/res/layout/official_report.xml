@@ -14,7 +14,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
-        android:id="@+id/etORID"
+        android:id="@+id/etORName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -25,22 +25,46 @@
     </EditText>
 
     <EditText
-        android:id="@+id/etORNAME"
+        android:id="@+id/etORAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/etORID"
+        android:layout_below="@+id/etORName"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="First and Last Name" >
+        android:hint="Address" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/etORPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etORAdd"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Phone Number" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/etOREmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/etORPhone"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Email address" >
     </EditText>
 
     <Button
         android:id="@+id/bReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etOREmail"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/sbutton"
         android:text="Report" />
 
     <Button
@@ -49,7 +73,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bReport"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/sbutton"
         android:text="@string/exit" />
 
 </RelativeLayout>
