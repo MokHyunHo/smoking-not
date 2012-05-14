@@ -352,8 +352,8 @@ public class Report extends Activity implements View.OnClickListener,
 					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
 					mGooglePlace.id = extras.getString("placeID");
 					mGooglePlace.name = extras.getString("placeName");
-					Log.i("ERIC", "name: " + mGooglePlace.name);
-					et1.setText(mGooglePlace.name);
+					mGooglePlace.vicinity = extras.getString("placeVicinity");
+					et1.setText(mGooglePlace.name + "\n" + mGooglePlace.vicinity);
 					break;
 				case iEmail:
 

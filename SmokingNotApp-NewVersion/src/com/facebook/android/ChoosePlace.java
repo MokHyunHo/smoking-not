@@ -77,6 +77,7 @@ public class ChoosePlace extends Activity {
 
 				data.putExtra("placeID", place.id);
 				data.putExtra("placeName", place.name);
+				data.putExtra("placeVicinity", place.vicinity);
 				setResult(RESULT_OK, data);
 				Log.i("ERIC", "set result: " + data.getExtras().toString());
 				finish();
@@ -150,7 +151,7 @@ public class ChoosePlace extends Activity {
 				Looper.prepare();
 				try {
 					//int radius = GooglePlacesAPI.ALLOWED_RADIUS;
-					int radius = (int)mLocation.getAccuracy() + GooglePlacesAPI.ALLOWED_RADIUS; 
+					int radius = (int)mLocation.getAccuracy() + 1 + GooglePlacesAPI.ALLOWED_RADIUS; 
 					if (!query)
 						mNearbyList = mGooglePlacesAPI.getNearby(mLocation, radius);
 					else

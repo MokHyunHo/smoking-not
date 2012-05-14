@@ -23,19 +23,21 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:src="@drawable/imageplace" />
-
+
     <EditText
         android:id="@+id/etLocation"
         android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:layout_alignLeft="@+id/ivReport"
         android:layout_below="@+id/ivReport"
         android:layout_marginTop="10dp"
         android:cursorVisible="false"
         android:editable="false"
         android:ems="10"
-        android:gravity="center_horizontal"
-        android:hint="Choose place" />
+        android:gravity="center|center_horizontal"
+        android:lines="2"
+        android:text="&lt;&lt;&lt; Choose place >>>"
+        android:textSize="14dp" />
 
     <Spinner
         android:id="@+id/ReasonSp"

@@ -4,6 +4,7 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="C:/Users/Ortal/Downloads/itextpdf-5.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eric/Documents/University/Google workshop/SmokingNotWorkSpace/SmokingNot/SmokingNotApp-NewVersion/itextpdf-5.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Eric/Documents/University/Google workshop/SmokingNotWorkSpace/SmokingNot/SmokingNotApp-NewVersion/gson-2.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

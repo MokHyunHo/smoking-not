@@ -12,7 +12,6 @@ import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 import org.json.JSONTokener;
 
 import android.content.Context;
@@ -29,6 +28,7 @@ public class GooglePlacesAPI {
 	private static final String API_URL = "https://maps.googleapis.com/maps/api/place";
 
 	public static final int ALLOWED_RADIUS = 100;
+	public static final int LOOK_AROUND_RADIUS = 00;
 	public static final int MAX_RADIUS = 50000;
 
 	/*
@@ -119,6 +119,7 @@ public class GooglePlacesAPI {
 					place.location = loc;
 
 					place.vicinity = item.getString("vicinity");
+					
 					if (by_location)
 						place.distance = calculateDistance(my_loc, loc);
 					else

@@ -156,7 +156,6 @@ public class NearbyAdapter extends BaseAdapter {
 		holder.position = position;
 		holder.mNameTxt.setText(place.name);
 		holder.mAddressTxt.setText(place.vicinity);
-		holder.mAddressTxt.setTextColor(Color.BLACK);
 		holder.mDistanceTxt.setText(formatDistance((double) place.distance));
 		if (!isShortAdapter) {
 			// find rating of corresponding place
