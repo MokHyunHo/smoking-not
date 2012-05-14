@@ -28,6 +28,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+
 public class NearbyAdapter extends BaseAdapter {
 	private ArrayList<GooglePlace> mPlacesList;
 	private LayoutInflater mInflater;
@@ -35,8 +40,7 @@ public class NearbyAdapter extends BaseAdapter {
 	private boolean isShortAdapter = false;
 	private boolean recolor = false;
 	private int new_color;
-	// rate for a place should be in database
-	private int rate = 0;
+	
 	Random rnd;
 	
 	private void init(Context c)
@@ -81,7 +85,9 @@ public class NearbyAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-
+		
+		final GooglePlace place = mPlacesList.get(position);
+		Log.i("ERIC", "place: " + place.name);
 		if (convertView == null) {
 			if (!isShortAdapter)
 				convertView = mInflater.inflate(R.layout.nearby_list, null);
@@ -103,6 +109,32 @@ public class NearbyAdapter extends BaseAdapter {
 						.findViewById(R.id.ib_ShowOnMap);
 				holder.mNumberRatings = (TextView) convertView
 						.findViewById(R.id.tv_raitings);
+				
+				// get location's rating from server
+				
+				Gson gson1 = new Gson();
+		    	WebRequest req=new WebRequest();
+		    	String str=null;
+		    	LocationRequest loc_updated=null;
+		        try {
+					JSONObject json2=req.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetLocation?locationid="+place.id);
+					str=(String)json2.get("location_req");
+					Log.w("str=",str);
+					if (str.compareTo("NotinDataBase")==0)
+						holder.mRaiting.setProgress(0);
+					else 
+						loc_updated=gson1.fromJson(str, LocationRequest.class);
+		        	}catch (JSONException e) {
+							Log.e("NearbyAdapter error, can't get response from server, JSON exception",e.toString());
+							Log.w("str=",str);
+						}
+				    catch (Exception e) {
+					Log.e("NearbyAdapter error, can't get response from server",e.toString());
+					Log.w("str=",str);
+				}
+		        
+				if (loc_updated!=null)
+					holder.mRaiting.setProgress(loc_updated.getRate());
 			}
 			
 			if (recolor)
@@ -118,8 +150,9 @@ public class NearbyAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		final GooglePlace place = mPlacesList.get(position);
-		Log.i("ERIC", "place: " + place.name);
+	
+		
+
 		holder.position = position;
 		holder.mNameTxt.setText(place.name);
 		holder.mAddressTxt.setText(place.vicinity);

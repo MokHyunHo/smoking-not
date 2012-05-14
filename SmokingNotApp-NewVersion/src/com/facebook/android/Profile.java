@@ -7,12 +7,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
+import com.google.gson.Gson;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -31,7 +36,7 @@ public class Profile extends Activity implements View.OnClickListener {
 	private ImageView ratingbar1,ratingbar2,ratingbar3,ratingbar4,ratingbar5,ratingbarfull;
 	 private ProgressBar pb;
 	 private TextView total_score;
-	 private int score; //should be in data base
+
 	 
 
 	@Override
@@ -48,25 +53,26 @@ public class Profile extends Activity implements View.OnClickListener {
 		tvPlaces.setOnClickListener(this);
 		tvProfile.setOnClickListener(this);
 		
-		//Set Score
-		try {
-			File myFile = new File("/sdcard/sdprofilefile.txt");
-			if(myFile.exists())
-			{
-				FileInputStream profileIn = new FileInputStream(myFile);
-				BufferedReader ScoreReader = new BufferedReader(new InputStreamReader(profileIn));
-				String aDataRow = "";
-				String[] aBuffer = new String[2];
-				for (int i=0;(aDataRow = ScoreReader.readLine()) != null;i++) {
-					aBuffer[i] = aDataRow;
+		
+        // get user info from server
+		Gson gson2 = new Gson();
+    	WebRequest req=new WebRequest();
+    	String str=null;
+    	UserRequest ur_updated=null;
+        try {
+			JSONObject json2=req.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="+FacebookMain.email);
+			str=(String)json2.get("user_req");
+			Log.w("str=",str);
+			ur_updated=gson2.fromJson(str, UserRequest.class);
+        	}catch (JSONException e) {
+					Log.e("Profile error, can't get response from server, JSON exception",e.toString());
+					Log.w("str=",str);
 				}
-				score=Integer.parseInt(aBuffer[1]);
-				ScoreReader.close();
-				profileIn.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		    catch (Exception e) {
+			Log.e("Profile error, can't get response from server",e.toString());
+			Log.w("str=",str);
 		}
+        
 		
 		 //user's progress
         pb=(ProgressBar) findViewById(R.id.progressbar);
@@ -79,8 +85,8 @@ public class Profile extends Activity implements View.OnClickListener {
         ratingbarfull=(ImageView)findViewById(R.id.iv_ratingbarfull);
         
       
-        pb.setProgress(score);
-        total_score.setText(score+"/100");
+        pb.setProgress(ur_updated.GetScore());
+        total_score.setText(ur_updated.GetScore()+"/100");
         ratingbar1.setVisibility(View.INVISIBLE);
     	ratingbar2.setVisibility(View.INVISIBLE);
     	ratingbar3.setVisibility(View.INVISIBLE);
@@ -89,17 +95,17 @@ public class Profile extends Activity implements View.OnClickListener {
     	ratingbarfull.setVisibility(View.INVISIBLE);
         
         //display current stage
-        if ((score>=0) && (score <15))
+        if ((ur_updated.GetScore()>=0) && (ur_updated.GetScore() <15))
         	ratingbar1.setVisibility(View.VISIBLE);
-        if ((score>=15) && (score <45))
+        if ((ur_updated.GetScore()>=15) && (ur_updated.GetScore() <45))
         	ratingbar2.setVisibility(View.VISIBLE);
-        if ((score>=45) && (score <135))
+        if ((ur_updated.GetScore()>=45) && (ur_updated.GetScore() <135))
         	ratingbar3.setVisibility(View.VISIBLE); 	
-        if ((score>=135) && (score <405))
+        if ((ur_updated.GetScore()>=135) && (ur_updated.GetScore() <405))
         	ratingbar4.setVisibility(View.VISIBLE);
-        if ((score>=405) && (score <1215))
+        if ((ur_updated.GetScore()>=405) && (ur_updated.GetScore() <1215))
         	ratingbar5.setVisibility(View.VISIBLE);
-        if (score>=1215) 
+        if (ur_updated.GetScore()>=1215) 
         	ratingbarfull.setVisibility(View.VISIBLE);
         
 		// PROFILE INFORMATION

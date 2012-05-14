@@ -106,7 +106,7 @@ public class Trial extends ListActivity {
 
 	private static int setDate(char[] ch, int i) {
 		int index, ikeep = -1;
-		char[] date = { ':', '×š', '×™', '×¨', '×', '×ª' };
+		char[] date = { ':', 'ê' , 'é', 'ø', 'à', 'ú' };
 		for (index = 0; index < 6 && ch[i] == date[index]; i++, index++)
 			;
 		if (index == 6)
@@ -117,7 +117,7 @@ public class Trial extends ListActivity {
 
 	private static int setMail(char[] ch, int i) {
 		int index, ikeep = -1;
-		char[] mail = { ':', '×œ', '"', '×', '×•', '×“' };
+		char[] mail = { ':', 'ì', '"', 'à', 'å', 'ã' };
 		for (index = 0; index < 6 && ch[i] == mail[index]; i++, index++)
 			;
 		if (index == 6)
@@ -128,7 +128,7 @@ public class Trial extends ListActivity {
 
 	private static int setPhone(char[] ch, int i) {
 		int index, ikeep = -1;
-		char[] phone = { ':', '×Ÿ', '×•', '×¤', '×œ', '×˜' };
+		char[] phone = { ':', 'ï', 'å', 'ô', 'ì', 'è' };
 		for (index = 0; index < 6 && ch[i] == phone[index]; i++, index++)
 			;
 		if (index == 6)
@@ -140,7 +140,7 @@ public class Trial extends ListActivity {
 
 	private static int setAddress(char[] ch, int i) {
 		int index, ikeep = -1;
-		char[] address = { ':', '×ª', '×‘', '×•', '×ª', '×›' };
+		char[] address = { ':', 'ú', 'á', 'å', 'ú', 'ë' };
 		for (index = 0; index < 6 && ch[i] == address[index]; i++, index++)
 			;
 		if (index == 6)
@@ -152,7 +152,7 @@ public class Trial extends ListActivity {
 
 	private static int setName(char[] ch, int i) {
 		int index, ikeep = -1;
-		char[] name = { ':', '×', '×©' };
+		char[] name = { ':', 'í', 'ù' };
 		for (index = 0; index < 3 && ch[i] == name[index]; i++, index++)
 			;
 		if (index == 3)
