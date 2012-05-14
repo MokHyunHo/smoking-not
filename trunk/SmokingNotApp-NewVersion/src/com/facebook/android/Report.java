@@ -2,6 +2,8 @@ package com.facebook.android;
 
 import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
+import com.google.gson.Gson;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,12 @@ import android.widget.Button;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.json.JSONStringer;
+import org.json.JSONException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -69,7 +77,7 @@ public class Report extends Activity implements View.OnClickListener,
 			if (checked != null)
 				c3.setVisibility(View.VISIBLE);
 		} catch (NullPointerException e) {
-			e.printStackTrace();
+			Log.w("user didn't check any box", e.toString());
 		}
 		try {
 			String loc;
@@ -79,8 +87,10 @@ public class Report extends Activity implements View.OnClickListener,
 			e.printStackTrace();
 		}
 		try {
-			bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
-			iv.setImageBitmap(bmp);
+			if (bmp != null) {
+				bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
+				iv.setImageBitmap(bmp);
+			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
@@ -153,7 +163,6 @@ public class Report extends Activity implements View.OnClickListener,
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		Intent myIntent;
 		switch (v.getId()) {
 		case R.id.ibReport:
@@ -162,6 +171,108 @@ public class Report extends Activity implements View.OnClickListener,
 			break;
 		case R.id.bReport:
 			String location = et1.getText().toString();
+			String reason = s1.getSelectedItem().toString();
+			int user_score = 0;
+			int place_rate = 0;
+			String locid = null;
+			// calculate new score
+
+			if (reason.compareTo("Positive Report") == 0) {
+				user_score = 2;
+				place_rate = 2;
+			}
+			if (reason.compareTo("Complaint") == 0) {
+				user_score = 1;
+				place_rate = 0;
+			}
+			locid = mGooglePlace.id;
+			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+			String date = s.format(new Date());
+			if (locid != null)
+				Log.w("google places id is", locid);
+			else
+				locid = "ortal's test";
+			LocationRequest loc = new LocationRequest(locid, place_rate);
+			UserRequest ur = new UserRequest(FacebookMain.email, user_score,
+					locid);
+			ReportRequest rr = new ReportRequest(FacebookMain.email, locid,
+					reason, date);
+			WebRequest req = new WebRequest();
+
+			/* Send location to Database */
+
+			// convert location request to gson string
+			Gson gson1 = new Gson();
+			String LocationStr = gson1.toJson(loc);
+			JSONStringer json1 = null;
+
+			// prepare Json
+			try {
+				json1 = new JSONStringer().object().key("action")
+						.value("update_location").key("location_request")
+						.value(LocationStr).endObject();
+
+			} catch (JSONException e) {
+				Log.e("json exeption-can't create jsonstringer with location",
+						e.toString());
+			}
+
+			// send json to web server
+			try {
+				req.getInternetData(json1);
+			} catch (Exception e) {
+				Log.w("couldn't send location to servlet", e.toString());
+			}
+
+			/* Send UserRequest to Database */
+
+			// convert location request to gson string
+			Gson gson2 = new Gson();
+			String UserStr = gson2.toJson(ur);
+			JSONStringer json2 = null;
+
+			// prepare Json
+			try {
+				json2 = new JSONStringer().object().key("action")
+						.value("update_ur").key("user_request").value(UserStr)
+						.endObject();
+
+			} catch (JSONException e) {
+				Log.e("json exeption-can't create jsonstringer with user request",
+						e.toString());
+			}
+
+			// send json to web server
+			try {
+				req.getInternetData(json2);
+			} catch (Exception e) {
+				Log.w("couldn't send user request to servlet", e.toString());
+			}
+
+			/* Send ReportRequest to Database */
+
+			// convert report request to gson string
+			Gson gson3 = new Gson();
+			String ReportStr = gson3.toJson(rr);
+			JSONStringer json3 = null;
+
+			// prepare Json
+			try {
+				json3 = new JSONStringer().object().key("action")
+						.value("update_report").key("report_request")
+						.value(ReportStr).endObject();
+
+			} catch (JSONException e) {
+				Log.e("json exeption-can't create jsonstringer with report",
+						e.toString());
+			}
+
+			// send json to web server
+			try {
+				req.getInternetData(json3);
+			} catch (Exception e) {
+				Log.w("couldn't send report to servlet", e.toString());
+			}
 
 			// send email
 			if (c3.isChecked()) {
@@ -172,13 +283,13 @@ public class Report extends Activity implements View.OnClickListener,
 				myIntent.putExtras(returnBundle);
 				startActivity(myIntent);
 			} else {
-				String emailaddress[] = { "eladcoo@gmail.com" };
+				/*String emailaddress[] = { FacebookMain.email };
 				String message = "Hello, \n" + "The Report about " + location
 						+ " Has been Sent! \n"
 						+ "The Reasons you've pointed were:\n";
-				for (int j = 0; j < checked.length; j++) {
-					if (checked[j] != null)
-						message += checked[j].toString() + "\n";
+				for (int k = 0; k < checked.length; k++) {
+					if (checked[k] != null)
+						message += checked[k].toString() + "\n";
 				}
 				message += "Have a pleasant Day!";
 				myIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -187,28 +298,18 @@ public class Report extends Activity implements View.OnClickListener,
 				myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 						"Smoking-Not Update!");
 				myIntent.setType("plain/text");
-				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);*/
 
-				// pop-up view
-				showDialog(v);
-
-				startActivity(myIntent);
-
+				// pop-up view 
+				showDialog(v); 
+				
 				// send notification to user
 				sendNotification();
 
-				int score = 0;
-
-				// calculate new score
-				String reason = s1.getSelectedItem().toString();
-				if (reason.compareTo("Positive Report") == 0)
-					score += 2;
-				if (reason.compareTo("Complaint") == 0)
-					score += 1;
-
-				// set place info
-				setPlaceRating(reason, location);
+				// start email activity
+				//startActivity(myIntent);
 			}
+
 			break;
 		case R.id.tvRep:
 			break;
@@ -281,6 +382,7 @@ public class Report extends Activity implements View.OnClickListener,
 			String strlocation = et1.getText().toString();
 			cbBundle.putString("StrLocation", strlocation);
 			i.putExtras(cbBundle);
+			i.putExtra("BitmapImage", bmp);
 			startActivityForResult(i, iData);
 			break;
 
@@ -313,25 +415,6 @@ public class Report extends Activity implements View.OnClickListener,
 
 	}
 
-	private void setPlaceRating(String reason, String location) {
-		int j;
-		double myRate = 0;
-		for (j = 0; places[j] != null; j++)
-			if (places[j].name.compareTo(location) == 0)
-				myRate = places[j].rate;
-
-		if (reason.compareTo("Positive Report") == 0)
-			myRate++;
-		if (reason.compareTo("Complaint") == 0) {
-			myRate--;
-			if (myRate < 0)
-				myRate = 0;
-		}
-		if (places[j] == null)
-			places[j] = mGooglePlace;
-		places[j].rate = myRate;
-	}
-
 	private void sendNotification() {
 		Intent new_intent = new Intent(this, Profile.class);
 		PendingIntent pi = PendingIntent.getActivity(this, 0, new_intent, 0);
@@ -343,4 +426,5 @@ public class Report extends Activity implements View.OnClickListener,
 		// n.defaults=Notification.
 		nm.notify(uniqueId, n);
 	}
+
 }
