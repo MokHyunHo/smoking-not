@@ -13,9 +13,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,8 +49,6 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_ADDRESS_OK = 4;
 	private final int M_GET_PLACES_ERR = 5;
 	private final int M_GET_PLACES_OK = 6;
-	
-	private final int rad = 150;
 	
 	private final int iCat = 0;
 
@@ -179,7 +175,7 @@ public class Places extends Activity implements View.OnClickListener {
 					if (mLocation != null)
 					{
 						mProgress.setMessage("Retrieving nearby places...");
-						loadNearbyPlaces(mLocation, false, null, (int)mLocation.getAccuracy());
+						loadNearbyPlaces(mLocation, false, null, GooglePlacesAPI.LOOK_AROUND_RADIUS);
 					}
 					else
 						Toast.makeText(Places.this, "Location is unknown",
@@ -260,7 +256,7 @@ public class Places extends Activity implements View.OnClickListener {
 									;
 								}
 							});
-					builder.setAdapter(mAdapter,
+					builder.setAdapter(adapter,
 							new DialogInterface.OnClickListener() {
 								public void onClick(
 										DialogInterface dialogInterface,
@@ -284,6 +280,8 @@ public class Places extends Activity implements View.OnClickListener {
 	public void updateLocation() {
 		mProgress.setMessage("Retrieving location...");
 		mProgress.show();
+		
+		mLocEng = new LocationEngine(this);
 
 		new Thread() {
 			@Override

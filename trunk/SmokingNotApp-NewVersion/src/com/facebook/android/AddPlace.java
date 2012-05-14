@@ -168,7 +168,7 @@ public class AddPlace extends MapActivity {
 				try {
 					ArrayList<GooglePlace> suspected = new ArrayList<GooglePlace>();
 					suspected = mGooglePlacesAPI.searchPlaces(newPlaceLocation,
-							true, name, (int)newPlaceLocation.getAccuracy()+GooglePlacesAPI.ALLOWED_RADIUS);
+							true, name, (int)newPlaceLocation.getAccuracy() + 1 + GooglePlacesAPI.ALLOWED_RADIUS);
 
 					if (suspected.size() > 0) {
 						mAdapter = new NearbyAdapter(context, true);
