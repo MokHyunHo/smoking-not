@@ -4,10 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center_horizontal">
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:padding="6dip"
-        android:layout_height="?android:attr/listPreferredItemHeight">
+
         <ImageView
             android:id="@+id/user_pic"
             android:layout_width="wrap_content"
@@ -27,7 +24,7 @@
             android:layout_below="@id/txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </RelativeLayout>
+        
     <Button android:id="@+id/profileButton"
         android:text="@string/profile"
         android:layout_width="wrap_content"

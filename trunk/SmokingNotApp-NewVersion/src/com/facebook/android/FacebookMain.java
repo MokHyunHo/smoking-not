@@ -291,6 +291,7 @@ public class FacebookMain extends Activity  {
                     @Override
                     public void run() {
                         mText.setText("Welcome " + name + "!");
+                        picURL="https://graph.facebook.com/"+ Utility.userUID + "/picture?type=normal";
                         mUserPic.setImageBitmap(Utility.getBitmap(picURL));
                     }
                 });
