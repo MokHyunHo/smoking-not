@@ -173,17 +173,18 @@ public class Report extends Activity implements View.OnClickListener,
 			String location = et1.getText().toString();
 			String reason = s1.getSelectedItem().toString();
 			int user_score = 0;
-			int place_rate = 0;
+			int goodplace_rate=0;
+			int badplace_rate = 0;
 			String locid = null;
 			// calculate new score
 
 			if (reason.compareTo("Positive Report") == 0) {
 				user_score = 2;
-				place_rate = 2;
+				goodplace_rate = 2;
 			}
 			if (reason.compareTo("Complaint") == 0) {
 				user_score = 1;
-				place_rate = 0;
+				badplace_rate = 1;
 			}
 			locid = mGooglePlace.id;
 			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
@@ -192,7 +193,7 @@ public class Report extends Activity implements View.OnClickListener,
 				Log.w("google places id is", locid);
 			else
 				locid = "ortal's test";
-			LocationRequest loc = new LocationRequest(locid, place_rate);
+			LocationRequest loc = new LocationRequest(locid, goodplace_rate,badplace_rate);
 			UserRequest ur = new UserRequest(FacebookMain.email, user_score,
 					locid);
 			ReportRequest rr = new ReportRequest(FacebookMain.email, locid,
