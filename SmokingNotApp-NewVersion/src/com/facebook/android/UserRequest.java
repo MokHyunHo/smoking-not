@@ -7,11 +7,14 @@ public class UserRequest {
 	private String email;
 	private int score;
 	private String lastplaceId;
+	private String date;
+	private String message="empty";
 	
-	public UserRequest (String email, int score, String place){
+	public UserRequest (String email, int score, String place, String date){
 		this.email=email;
 		this.score=score;
 		this.lastplaceId=place;
+		this.date=date;
 	}
 	
 	public String GetEmail(){
@@ -21,6 +24,21 @@ public class UserRequest {
 
 	public String GetLastPalace(){
 		return lastplaceId;
+	}
+	
+	public String GetLastReportDate() {
+		return date;
+	}
+	
+	public void SetLastReportDate(String last_date) {
+		date=last_date;
+	}
+	public void SetMessage(String m){
+		message=m;
+	}
+	
+	public String GetMessage(){
+		return message;
 	}
 	
 	public void SetLastplace (String l) 

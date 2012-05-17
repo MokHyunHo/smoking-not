@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.json.JSONObject;
 import org.json.JSONStringer;
 import org.json.JSONException;
 
@@ -187,47 +188,23 @@ public class Report extends Activity implements View.OnClickListener,
 				badplace_rate = 1;
 			}
 			locid = mGooglePlace.id;
+			int conflict=0;
 			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
 			String date = s.format(new Date());
 			if (locid != null)
 				Log.w("google places id is", locid);
 			else
-				locid = "ortal's test";
+				locid = "NoPlaceFound";
 			LocationRequest loc = new LocationRequest(locid, goodplace_rate,badplace_rate);
 			UserRequest ur = new UserRequest(FacebookMain.email, user_score,
-					locid);
+					locid,date);
 			ReportRequest rr = new ReportRequest(FacebookMain.email, locid,
 					reason, date);
 			WebRequest req = new WebRequest();
 
-			/* Send location to Database */
-
-			// convert location request to gson string
-			Gson gson1 = new Gson();
-			String LocationStr = gson1.toJson(loc);
-			JSONStringer json1 = null;
-
-			// prepare Json
-			try {
-				json1 = new JSONStringer().object().key("action")
-						.value("update_location").key("location_request")
-						.value(LocationStr).endObject();
-
-			} catch (JSONException e) {
-				Log.e("json exeption-can't create jsonstringer with location",
-						e.toString());
-			}
-
-			// send json to web server
-			try {
-				req.getInternetData(json1);
-			} catch (Exception e) {
-				Log.w("couldn't send location to servlet", e.toString());
-			}
-
 			/* Send UserRequest to Database */
 
-			// convert location request to gson string
+			// convert UserRequest request to gson string
 			Gson gson2 = new Gson();
 			String UserStr = gson2.toJson(ur);
 			JSONStringer json2 = null;
@@ -249,32 +226,91 @@ public class Report extends Activity implements View.OnClickListener,
 			} catch (Exception e) {
 				Log.w("couldn't send user request to servlet", e.toString());
 			}
-
-			/* Send ReportRequest to Database */
-
-			// convert report request to gson string
-			Gson gson3 = new Gson();
-			String ReportStr = gson3.toJson(rr);
-			JSONStringer json3 = null;
-
-			// prepare Json
-			try {
-				json3 = new JSONStringer().object().key("action")
-						.value("update_report").key("report_request")
-						.value(ReportStr).endObject();
-
-			} catch (JSONException e) {
-				Log.e("json exeption-can't create jsonstringer with report",
-						e.toString());
+			
+			
+			/* check if the report already exists */
+	        // get user info from server
+			Gson gson4 = new Gson();
+	    	WebRequest res=new WebRequest();
+	    	String str=null;
+	    	UserRequest ur_check=null;
+	        try {
+				JSONObject json4=res.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="+FacebookMain.email);
+				str=(String)json4.get("user_req");
+				Log.w("str=",str);
+				ur_check=gson4.fromJson(str, UserRequest.class);
+	        	}catch (JSONException e) {
+						Log.e("Report error, can't get response from server, JSON exception",e.toString());
+						Log.w("str=",str);
+					}
+			    catch (Exception e) {
+				Log.e("Report error, can't get response from server",e.toString());
+				Log.w("str=",str);
 			}
+	        if (ur_check.GetMessage().compareTo("Report Exsits") ==0) {
+	        	showConflict(v);
+	        	conflict=1;
+	        }
+			
+			
+			/* Send location to Database */
 
-			// send json to web server
-			try {
-				req.getInternetData(json3);
-			} catch (Exception e) {
-				Log.w("couldn't send report to servlet", e.toString());
-			}
+	        if (conflict==0) 
+	        {
+				// convert location request to gson string
+				Gson gson1 = new Gson();
+				String LocationStr = gson1.toJson(loc);
+				JSONStringer json1 = null;
+	
+				// prepare Json
+				try {
+					json1 = new JSONStringer().object().key("action")
+							.value("update_location").key("location_request")
+							.value(LocationStr).endObject();
+	
+				} catch (JSONException e) {
+					Log.e("json exeption-can't create jsonstringer with location",
+							e.toString());
+				}
+	
+				// send json to web server
+				try {
+					req.getInternetData(json1);
+				} catch (Exception e) {
+					Log.w("couldn't send location to servlet", e.toString());
+				}
+	
+				
+	
+				/* Send ReportRequest to Database */
+	
+				// convert report request to gson string
+				Gson gson3 = new Gson();
+				String ReportStr = gson3.toJson(rr);
+				JSONStringer json3 = null;
+	
+				// prepare Json
+				try {
+					json3 = new JSONStringer().object().key("action")
+							.value("update_report").key("report_request")
+							.value(ReportStr).endObject();
+	
+				} catch (JSONException e) {
+					Log.e("json exeption-can't create jsonstringer with report",
+							e.toString());
+				}
+	
+				// send json to web server
+				try {
+					req.getInternetData(json3);
+				} catch (Exception e) {
+					Log.w("couldn't send report to servlet", e.toString());
+				}
+			
+	        }
 
+	        
+	        
 			// send email
 			if (c3.isChecked()) {
 				myIntent = new Intent(Report.this, OfficialReport.class);
@@ -300,12 +336,14 @@ public class Report extends Activity implements View.OnClickListener,
 						"Smoking-Not Update!");
 				myIntent.setType("plain/text");
 				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);*/
-
-				// pop-up view 
-				showDialog(v); 
 				
-				// send notification to user
-				sendNotification();
+				if (conflict==0){
+					// pop-up view 
+					showDialog(v); 
+					
+					// send notification to user
+					sendNotification();
+				}
 
 				// start email activity
 				//startActivity(myIntent);
@@ -426,6 +464,26 @@ public class Report extends Activity implements View.OnClickListener,
 		n.setLatestEventInfo(this, title, body, pi);
 		// n.defaults=Notification.
 		nm.notify(uniqueId, n);
+	}
+	
+	private void showConflict(View v) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+		builder.setTitle("Error");
+		builder.setMessage("A report about this place has already been accepted by you");
+		builder.setCancelable(true);
+
+		final AlertDialog dlg = builder.create();
+		dlg.show();
+		final Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			public void run() {
+				dlg.dismiss(); // when the task active then close the dialog
+				t.cancel(); // also just top the timer thread, otherwise, you
+							// may receive a crash report
+			}
+		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
+					// active
+
 	}
 
 }
