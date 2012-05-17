@@ -133,8 +133,9 @@ public class NearbyAdapter extends BaseAdapter {
 					Log.w("str=",str);
 				}
 		        
+		        // add progressbar for bad rating
 				if (loc_updated!=null)
-					holder.mRaiting.setProgress(loc_updated.getRate());
+					holder.mRaiting.setProgress(loc_updated.getGoodRate());
 			}
 			
 			if (recolor)
