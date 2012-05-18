@@ -5,12 +5,15 @@ package com.facebook.android;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
+import com.facebook.android.GooglePlacesAPI.GooglePlaceType;
+import com.facebook.android.GooglePlacesAPI.GooglePlaceTypeAdapter;
 import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -68,11 +71,13 @@ public class Places extends Activity implements View.OnClickListener {
 	private ImageButton exitButton, mShowMeOnMap, mRefreshButton;
 	private Location mLocation;
 	private MultiAutoCompleteTextView etSearch;
-	CountDownLatch latch = new CountDownLatch(1);
+	private CountDownLatch latch = new CountDownLatch(1);
+	private Context context;
 	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
 	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
 
 	private void Init() {
+		context = this;
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
 		tvProfile = (TextView) findViewById(R.id.tvPlaProfile);
@@ -229,6 +234,8 @@ public class Places extends Activity implements View.OnClickListener {
 		mRefreshButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
+					mLocEng = null;
+					mLocEng = new LocationEngine(context);
 					updateLocation();
 				} catch (Throwable t) {
 					;
@@ -240,13 +247,12 @@ public class Places extends Activity implements View.OnClickListener {
 		btnCategories.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {					
-					ArrayAdapter<CharSequence> adapter = ArrayAdapter
-							.createFromResource(getApplicationContext(), R.array.types_array,
-									android.R.layout.simple_spinner_item);
+					//GooglePlaceTypeAdapter adapter = new GooglePlaceTypeAdapter(context, R.id.tv_name, null);
+					ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.types_array, android.R.layout.simple_expandable_list_item_1);
 					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 					AlertDialog.Builder builder = new AlertDialog.Builder(
-							getApplicationContext());
+							context);
 					builder.setTitle("Categories");
 					builder.setNeutralButton("Apply",
 							new DialogInterface.OnClickListener() {
@@ -256,14 +262,17 @@ public class Places extends Activity implements View.OnClickListener {
 									;
 								}
 							});
-					builder.setAdapter(adapter,
+					boolean ch[] = {true, true, true, false, false, false, true};
+					builder.setMultiChoiceItems(R.array.types_array, ch, null);
+					/*builder.setAdapter(adapter,
 							new DialogInterface.OnClickListener() {
 								public void onClick(
 										DialogInterface dialogInterface,
 										int item) {
-									return;
+									;//return;
 								}
 							});
+						*/	
 					builder.create().show();
 					
 				} catch (Throwable t) {
@@ -292,7 +301,7 @@ public class Places extends Activity implements View.OnClickListener {
 				try {
 
 					int counter = 0;
-					if (!mLocEng.isLocationEnabled()) {
+					if (!mLocEng.isServiceEnabled()) {
 						what = M_LS_DOWN;
 
 					} else {
@@ -305,8 +314,12 @@ public class Places extends Activity implements View.OnClickListener {
 							counter++;
 							Log.i("ERIC", "counter=" + counter);
 						}
+						if (mLocation == null) {
+							mLocEng.setDebugLocation();
+							mLocation = mLocEng.getCurrentLocation();
+						}
 						counter = 0;
-						mProgress.setMessage("Obtaining your address");
+						//mProgress.setMessage("Obtaining your address");
 						while ((!mLocEng.addressEnabled) && (counter < CYCLES_TO_WAIT)) 
 						{
 							mLocEng.getAddressFromLocation(mLocation);
@@ -319,9 +332,9 @@ public class Places extends Activity implements View.OnClickListener {
 						
 					}
 
-				} catch (Exception Ex) {
+				} catch (Exception e) {
 					what = M_UPD_LOC_ERR;
-					Log.i("ERIC", "BAD UPDATE LOC: " + Ex.getMessage());
+					e.printStackTrace();
 
 				}
 				latch.countDown();
@@ -367,7 +380,6 @@ public class Places extends Activity implements View.OnClickListener {
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			mProgress.dismiss();
 			Log.i("ERIC", "what: " + msg.what);
 			switch (msg.what) {
 			case M_LS_DOWN:
@@ -410,6 +422,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 			}
 			latch.countDown();
+			mProgress.dismiss();
 			Log.i("ERIC", "unlatched");
 		}
 

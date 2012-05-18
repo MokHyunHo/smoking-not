@@ -2,8 +2,6 @@ package com.facebook.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
@@ -117,7 +107,7 @@ public class NearbyAdapter extends BaseAdapter {
 		    	String str=null;
 		    	LocationRequest loc_updated=null;
 		        try {
-					JSONObject json2=req.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetLocation?locationid="+place.id);
+					JSONObject json2=req.readJsonFromUrl(caller.getString(R.string.DatabaseUrl) + "/GetLocation?locationid="+place.id);
 					str=(String)json2.get("location_req");
 					Log.w("str=",str);
 					if (str.compareTo("NotinDataBase")==0)
