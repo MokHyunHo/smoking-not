@@ -222,7 +222,7 @@ public class Report extends Activity implements View.OnClickListener,
 
 			// send json to web server
 			try {
-				req.getInternetData(json2);
+				req.getInternetData(json2, getString(R.string.DatabaseUrl) + "/UpdateUser");
 			} catch (Exception e) {
 				Log.w("couldn't send user request to servlet", e.toString());
 			}
@@ -275,7 +275,7 @@ public class Report extends Activity implements View.OnClickListener,
 	
 				// send json to web server
 				try {
-					req.getInternetData(json1);
+					req.getInternetData(json1, getString(R.string.DatabaseUrl) + "/UpdateUser");
 				} catch (Exception e) {
 					Log.w("couldn't send location to servlet", e.toString());
 				}
@@ -302,7 +302,7 @@ public class Report extends Activity implements View.OnClickListener,
 	
 				// send json to web server
 				try {
-					req.getInternetData(json3);
+					req.getInternetData(json3, getString(R.string.DatabaseUrl) + "/UpdateUser");
 				} catch (Exception e) {
 					Log.w("couldn't send report to servlet", e.toString());
 				}
