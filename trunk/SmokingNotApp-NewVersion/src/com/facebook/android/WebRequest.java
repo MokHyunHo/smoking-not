@@ -6,20 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
@@ -33,9 +24,10 @@ import android.util.Log;
 public class WebRequest {
 	
 
-		 public  void getInternetData  (JSONStringer jsonStr) throws UnsupportedEncodingException,ClientProtocolException,IOException
+		 public  void getInternetData  (JSONStringer jsonStr, String urlStr) throws UnsupportedEncodingException,ClientProtocolException,IOException
 	        {
-	                HttpPost request = new HttpPost("http://www.smokingnot2012.appspot.com/UpdateUser");
+	                //HttpPost request = new HttpPost("http://www.smokingnot2012.appspot.com/UpdateUser");
+			 		HttpPost request = new HttpPost(urlStr);
 	                try 
 	                {
 	                        StringEntity entity = new StringEntity(jsonStr.toString());
@@ -101,14 +93,4 @@ public class WebRequest {
 	           
            return null;
          }
-
-
-		
-	
-	
-	
-	
-	
-	
-
 }

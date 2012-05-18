@@ -1,73 +1,55 @@
 package com.facebook.android;
 
 import java.io.IOException;
-import java.text.BreakIterator;
-import java.util.List;
-import java.util.Locale;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 public class LocationEngine implements LocationListener {
 
 	private LocationManager lm;
-	private Geocoder gc;
 
 	private boolean locationSent;
 
 	String provider = LocationManager.NETWORK_PROVIDER;
 
 	private Location mLocation;
+	private boolean serviceEnabled = false;
 	private boolean locationEnabled = false;
-	private boolean geocoderEnabled = false;
 	boolean addressEnabled = false;
+	private Context context;
+
+	private WebRequest req;
 
 	public LocationEngine(Context context) {
+		this.context = context;
 		lm = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
 
-		if (!lm.isProviderEnabled(provider))
+		if (!lm.isProviderEnabled(provider)) {
+
+			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+			context.startActivity(intent);
 			return;
+		} else
+			serviceEnabled = true;
 
-		gc = new Geocoder(context, Locale.getDefault());
-
-		if (Geocoder.isPresent())
-			geocoderEnabled = true;
-
-		Log.i("ERIC", "geocoder enabled = " + geocoderEnabled);
+		req = new WebRequest();
 
 		setLocationSent(false);
-		
 
-		
-		//uncoment in release
-
-		/*		Debug only*/
-		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
-		mLocation.setLatitude(32.06);
-		mLocation.setLongitude(34.77);
-		
 		lm.requestLocationUpdates(provider, 0, 0, this);
-		
-		Location newLocation = lm.getLastKnownLocation(provider);
-		
-		if (newLocation != null)
-			mLocation = newLocation;
-		else
-			Toast.makeText(context, "Location is unavailable. Placing you somewhere is Tel Aviv... (debug)", Toast.LENGTH_LONG);
-		
-		locationEnabled = (mLocation != null);
-		//locationEnabled = true; //debug
 
-		
-		
+		locationEnabled = (mLocation != null);
 
 	}
 
@@ -101,6 +83,10 @@ public class LocationEngine implements LocationListener {
 		return locationEnabled;
 	}
 
+	public boolean isServiceEnabled() {
+		return serviceEnabled;
+	}
+
 	public Location getCurrentLocation() {
 		setLocationSent(true);
 		return mLocation;
@@ -108,45 +94,35 @@ public class LocationEngine implements LocationListener {
 
 	public String getAddressFromLocation(Location location) {
 		String addressString = "(address unavailable)";
-		List<Address> addresses;
 
 		addressEnabled = false;
 
 		OBTAIN: try {
 
-			if (!geocoderEnabled)
+			if (location == null)
 				break OBTAIN;
+			String requestUrl = context.getString(R.string.GeocoderApiUrl)
+					+ "/json?sensor=true&latlng=" + location.getLatitude()
+					+ "," + location.getLongitude();
 
-			if (mLocation == null)
-				break OBTAIN;
+			JSONObject geocoderResponse = getGeocoderResponse(requestUrl);
 
-			addresses = gc.getFromLocation(location.getLatitude(),
-					location.getLongitude(), 1);
-
-			if (addresses == null)
-				break OBTAIN;
-
-			StringBuilder sb = new StringBuilder();
-
-			if (addresses.size() < 1)
-				break OBTAIN;
-
-			Address address = addresses.get(0);
-			int i;
-			for (i = 0; i < address.getMaxAddressLineIndex() - 1; i++)
-				sb.append(address.getAddressLine(i)).append(", ");
-			sb.append(address.getAddressLine(i));
-
-			addressString = sb.toString();
+			addressString = geocoderResponse.getJSONArray("results")
+					.getJSONObject(0).getString("formatted_address");
 
 			addressEnabled = true;
 
-		} catch (IOException e) {
-			Log.i("ERIC", "BAD! address: " + e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
 			break OBTAIN;
 		}
 
 		return addressString;
+	}
+
+	JSONObject getGeocoderResponse(String request) throws IOException,
+			JSONException {
+		return req.readJsonFromUrl(request);
 	}
 
 	public boolean isLocationSent() {
@@ -155,6 +131,18 @@ public class LocationEngine implements LocationListener {
 
 	public void setLocationSent(boolean locationSent) {
 		this.locationSent = locationSent;
+	}
+
+	void setDebugLocation() {
+		mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
+		mLocation.setLatitude(32.06);
+		mLocation.setLongitude(34.77);
+		locationEnabled = true;
+
+		Toast.makeText(
+				context,
+				"Location is unavailable. Placing you somewhere is Tel Aviv... (debug)",
+				Toast.LENGTH_LONG);
 	}
 
 }

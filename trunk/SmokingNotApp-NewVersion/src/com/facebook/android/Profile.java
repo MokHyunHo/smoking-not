@@ -60,7 +60,7 @@ public class Profile extends Activity implements View.OnClickListener {
     	String str=null;
     	UserRequest ur_updated=null;
         try {
-			JSONObject json2=req.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="+FacebookMain.email);
+			JSONObject json2=req.readJsonFromUrl(getString(R.string.DatabaseUrl) + "/GetUser?mail="+FacebookMain.email);
 			str=(String)json2.get("user_req");
 			Log.w("str=",str);
 			ur_updated=gson2.fromJson(str, UserRequest.class);
