@@ -1,4 +1,8 @@
 #labels Phase-Design
+New main menu design option #1
+
+http://smoking-not.googlecode.com/svn/wiki/images/new_main.jpg
+
 There are 4 options for design.
 
 The preferred one:
