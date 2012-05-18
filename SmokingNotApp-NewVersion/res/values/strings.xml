@@ -148,5 +148,7 @@
         <item>store</item>
         <item>other</item>
     </string-array>
-
+    
+    <string name="DatabaseUrl">http://www.smokingnot2012.appspot.com</string>
+	<string name="GeocoderApiUrl">https://maps.googleapis.com/maps/api/geocode</string>
 </resources>
