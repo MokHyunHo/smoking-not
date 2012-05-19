@@ -25,7 +25,7 @@ public class LocationEngine implements LocationListener {
 	private Location mLocation;
 	private boolean serviceEnabled = false;
 	private boolean locationEnabled = false;
-	boolean addressEnabled = false;
+
 	private Context context;
 
 	private WebRequest req;
@@ -92,38 +92,7 @@ public class LocationEngine implements LocationListener {
 		return mLocation;
 	}
 
-	public String getAddressFromLocation(Location location) {
-		String addressString = "(address unavailable)";
 
-		addressEnabled = false;
-
-		OBTAIN: try {
-
-			if (location == null)
-				break OBTAIN;
-			String requestUrl = context.getString(R.string.GeocoderApiUrl)
-					+ "/json?sensor=true&latlng=" + location.getLatitude()
-					+ "," + location.getLongitude();
-
-			JSONObject geocoderResponse = getGeocoderResponse(requestUrl);
-
-			addressString = geocoderResponse.getJSONArray("results")
-					.getJSONObject(0).getString("formatted_address");
-
-			addressEnabled = true;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			break OBTAIN;
-		}
-
-		return addressString;
-	}
-
-	JSONObject getGeocoderResponse(String request) throws IOException,
-			JSONException {
-		return req.readJsonFromUrl(request);
-	}
 
 	public boolean isLocationSent() {
 		return locationSent;

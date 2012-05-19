@@ -33,7 +33,7 @@
         android:layout_above="@+id/btn_submit"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/TextView01"
-        android:apiKey="0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ"
+        android:apiKey="@string/GoogleMapsAPIKeyRelease"
         android:clickable="true" />
     
         <!--debug key-->
