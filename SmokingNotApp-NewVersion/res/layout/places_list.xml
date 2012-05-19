@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingBottom="10dp" >
-
+
     <TextView
         android:id="@+id/tv_distance"
         android:layout_width="wrap_content"
@@ -14,7 +14,7 @@
         android:text="10 km"
         android:textColor="#88945f"
         android:textSize="12sp" />
-
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="fill_parent"
@@ -25,10 +25,10 @@
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@id/tv_distance"
         android:text="Name"
-        android:textColor="#ccc"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold" />
-
+
     <TextView
         android:id="@+id/tv_address"
         android:layout_width="fill_parent"
@@ -40,7 +40,7 @@
         android:layout_marginTop="5dp"
         android:layout_toLeftOf="@id/tv_distance"
         android:text="Address"
-        android:textColor="#ccc"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
 </RelativeLayout>

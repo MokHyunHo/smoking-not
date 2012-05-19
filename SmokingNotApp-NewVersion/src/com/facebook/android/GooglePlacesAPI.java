@@ -1,9 +1,5 @@
 package com.facebook.android;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +7,9 @@ import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -24,23 +22,64 @@ import android.widget.TextView;
 public class GooglePlacesAPI {
 	private Context context;
 	private WebRequest req;
-	private static final String GooglePlacesAPIKey = "AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw";
-	private static final String API_URL = "https://maps.googleapis.com/maps/api/place";
+	private SharedPreferences sh_pref;
+	public GeocoderEngine mGeoEng;
+
 
 	public static final int ALLOWED_RADIUS = 100;
-	public static final int LOOK_AROUND_RADIUS = 100;
+	public static final int LOOK_AROUND_RADIUS = 1000;
 	public static final int MAX_RADIUS = 50000;
 
-	public GooglePlaceType placesTypes[] = { new GooglePlaceType("bar", "Bar"),
-			new GooglePlaceType("cafe", "Cafe"),
-			new GooglePlaceType("food", "Food"),
-			new GooglePlaceType("night_club", "Night Club"),
-			new GooglePlaceType("restaurant", "Restaurant"),
-			new GooglePlaceType("store", "Store") };
+	public boolean[] chosen_cats;
+	public String[] cats;
 
 	public GooglePlacesAPI(Context context) {
 		this.context = context;
 		req = new WebRequest();
+		mGeoEng = new GeocoderEngine(context);
+		cats = context.getResources().getStringArray(R.array.types_array);
+		chosen_cats = new boolean[cats.length];
+
+		sh_pref = context.getSharedPreferences("Places", 0);
+		for (int i = 0; i < cats.length; i++) {
+			chosen_cats[i] = sh_pref.getBoolean(cats[i],
+					(cats[i].equals("other") ? false : true));
+		}
+	}
+
+	public void setChosenCats(boolean[] ch_cats) {
+
+		chosen_cats = ch_cats;
+		SharedPreferences.Editor pref_edit = sh_pref.edit();
+		for (int i = 0; i < cats.length; i++) {
+			pref_edit.putBoolean(cats[i], ch_cats[i]);
+		}
+		pref_edit.commit();
+
+	}
+
+	public ArrayList<String> getChosenCats() {
+		ArrayList<String> chosen_cats_list = new ArrayList<String>();
+
+		for (int i = 0; i < chosen_cats.length; i++) {
+			if (chosen_cats[i])
+				chosen_cats_list.add(cats[i]);
+		}
+		Log.i("ERIC", chosen_cats_list.toString());
+		return chosen_cats_list;
+	}
+
+	public String getChosenCatsStr() {
+		ArrayList<String> lst = getChosenCats();
+		if (lst.contains("other"))
+			return "";
+		else {
+			StringBuilder strb = new StringBuilder("&types=");
+			for (int i = 0; i < lst.size() - 1; i++)
+				strb.append(lst.get(i)).append("|");
+			strb.append(lst.get(lst.size() - 1));
+			return strb.toString();
+		}
 	}
 
 	public ArrayList<GooglePlace> getNearby(Location location, int radius)
@@ -49,8 +88,9 @@ public class GooglePlacesAPI {
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
 
-		URL url = new URL(API_URL + "/search/json?key=" + GooglePlacesAPIKey
-				+ "&location=" + ll + "&sensor=true" + "&radius=" + radius);
+		URL url = new URL(context.getString(R.string.GooglePlacesApiUrl) + "/search/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
+				+ "&location=" + ll + "&sensor=true" + "&radius=" + radius
+				+ getChosenCatsStr());
 
 		return getPlaces(url, true, location);
 	}
@@ -60,16 +100,16 @@ public class GooglePlacesAPI {
 
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
-		
-		String url_str = API_URL + "/search/json?key=" + GooglePlacesAPIKey
+
+		String url_str = context.getString(R.string.GooglePlacesApiUrl) + "/search/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
 				+ "&location=" + ll + "&sensor=" + String.valueOf(hasLocation)
-				+ "&keyword=" + searchStr + "&radius=" + radius;
+				+ "&keyword=" + searchStr + "&radius=" + radius
+				+ getChosenCatsStr();
 
 		url_str = url_str.replace(" ", "%20");
 		URL url = new URL(url_str);
-		
 
-		Log.d("ERIC", url.toURI().toASCIIString());
+		//Log.d("ERIC", url.toURI().toString());
 
 		return getPlaces(url, hasLocation, location);
 	}
@@ -83,21 +123,7 @@ public class GooglePlacesAPI {
 
 			Log.d("ERIC", "Opening URL " + url.toString());
 
-			/*HttpURLConnection urlConnection = (HttpURLConnection) url
-					.openConnection();
-
-			urlConnection.setRequestMethod("GET");
-			urlConnection.setDoInput(true);
-			urlConnection.setDoOutput(true);
-			
-
-			urlConnection.connect();
-*/
 			JSONObject jsonObj = req.readJsonFromUrl(url.toString());
-			/*String response = streamToString(urlConnection.getInputStream());
-			JSONObject jsonObj = (JSONObject) new JSONTokener(response)
-					.nextValue();
-*/
 			JSONArray places = jsonObj.getJSONArray("results");
 
 			int length = places.length();
@@ -122,7 +148,9 @@ public class GooglePlacesAPI {
 
 					place.location = loc;
 
-					place.vicinity = item.getString("vicinity");
+					place.vicinity = item.optString("vicinity");
+					if (place.vicinity.equals(""))
+						place.vicinity = mGeoEng.getAddressFromLocation(loc);
 
 					if (by_location)
 						place.distance = calculateDistance(my_loc, loc);
@@ -139,31 +167,6 @@ public class GooglePlacesAPI {
 
 		Collections.sort(placesList, new distanceComparator());
 		return placesList;
-	}
-
-	private String streamToString(InputStream is) throws IOException {
-		String str = "";
-
-		if (is != null) {
-			StringBuilder sb = new StringBuilder();
-			String line;
-
-			try {
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
-
-				while ((line = reader.readLine()) != null) {
-					sb.append(line);
-				}
-
-				reader.close();
-			} finally {
-				is.close();
-			}
-
-			str = sb.toString();
-		}
-		return str;
 	}
 
 	/* ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
@@ -218,7 +221,7 @@ public class GooglePlacesAPI {
 			placeTypes.put(place_type);
 			newPlaceObject.put("types", placeTypes);
 
-			URL url = new URL(API_URL + "/add/json?key=" + GooglePlacesAPIKey
+			URL url = new URL(context.getString(R.string.GooglePlacesApiUrl) + "/add/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
 					+ "&sensor=true");
 			JSONObject jsonResponse = HttpClient.SendHttpPost(url.toString(),
 					newPlaceObject);

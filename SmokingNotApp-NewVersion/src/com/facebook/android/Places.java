@@ -5,8 +5,6 @@ package com.facebook.android;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
-import com.facebook.android.GooglePlacesAPI.GooglePlaceType;
-import com.facebook.android.GooglePlacesAPI.GooglePlaceTypeAdapter;
 import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
 
@@ -15,6 +13,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -22,14 +21,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.MultiAutoCompleteTextView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
 //import android.widget.ImageView;
 //import android.widget.TextView;
@@ -38,43 +41,48 @@ import android.widget.TextView;
 public class Places extends Activity implements View.OnClickListener {
 	/** Called when the activity is first created. */
 
-	/*
-	 * private enum handlerMessages { M_LS_DOWN, M_UPD_LOC_ERR, M_ADDRESS_NA,
-	 * M_LOC_OK, M_ADDRESS_OK;
-	 * 
-	 * private final int msg; handlerMessages(int msg) { this.msg = msg; } }
-	 */
-
 	private final int M_LS_DOWN = 0;
 	private final int M_UPD_LOC_ERR = 1;
+	@SuppressWarnings("unused")
 	private final int M_ADDRESS_NA = 2;
 	private final int M_LOC_OK = 3;
+	@SuppressWarnings("unused")
 	private final int M_ADDRESS_OK = 4;
 	private final int M_GET_PLACES_ERR = 5;
 	private final int M_GET_PLACES_OK = 6;
-	
-	private final int iCat = 0;
+	private final int M_GET_SUGGESTIONS_OK = 7;
+	private final int M_GET_SUGGESTIONS_ERR = 8;
+	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
 
 	private final int CYCLES_TO_WAIT = 5;
-	
+
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
 	// private EditText latitudeEt, longitudeEt, radiusEt;
-	private Button goBtn, searchBtn, btnCategories;
+	private Button goBtn;
 
-	//private FoursquareApp mFsqApp;
-	private GooglePlacesAPI mGooglePlacesAPI; 
+	// private FoursquareApp mFsqApp;
+	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
 	private ListView mListView;
 	private NearbyAdapter mAdapter;
 	private ArrayList<GooglePlace> mNearbyList;
 	private ProgressDialog mProgress;
-	private ImageButton exitButton, mShowMeOnMap, mRefreshButton;
-	private Location mLocation;
-	private MultiAutoCompleteTextView etSearch;
+	private ImageButton exitButton, mShowMeOnMap, mRefreshButton, searchBtn,
+			btnCategories;
+	private Location mLocation, userLocation;
+	private boolean near_me;
+	private AutoCompleteTextView etSearch;
+	private RadioGroup rg;
+	// private AlertDialog.Builder addressAlert;
+	private AutoCompleteTextView addressInput;
 	private CountDownLatch latch = new CountDownLatch(1);
 	private Context context;
-	public static final String CLIENT_ID = "YP3ZQVYTZWNQVEWUNZV2LNIP0EKOLPSG40IVT4BT2TVKS5TP";
-	public static final String CLIENT_SECRET = "SJMMUOXSX0FOUF5UHJYWBCUN3VQOPAO2CCCBUA4FPBCBEGDA";
+	boolean m_chosen_cats[];
+
+	long lastTime;
+	String input_str;
+
+	ArrayAdapter<String> ac_adapter;
 
 	private void Init() {
 		context = this;
@@ -84,11 +92,10 @@ public class Places extends Activity implements View.OnClickListener {
 
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
-		searchBtn = (Button) findViewById(R.id.b_search);
-		btnCategories = (Button) findViewById(R.id.b_categoies);
+		searchBtn = (ImageButton) findViewById(R.id.b_search);
+		btnCategories = (ImageButton) findViewById(R.id.b_categoies);
 		mListView = (ListView) findViewById(R.id.lv_places);
 
-		//mFsqApp = new FoursquareApp(this, CLIENT_ID, CLIENT_SECRET);
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		mLocEng = new LocationEngine(this);
 
@@ -97,9 +104,81 @@ public class Places extends Activity implements View.OnClickListener {
 		mProgress = new ProgressDialog(this);
 		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
 		mRefreshButton = (ImageButton) findViewById(R.id.ib_Refresh);
-		etSearch = (MultiAutoCompleteTextView) findViewById(R.id.et_Search);
+		etSearch = (AutoCompleteTextView) findViewById(R.id.et_Search);
 		mShowMeOnMap.setVisibility(View.INVISIBLE);
 		goBtn.setEnabled(false);
+
+		lastTime = System.nanoTime();
+		near_me = true;
+		addressInput = (AutoCompleteTextView) findViewById(R.id.etAddress);
+		rg = (RadioGroup) findViewById(R.id.radioGroup1);
+		rg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup arg0, int arg1) {
+				if (arg1 == 0) {
+					etSearch.requestFocus();
+					addressInput.setEnabled(false);
+					near_me = true;
+
+				} else {
+					addressInput.setEnabled(true);
+					near_me = false;
+					addressInput.requestFocus();
+				}
+
+			}
+		});
+
+		addressInput.setOnKeyListener(new View.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+				if (event.getAction() == KeyEvent.ACTION_UP) {
+					lastTime = System.nanoTime();
+					Log.i("ERIC", "last key at:" + lastTime);
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								sleep(AUTOCOMPLETE_MINIMUM_INTERVAL / 1000000);
+							} catch (InterruptedException e1) {
+								e1.printStackTrace();
+							}
+							long now = System.nanoTime();
+							long interval = now - lastTime;
+							Log.i("ERIC", "inerval: " + interval);
+							if (interval >= AUTOCOMPLETE_MINIMUM_INTERVAL) {
+								int what = M_GET_SUGGESTIONS_OK;
+								input_str = addressInput.getText().toString();
+								if (input_str.length() > 1) {
+									try {
+										ac_adapter = new ArrayAdapter<String>(
+												context,
+												android.R.layout.simple_dropdown_item_1line,
+												mGooglePlacesAPI.mGeoEng
+														.getAddressSuggestions(
+																input_str,
+																mLocation));
+									} catch (Exception e) {
+										what = M_GET_SUGGESTIONS_ERR;
+										e.printStackTrace();
+									}
+
+									mHandler.sendMessage(mHandler
+											.obtainMessage(what));
+								}
+							}
+						}
+
+					}.start();
+				}
+				return false;
+			}
+
+		});
+
 		// connection between XML & JAVA
 
 		// first-up menu
@@ -109,7 +188,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 		// START MENU BUTTON
 		exitButton = (ImageButton) findViewById(R.id.exitButton);
-		
+
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -148,8 +227,7 @@ public class Places extends Activity implements View.OnClickListener {
 			break;
 		}
 	}
-	
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -158,31 +236,37 @@ public class Places extends Activity implements View.OnClickListener {
 		setContentView(R.layout.places);
 		Init();
 
-
 		updateLocation();
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-
+				Location theLoc;
 				try {
-					if (!mLocEng.isLocationEnabled()) {
-						Toast.makeText(Places.this, "Location is unknown",
-								Toast.LENGTH_SHORT).show();
-						return;
+					if (!near_me) {
+						input_str = addressInput.getText().toString();
+						userLocation = mGooglePlacesAPI.mGeoEng
+								.getLocationFromAddress(input_str);
+						theLoc = userLocation;
+					} else {
+						if (!mLocEng.isLocationEnabled()) {
+							Toast.makeText(Places.this, "Location is unknown",
+									Toast.LENGTH_SHORT).show();
+							return;
+						}
+						if (!mLocEng.isLocationSent()) {
+							Log.i("ERIC", "latched");
+							latch = new CountDownLatch(1);
+							updateLocation();
+							latch.await();
+						}
+						theLoc = mLocation;
 					}
-					if (!mLocEng.isLocationSent()) {
-						Log.i("ERIC", "latched");
-						latch = new CountDownLatch(1);
-						updateLocation();
-						latch.await();
-					}
-					if (mLocation != null)
-					{
+					if (theLoc != null) {
 						mProgress.setMessage("Retrieving nearby places...");
-						loadNearbyPlaces(mLocation, false, null, GooglePlacesAPI.LOOK_AROUND_RADIUS);
-					}
-					else
+						loadNearbyPlaces(theLoc, false, null,
+								GooglePlacesAPI.LOOK_AROUND_RADIUS);
+					} else
 						Toast.makeText(Places.this, "Location is unknown",
 								Toast.LENGTH_SHORT).show();
 
@@ -194,18 +278,30 @@ public class Places extends Activity implements View.OnClickListener {
 			}
 
 		});
-		
+
 		searchBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String searchStr = etSearch.getText().toString(); 
-				if (searchStr.isEmpty()) return;
-				
-				try
-				{
+
+				String searchStr = etSearch.getText().toString();
+				if (searchStr.isEmpty())
+					return;
+
+				try {
 					mProgress.setMessage("Searching for places...");
-					
-					loadNearbyPlaces(mLocation, true, searchStr, GooglePlacesAPI.MAX_RADIUS);
+					if (!near_me) {
+						input_str = addressInput.getText().toString();
+						userLocation = mGooglePlacesAPI.mGeoEng
+								.getLocationFromAddress(input_str);
+						loadNearbyPlaces(userLocation, true, searchStr,
+								GooglePlacesAPI.MAX_RADIUS);
+						Log.i("ERIC", "searching near " + input_str + ", "
+								+ userLocation.getLatitude() + ","
+								+ userLocation.getLongitude());
+					} else {
+						loadNearbyPlaces(mLocation, true, searchStr,
+								GooglePlacesAPI.MAX_RADIUS);
+					}
 
 				} catch (Exception ex) {
 					Toast.makeText(Places.this,
@@ -215,13 +311,12 @@ public class Places extends Activity implements View.OnClickListener {
 			}
 
 		});
-		
+
 		mShowMeOnMap.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
-					Uri mUri = Uri.parse("geo:0,0?q="
-							+ mLocation.getLatitude() + ","
-							+ mLocation.getLongitude());
+					Uri mUri = Uri.parse("geo:0,0?q=" + mLocation.getLatitude()
+							+ "," + mLocation.getLongitude());
 					Intent i = new Intent(Intent.ACTION_VIEW, mUri);
 					startActivity(i);
 				} catch (Throwable t) {
@@ -230,7 +325,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 			}
 		});
-		
+
 		mRefreshButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
@@ -242,54 +337,53 @@ public class Places extends Activity implements View.OnClickListener {
 				}
 
 			}
-		});	
-		
+		});
+
 		btnCategories.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				try {					
-					//GooglePlaceTypeAdapter adapter = new GooglePlaceTypeAdapter(context, R.id.tv_name, null);
-					ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.types_array, android.R.layout.simple_expandable_list_item_1);
-					adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+				try {
 					AlertDialog.Builder builder = new AlertDialog.Builder(
 							context);
 					builder.setTitle("Categories");
+					m_chosen_cats = mGooglePlacesAPI.chosen_cats;
+					// builder.setAdapter(adapter, null);
+					builder.setMultiChoiceItems(R.array.types_array,
+							mGooglePlacesAPI.chosen_cats,
+							new OnMultiChoiceClickListener() {
+
+								@Override
+								public void onClick(DialogInterface arg0,
+										int arg1, boolean arg2) {
+									m_chosen_cats[arg1] = arg2;
+
+								}
+							});
+
 					builder.setNeutralButton("Apply",
 							new DialogInterface.OnClickListener() {
 								public void onClick(
 										DialogInterface dialogInterface,
 										int item) {
-									;
+									mGooglePlacesAPI
+											.setChosenCats(m_chosen_cats);
+									mGooglePlacesAPI.getChosenCats();
 								}
 							});
-					boolean ch[] = {true, true, true, false, false, false, true};
-					builder.setMultiChoiceItems(R.array.types_array, ch, null);
-					/*builder.setAdapter(adapter,
-							new DialogInterface.OnClickListener() {
-								public void onClick(
-										DialogInterface dialogInterface,
-										int item) {
-									;//return;
-								}
-							});
-						*/	
 					builder.create().show();
-					
+
 				} catch (Throwable t) {
 					t.printStackTrace();
 				}
 
 			}
-		});	
-
-		
+		});
 
 	}
 
 	public void updateLocation() {
 		mProgress.setMessage("Retrieving location...");
 		mProgress.show();
-		
+
 		mLocEng = new LocationEngine(this);
 
 		new Thread() {
@@ -305,8 +399,8 @@ public class Places extends Activity implements View.OnClickListener {
 						what = M_LS_DOWN;
 
 					} else {
-						while ((mLocation == null) && (counter < CYCLES_TO_WAIT)) 
-						{
+						while ((mLocation == null)
+								&& (counter < CYCLES_TO_WAIT)) {
 							mLocation = mLocEng.getCurrentLocation();
 							if (mLocation != null)
 								break;
@@ -319,17 +413,18 @@ public class Places extends Activity implements View.OnClickListener {
 							mLocation = mLocEng.getCurrentLocation();
 						}
 						counter = 0;
-						//mProgress.setMessage("Obtaining your address");
-						while ((!mLocEng.addressEnabled) && (counter < CYCLES_TO_WAIT)) 
-						{
-							mLocEng.getAddressFromLocation(mLocation);
-							if (mLocEng.addressEnabled)
+						// mProgress.setMessage("Obtaining your address");
+						while ((!mGooglePlacesAPI.mGeoEng.addressEnabled)
+								&& (counter < CYCLES_TO_WAIT)) {
+							mGooglePlacesAPI.mGeoEng
+									.getAddressFromLocation(mLocation);
+							if (mGooglePlacesAPI.mGeoEng.addressEnabled)
 								break;
 							sleep(1000);
 							counter++;
 							Log.i("ERIC", "counter=" + counter);
 						}
-						
+
 					}
 
 				} catch (Exception e) {
@@ -345,32 +440,31 @@ public class Places extends Activity implements View.OnClickListener {
 		Log.i("ERIC", "upd loc thread started");
 	}
 
+	private void loadNearbyPlaces(final Location location, final boolean query,
+			final String searchStr, final int radius) {
 
-
-	private void loadNearbyPlaces(final Location location, final boolean query, final String searchStr, final int radius) {
-		
 		mProgress.show();
 
 		new Thread() {
 			@Override
 			public void run() {
 				int what = M_GET_PLACES_OK;
-
+				Log.i("ERIC", mGooglePlacesAPI.getChosenCatsStr());
 				Looper.prepare();
 				try {
-					if (query == true)
-						mNearbyList = mGooglePlacesAPI
-						.searchPlaces(mLocation, mLocEng.isLocationEnabled(), searchStr, radius);
-						
-					else
-					mNearbyList = mGooglePlacesAPI
-							.getNearby(location, radius);
-					
+					if (query == true) {
+						Log.i("ERIC", searchStr);
+						mNearbyList = mGooglePlacesAPI.searchPlaces(location,
+								mLocEng.isLocationEnabled(), searchStr, radius);
+					} else
+						mNearbyList = mGooglePlacesAPI.getNearby(location,
+								radius);
 
 				} catch (Throwable e) {
 					what = M_GET_PLACES_ERR;
+					e.printStackTrace();
 				}
-				
+
 				mHandler.sendMessage(mHandler.obtainMessage(what));
 			}
 		}.start();
@@ -385,7 +479,7 @@ public class Places extends Activity implements View.OnClickListener {
 			case M_LS_DOWN:
 				Toast.makeText(Places.this, "Location Service is unavailable",
 						Toast.LENGTH_LONG).show();
-				
+
 				break;
 			case M_UPD_LOC_ERR:
 				Toast.makeText(Places.this, "Error while getting location",
@@ -394,8 +488,8 @@ public class Places extends Activity implements View.OnClickListener {
 				break;
 			case M_LOC_OK:
 				if (mLocation != null) {
-					tvAddress
-							.setText(mLocEng.getAddressFromLocation(mLocation));
+					tvAddress.setText(mGooglePlacesAPI.mGeoEng
+							.getAddressFromLocation(mLocation));
 					Log.i("ERIC", "location: " + mLocation.toString());
 					goBtn.setEnabled(true);
 					mShowMeOnMap.setVisibility(View.VISIBLE);
@@ -406,8 +500,8 @@ public class Places extends Activity implements View.OnClickListener {
 
 			case M_GET_PLACES_OK:
 				if (mNearbyList.size() == 0) {
-					Toast.makeText(Places.this, "No places",
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(Places.this, "No places", Toast.LENGTH_LONG)
+							.show();
 					break;
 				}
 
@@ -418,6 +512,14 @@ public class Places extends Activity implements View.OnClickListener {
 			case M_GET_PLACES_ERR:
 				Toast.makeText(Places.this, "Failed to load places",
 						Toast.LENGTH_LONG).show();
+				break;
+			case M_GET_SUGGESTIONS_OK:
+				addressInput.setAdapter(ac_adapter);
+				try {
+					addressInput.showDropDown();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 
 			}
