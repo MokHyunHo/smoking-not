@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Report extends Activity implements View.OnClickListener,
 		OnItemSelectedListener {
@@ -485,5 +487,106 @@ public class Report extends Activity implements View.OnClickListener,
 					// active
 
 	}
+	
+	
+	
+	//was added
+    //--------------- Post to Wall-----------------------
+    public static final String imageURL="http://www.facebook.com/images/devsite/iphone_connect_btn.jpg";
+    public static final String linkURL="http://smokingnot2012.appspot.com";
+  
+    
+    private static final String MSG = "Message from Smoking_Not";
+   	private final Handler mFacebookHandler = new Handler();
+       final Runnable mUpdateFacebookNotification = new Runnable() {
+           public void run() {
+           	Toast.makeText(getBaseContext(), "Facebook updated !", Toast.LENGTH_LONG).show();
+           }
+       };
+       
+    public void postMessage(String msg) {
+    	
+    	if (Utility.mFacebook.isSessionValid()) {
+    		postMessageInThread(msg);
+    	} 
+    }
+
+    private void postMessageInThread(final String msg) {
+    	Thread t = new Thread() {
+    		public void run() {
+    	    	
+    	    	try {
+    	    		postMessageOnWall(msg);
+    				mFacebookHandler.post(mUpdateFacebookNotification);
+    			} catch (Exception ex) {
+    			}
+    	    }
+    	};
+    	t.start();
+    }
+
+    
+    public void postMessageOnWall(String msg) {
+		if (Utility.mFacebook.isSessionValid()) {
+			
+			 Log.d("Tests", "Testing graph API wall post");
+			    try 
+			    {
+			        String response =  Utility.mFacebook.request("me");
+			        Bundle parameters = new Bundle();
+			        
+			        parameters.putString("caption", getString(R.string.app_name));
+			        parameters.putString("message", msg);
+			        parameters.putString("description", "my_app");
+
+			        parameters.putString("picture", imageURL);      
+			        parameters.putString("link",linkURL);
+			        parameters.putString("name", getString(R.string.app_action));
+	                
+	               
+			        
+			        response =  Utility.mFacebook.request("me/feed", parameters, "POST");
+			         Log.d("Tests", "got response: " + response);
+			        if (response == null || response.equals("") || response.equals("false"))
+			        {
+			            Log.v("Error", "Blank response");
+			        }
+			        
+			     }
+			     catch(Exception e)
+			     {
+			         e.printStackTrace();
+			     }
+		}
+	}	
+
+
+ // posts a string on users wall
+    public static void PostStatusToFeed(String msg) 
+    {
+        Log.d("Tests", "Testing graph API wall post");
+        try 
+        {
+            String response =  Utility.mFacebook.request("me");
+            Bundle parameters = new Bundle();
+            parameters.putString("message", msg);
+            parameters.putString("caption", "smoking_not");
+            parameters.putString("name", "smoking_not");
+            parameters.putString("description", "my_app");
+            parameters.putString("picture", imageURL);  //Utility.HACK_ICON_URL    
+	        parameters.putString("link",linkURL);
+            response =  Utility.mFacebook.request("me/feed", parameters, "POST");
+             Log.d("Tests", "got response: " + response);
+            if (response == null || response.equals("") || response.equals("false"))
+            {
+                Log.v("Error", "Blank response");
+            }
+            
+         }
+         catch(Exception e)
+         {
+             e.printStackTrace();
+         }
+    }
 
 }
