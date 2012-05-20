@@ -220,6 +220,11 @@ public class GooglePlacesAPI {
 	}
 
 	private double calculateDistance(Location loc1, Location loc2) {
+		Log.i("ERIC", "loc1: " + loc1.toString() + "loc2: " + loc2.toString());
+		
+		if ((loc1.getLatitude() == loc2.getLatitude()) && (loc1.getLongitude() == loc2.getLongitude()))
+			return 0;
+		
 		double theta = loc1.getLongitude() - loc2.getLongitude();
 		double dist = Math.sin(deg2rad(loc1.getLatitude()))
 				* Math.sin(deg2rad(loc2.getLatitude()))
@@ -230,6 +235,7 @@ public class GooglePlacesAPI {
 		dist = rad2deg(dist);
 		dist = dist * 60 * 1.1515;
 		dist = dist * 1.609344 * 1000;// meters
+		Log.i("ERIC", "distance: " + dist);
 		return (dist);
 	}
 
