@@ -62,9 +62,9 @@ public class FacebookMain extends Activity  {
      */
     public static final String APP_ID = "306456662758902";
 
+    private ImageView mUserPic; 
     private LoginButton mLoginButton;
     private TextView mText;
-    private ImageView mUserPic;
     private Handler mHandler;
     ProgressDialog dialog;
 
@@ -88,14 +88,14 @@ public class FacebookMain extends Activity  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        
+        setContentView(R.layout.main);
+        
         if (APP_ID == null) {
             Util.showAlert(this, "Warning", "Facebook Applicaton ID must be "
                     + "specified before running this example: see FbAPIs.java");
             return;
         }
-
-        setContentView(R.layout.main);
         mHandler = new Handler();
 
         mText = (TextView) FacebookMain.this.findViewById(R.id.txt);
@@ -293,6 +293,7 @@ public class FacebookMain extends Activity  {
                         mText.setText("Welcome " + name + "!");
                         picURL="https://graph.facebook.com/"+ Utility.userUID + "/picture?type=normal";
                         mUserPic.setImageBitmap(Utility.getBitmap(picURL));
+                        
                     }
                 });
 
@@ -336,6 +337,7 @@ public class FacebookMain extends Activity  {
         public void onLogoutFinish() {
             mText.setText("You have logged out! ");
             mUserPic.setImageBitmap(null);
+           
         }
     }
 
@@ -350,3 +352,9 @@ public class FacebookMain extends Activity  {
         Utility.mAsyncRunner.request("me", params, new UserRequestListener());
     }
 }
+
+
+
+
+
+

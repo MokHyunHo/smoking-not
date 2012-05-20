@@ -89,7 +89,7 @@ public class ChoosePlace extends Activity {
 			@Override
 			public void onClick(View v) {
 				searchStr = etSearch.getText().toString(); 
-				if (searchStr.isEmpty()) return;
+				//if (searchStr.isEmpty()) return;
 				
 				try
 				{

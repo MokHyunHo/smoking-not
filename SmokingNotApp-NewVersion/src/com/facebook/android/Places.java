@@ -284,7 +284,7 @@ public class Places extends Activity implements View.OnClickListener {
 			public void onClick(View v) {
 
 				String searchStr = etSearch.getText().toString();
-				if (searchStr.isEmpty())
+				if (searchStr.compareTo("")==0)
 					return;
 
 				try {
