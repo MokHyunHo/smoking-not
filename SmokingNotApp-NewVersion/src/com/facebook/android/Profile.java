@@ -2,11 +2,6 @@ package com.facebook.android;
 
 //import java.io.IOException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,9 +26,8 @@ public class Profile extends Activity implements View.OnClickListener {
 	private TextView tvReport, tvPlaces, tvProfile;
 	private Button exitButton;
 	private TextView mText;
-	private TextView email;
+	private TextView rank;
 	private ImageView mUserPic;
-	private ImageView ratingbar1,ratingbar2,ratingbar3,ratingbar4,ratingbar5,ratingbarfull;
 	 private ProgressBar pb;
 	 private TextView total_score;
 
@@ -77,40 +71,25 @@ public class Profile extends Activity implements View.OnClickListener {
 		 //user's progress
         pb=(ProgressBar) findViewById(R.id.progressbar);
         total_score=(TextView)findViewById(R.id.tv_score);
-        ratingbar1=(ImageView)findViewById(R.id.iv_ratingbar1);
-        ratingbar2=(ImageView)findViewById(R.id.iv_ratingbar2);
-        ratingbar3=(ImageView)findViewById(R.id.iv_ratingbar3);
-        ratingbar4=(ImageView)findViewById(R.id.iv_ratingbar4);
-        ratingbar5=(ImageView)findViewById(R.id.iv_ratingbar5);
-        ratingbarfull=(ImageView)findViewById(R.id.iv_ratingbarfull);
-        
-      
+
+              
         pb.setProgress(ur_updated.GetScore());
         total_score.setText(ur_updated.GetScore()+"/100");
-        ratingbar1.setVisibility(View.INVISIBLE);
-    	ratingbar2.setVisibility(View.INVISIBLE);
-    	ratingbar3.setVisibility(View.INVISIBLE);
-    	ratingbar4.setVisibility(View.INVISIBLE);
-    	ratingbar5.setVisibility(View.INVISIBLE);
-    	ratingbarfull.setVisibility(View.INVISIBLE);
         
         //display current stage
-        if ((ur_updated.GetScore()>=0) && (ur_updated.GetScore() <15))
-        	ratingbar1.setVisibility(View.VISIBLE);
-        if ((ur_updated.GetScore()>=15) && (ur_updated.GetScore() <45))
-        	ratingbar2.setVisibility(View.VISIBLE);
+        if ((ur_updated.GetScore()>=0) && (ur_updated.GetScore() <45))
+        	rank.setText("Beginner");
         if ((ur_updated.GetScore()>=45) && (ur_updated.GetScore() <135))
-        	ratingbar3.setVisibility(View.VISIBLE); 	
-        if ((ur_updated.GetScore()>=135) && (ur_updated.GetScore() <405))
-        	ratingbar4.setVisibility(View.VISIBLE);
-        if ((ur_updated.GetScore()>=405) && (ur_updated.GetScore() <1215))
-        	ratingbar5.setVisibility(View.VISIBLE);
-        if (ur_updated.GetScore()>=1215) 
-        	ratingbarfull.setVisibility(View.VISIBLE);
+        	rank.setText("Active");
+        if ((ur_updated.GetScore()>=135) && (ur_updated.GetScore() <270))
+        	rank.setText("Advanced"); 	
+        if ((ur_updated.GetScore()>=270) && (ur_updated.GetScore() <405))
+        	rank.setText("Expert");
+        if (ur_updated.GetScore()>=405)
+        	rank.setText("Supervisor");
         
 		// PROFILE INFORMATION
 		mText.setText("Welcome " + FacebookMain.name);
-		email.setText("Email: " + FacebookMain.email);
 		mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
 
 		// START MENU BUTTON
@@ -135,7 +114,7 @@ public class Profile extends Activity implements View.OnClickListener {
 		tvPlaces = (TextView) findViewById(R.id.tvProPlaces);
 		tvProfile = (TextView) findViewById(R.id.tvProProfile);
 		mText = (TextView) findViewById(R.id.txt);
-		email = (TextView) findViewById(R.id.email);
+		rank = (TextView) findViewById(R.id.rank);
 		mUserPic = (ImageView) findViewById(R.id.user_pic);
 	}
 
