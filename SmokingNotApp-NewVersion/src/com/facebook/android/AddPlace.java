@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,9 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -44,8 +48,7 @@ public class AddPlace extends MapActivity {
 	private Context context;
 
 	private NearbyAdapter mAdapter;
-	
-	
+	private ProgressDialog mProgress;
 	String name;
 	String type;
 
@@ -113,6 +116,8 @@ public class AddPlace extends MapActivity {
 
 		setContentView(R.layout.add_place);
 
+		mProgress = new ProgressDialog(this);
+
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		etName = (EditText) findViewById(R.id.et_Name);
 		btnSubmit = (Button) findViewById(R.id.btn_submit);
@@ -168,7 +173,8 @@ public class AddPlace extends MapActivity {
 				try {
 					ArrayList<GooglePlace> suspected = new ArrayList<GooglePlace>();
 					suspected = mGooglePlacesAPI.searchPlaces(newPlaceLocation,
-							true, name, (int)newPlaceLocation.getAccuracy() + 1 + GooglePlacesAPI.ALLOWED_RADIUS);
+							true, name, (int) newPlaceLocation.getAccuracy()
+									+ 1 + GooglePlacesAPI.ALLOWED_RADIUS);
 
 					if (suspected.size() > 0) {
 						mAdapter = new NearbyAdapter(context, true);
@@ -183,7 +189,7 @@ public class AddPlace extends MapActivity {
 									public void onClick(
 											DialogInterface dialogInterface,
 											int item) {
-										;
+										addNew();
 									}
 								});
 						builder.setAdapter(mAdapter,
@@ -193,9 +199,12 @@ public class AddPlace extends MapActivity {
 											int item) {
 										GooglePlace chosen_item = (GooglePlace) mAdapter
 												.getItem(item);
-										
-										TransferPlaceAndFinish(chosen_item.name, chosen_item.id);
-										
+
+										TransferPlaceAndFinish(
+												chosen_item.name,
+												chosen_item.id,
+												chosen_item.vicinity);
+
 										return;
 									}
 								});
@@ -212,38 +221,66 @@ public class AddPlace extends MapActivity {
 		});
 
 	}
-	
+
 	private void addNew() {
-		try {
-			JSONObject jsonResponse = mGooglePlacesAPI.AddPlace(name, type,
-					newPlaceLocation);
-			if (jsonResponse != null) {
-				String status = jsonResponse.getString("status");
-				if (status.compareTo("OK") == 0) {
 
-					TransferPlaceAndFinish(name, jsonResponse.getString("id"));
+		mProgress.setMessage("Adding place...");
+		mProgress.show();
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					JSONObject jsonResponse = mGooglePlacesAPI.AddPlace(name,
+							type, newPlaceLocation);
+					if (jsonResponse != null) {
+						String status = jsonResponse.getString("status");
+						if (status.compareTo("OK") == 0) {
+							// String reference =
+							// jsonResponse.getString("reference");
+							// JSONObject details =
+							// mGooglePlacesAPI.getPlaceDetails(reference);
+							String address = mGooglePlacesAPI.mGeoEng
+									.getAddressFromLocation(newPlaceLocation);
+							TransferPlaceAndFinish(name,
+									jsonResponse.getString("id"), address);
 
-				} else {
-					Toast.makeText(context, "Failed to add place :(",
-							Toast.LENGTH_SHORT);
-					return;
+						} else {
+							Toast.makeText(context, "Failed to add place :(",
+									Toast.LENGTH_SHORT);
+							return;
+						}
+
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
+				mHandler.sendMessage(mHandler.obtainMessage(0));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		}.start();
+		
 	}
-	
-	private void TransferPlaceAndFinish(String placeName, String placeId) {
+
+	private void TransferPlaceAndFinish(String placeName, String placeId,
+			String vicinity) {
 
 		Intent data = new Intent();
 
 		data.putExtra("placeName", placeName);
 		data.putExtra("placeID", placeId);
+		data.putExtra("placeVicinity", vicinity);
 
 		setResult(RESULT_OK, data);
 		finish();
 
 	}
+
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			Log.i("ERIC", "what: " + msg.what);
+
+			mProgress.dismiss();
+
+		}
+	};
 }

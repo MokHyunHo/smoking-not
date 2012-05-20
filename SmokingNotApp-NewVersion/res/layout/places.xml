@@ -98,8 +98,6 @@
         android:paddingRight="70dp"
         android:text=""
         android:textSize="14dp" >
-
-        <requestFocus android:layout_width="match_parent" />
     </AutoCompleteTextView>
 
     <RelativeLayout
@@ -141,7 +139,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="34dp"
             android:gravity="center"
-            android:text="(not available)"
+            android:text="Retrieving your address..."
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <AutoCompleteTextView

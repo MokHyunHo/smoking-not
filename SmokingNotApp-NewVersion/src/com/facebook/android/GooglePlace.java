@@ -8,5 +8,6 @@ public class GooglePlace {
 	public String vicinity;
 	public Location location;
 	public double distance;
-	public double rate;
+	public int goodRate;
+	public int badRate;
 }

@@ -38,7 +38,7 @@ public class GeocoderEngine {
 					+ context.getString(R.string.GooglePlacesAPIKey)
 					+ "&input=" + request + "&types=geocode" + loc_str;
 
-			requestUrl = requestUrl.replace(" ", "%20");
+			requestUrl = requestUrl.replace(" ", "+");
 
 			Log.i("ERIC", requestUrl);
 			JSONObject jsonResponse = getGeocoderResponse(requestUrl);
@@ -110,6 +110,26 @@ public class GeocoderEngine {
 		return loc;
 	}
 
+	public String getAddressFromAddress(String str) {
+		try {
+
+			String requestUrl = context.getString(R.string.GeocoderApiUrl)
+					+ "/json?sensor=true&address=" + str;
+
+			requestUrl = requestUrl.replace(" ", "+");
+			Log.i("ERIC", requestUrl);
+			JSONObject geocoderResponse = getGeocoderResponse(requestUrl);
+			return geocoderResponse.getJSONArray("results").getJSONObject(0)
+					.getString("formatted_address");
+			
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return str;
+		}
+
+	}
 	JSONObject getGeocoderResponse(String request) throws IOException,
 			JSONException {
 		return req.readJsonFromUrl(request);

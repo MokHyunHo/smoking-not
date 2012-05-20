@@ -74,7 +74,9 @@ public class WebRequest {
          //@SuppressWarnings("finally")
        public JSONObject readJsonFromUrl(String url) throws IOException, JSONException
          {
-	           InputStream is = new URL(url).openStream();
+	           
+    	   Log.i("ERIC", url);
+    	   InputStream is = new URL(url).openStream();
 	           try 
 	           {
 	             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));

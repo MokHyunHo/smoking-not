@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.gson.Gson;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,9 +28,8 @@ public class GooglePlacesAPI {
 	private SharedPreferences sh_pref;
 	public GeocoderEngine mGeoEng;
 
-
 	public static final int ALLOWED_RADIUS = 100;
-	public static final int LOOK_AROUND_RADIUS = 1000;
+	public static final int LOOK_AROUND_RADIUS = 100;
 	public static final int MAX_RADIUS = 50000;
 
 	public boolean[] chosen_cats;
@@ -88,8 +90,10 @@ public class GooglePlacesAPI {
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
 
-		URL url = new URL(context.getString(R.string.GooglePlacesApiUrl) + "/search/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
-				+ "&location=" + ll + "&sensor=true" + "&radius=" + radius
+		URL url = new URL(context.getString(R.string.GooglePlacesApiUrl)
+				+ "/search/json?key="
+				+ context.getString(R.string.GooglePlacesAPIKey) + "&location="
+				+ ll + "&sensor=true" + "&radius=" + radius
 				+ getChosenCatsStr());
 
 		return getPlaces(url, true, location);
@@ -101,15 +105,16 @@ public class GooglePlacesAPI {
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
 
-		String url_str = context.getString(R.string.GooglePlacesApiUrl) + "/search/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
-				+ "&location=" + ll + "&sensor=" + String.valueOf(hasLocation)
-				+ "&keyword=" + searchStr + "&radius=" + radius
-				+ getChosenCatsStr();
+		String url_str = context.getString(R.string.GooglePlacesApiUrl)
+				+ "/search/json?key="
+				+ context.getString(R.string.GooglePlacesAPIKey) + "&location="
+				+ ll + "&sensor=" + String.valueOf(hasLocation) + "&keyword="
+				+ searchStr + "&radius=" + radius + getChosenCatsStr();
 
 		url_str = url_str.replace(" ", "%20");
 		URL url = new URL(url_str);
 
-		//Log.d("ERIC", url.toURI().toString());
+		// Log.d("ERIC", url.toURI().toString());
 
 		return getPlaces(url, hasLocation, location);
 	}
@@ -157,6 +162,37 @@ public class GooglePlacesAPI {
 					else
 						place.distance = -1.0;
 
+					// get location's rating from server
+
+					Gson gson1 = new Gson();
+					WebRequest req = new WebRequest();
+					String str = null;
+					LocationRequest loc_updated = null;
+					try {
+						JSONObject json2 = req.readJsonFromUrl(context
+								.getString(R.string.DatabaseUrl)
+								+ "/GetLocation?locationid=" + place.id);
+						str = (String) json2.get("location_req");
+						Log.w("str=", str);
+						if (str.compareTo("NotinDataBase") != 0)
+							loc_updated = gson1.fromJson(str,
+									LocationRequest.class);
+					} catch (JSONException e) {
+						Log.e("NearbyAdapter error, can't get response from server, JSON exception",
+								e.toString());
+						Log.w("str=", str);
+					} catch (Exception e) {
+						Log.e("NearbyAdapter error, can't get response from server",
+								e.toString());
+						Log.w("str=", str);
+					}
+					if (loc_updated != null) {
+						place.goodRate = loc_updated.getGoodRate();
+						place.badRate = loc_updated.getBadRate();
+					} else {
+						place.goodRate = 0;
+						place.badRate = 0;
+					}
 					placesList.add(place);
 
 				}
@@ -221,10 +257,30 @@ public class GooglePlacesAPI {
 			placeTypes.put(place_type);
 			newPlaceObject.put("types", placeTypes);
 
-			URL url = new URL(context.getString(R.string.GooglePlacesApiUrl) + "/add/json?key=" + context.getString(R.string.GooglePlacesAPIKey)
+			URL url = new URL(context.getString(R.string.GooglePlacesApiUrl)
+					+ "/add/json?key="
+					+ context.getString(R.string.GooglePlacesAPIKey)
 					+ "&sensor=true");
 			JSONObject jsonResponse = HttpClient.SendHttpPost(url.toString(),
 					newPlaceObject);
+
+			return jsonResponse;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public JSONObject getPlaceDetails(String placeReference) {
+		try {
+
+			String requestUrl = context.getString(R.string.GooglePlacesApiUrl)
+					+ "/details/json?key="
+					+ context.getString(R.string.GooglePlacesAPIKey)
+					+ "&sensor=true&reference=" + placeReference;
+			JSONObject jsonResponse = req.readJsonFromUrl(requestUrl);
 
 			return jsonResponse;
 
