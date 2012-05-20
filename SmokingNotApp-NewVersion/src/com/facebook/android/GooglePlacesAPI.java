@@ -194,6 +194,7 @@ public class GooglePlacesAPI {
 						place.badRate = 0;
 					}
 					placesList.add(place);
+					Log.i("ERIC", "printing place - " + place.toString());
 
 				}
 			}
@@ -235,7 +236,6 @@ public class GooglePlacesAPI {
 		dist = rad2deg(dist);
 		dist = dist * 60 * 1.1515;
 		dist = dist * 1.609344 * 1000;// meters
-		Log.i("ERIC", "distance: " + dist);
 		return (dist);
 	}
 

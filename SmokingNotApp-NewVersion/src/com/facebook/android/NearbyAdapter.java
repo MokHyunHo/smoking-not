@@ -107,10 +107,6 @@ public class NearbyAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		
-		
-		
-		
 		if (recolor) {
 
 			holder.mNameTxt.setTextColor(new_color);
@@ -120,45 +116,51 @@ public class NearbyAdapter extends BaseAdapter {
 
 		convertView.setTag(holder);
 
-		holder.position = position;
-		holder.mNameTxt.setText(place.name);
-		holder.mAddressTxt.setText(place.vicinity);
-		holder.mDistanceTxt.setText(formatDistance((double) place.distance));
-		if (!isShortAdapter) {
-			
-			// add progressbar for ratings
-			int num_raitings = place.badRate + place.goodRate;
+		try {
+			holder.position = position;
+			holder.mNameTxt.setText(place.name);
+			holder.mAddressTxt.setText(place.vicinity);
+			holder.mDistanceTxt
+					.setText(formatDistance((double) place.distance));
+			if (!isShortAdapter) {
 
-			String num_r;
-			//holder.mRaiting.setMax(num_raitings);
-			if (num_raitings > 0) {
-				double rating = ((double)place.goodRate/((double)place.badRate + (double)place.goodRate)) * 100;
-				holder.mRaiting.setVisibility(View.VISIBLE);
-				num_r = "Likes: " + place.goodRate + ", Dislikes: " + place.badRate;
-				holder.mRaiting.setProgress((int)rating);
-				Log.i("ERIC", "rating: " + rating);
-			} else {
-				holder.mRaiting.setVisibility(View.INVISIBLE);
-				num_r = "No reports for this place";
-			}
-			Log.i("ERIC", "Place raitings: " + num_raitings);
-			holder.mNumberRatings.setText(num_r);
-			
-			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					try {
-						Uri mUri = Uri.parse("geo:0,0?q="
-								+ place.location.getLatitude() + ","
-								+ place.location.getLongitude());
-						Log.i("Eric", mUri.toString());
-						Intent i = new Intent(Intent.ACTION_VIEW, mUri);
-						caller.startActivity(i);
-					} catch (Throwable t) {
-						;
-					}
+				// add progressbar for ratings
+				int num_raitings = place.badRate + place.goodRate;
 
+				String num_r;
+				// holder.mRaiting.setMax(num_raitings);
+				if (num_raitings > 0) {
+					double rating = ((double) place.goodRate / ((double) place.badRate + (double) place.goodRate)) * 100;
+					holder.mRaiting.setVisibility(View.VISIBLE);
+					num_r = "Likes: " + place.goodRate + ", Dislikes: "
+							+ place.badRate;
+					holder.mRaiting.setProgress((int) rating);
+					Log.i("ERIC", "rating: " + rating);
+				} else {
+					holder.mRaiting.setVisibility(View.INVISIBLE);
+					num_r = "No reports for this place";
 				}
-			});
+				Log.i("ERIC", "Place raitings: " + num_raitings);
+				holder.mNumberRatings.setText(num_r);
+
+				holder.mShowOnMap.setOnClickListener(new OnClickListener() {
+					public void onClick(View v) {
+						try {
+							Uri mUri = Uri.parse("geo:0,0?q="
+									+ place.location.getLatitude() + ","
+									+ place.location.getLongitude());
+							Log.i("Eric", mUri.toString());
+							Intent i = new Intent(Intent.ACTION_VIEW, mUri);
+							caller.startActivity(i);
+						} catch (Throwable t) {
+							;
+						}
+
+					}
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return convertView;
 	}
