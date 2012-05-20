@@ -23,11 +23,11 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:src="@drawable/imageplace" />
-
+
     <EditText
         android:id="@+id/etLocation"
         android:layout_width="250dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_alignLeft="@+id/ivReport"
         android:layout_below="@+id/ivReport"
         android:layout_marginTop="10dp"
@@ -39,13 +39,27 @@
         android:text="&lt;&lt;&lt; Choose place >>>"
         android:textSize="14dp" />
 
-    <Spinner
+    <RadioGroup
         android:id="@+id/ReasonSp"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/etLocation"
         android:layout_below="@+id/etLocation"
-        android:prompt="@string/ReportReason" />
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/ReasonRB1"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Positive Report" 
+            android:checked="true"/>
+
+        <RadioButton
+            android:id="@+id/ReasonRB2"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:text="Complaint" />
+    </RadioGroup>
 
     <TableLayout
         android:id="@+id/TableLayout"
@@ -113,29 +127,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/ReasonSp"
         android:layout_below="@+id/imageView2"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/sbutton"
         android:text="Report" />
-
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bReport"
-        android:layout_alignBottom="@+id/bReport"
-        android:layout_alignRight="@+id/ReasonSp"
-        android:background="@drawable/sbutton"
-        android:text="@string/exit" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/exitButton"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_marginRight="160dp"
-        android:layout_marginTop="27dp"
-        android:src="@drawable/facebook" />
 
     <CheckBox
         android:id="@+id/checkBox3"
@@ -143,7 +137,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageView2"
         android:layout_alignLeft="@+id/bReport"
-        android:text="Official Report via Authorities" />
+        android:text="Official Report via Authorities"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/checkBox1"
@@ -180,7 +175,26 @@
         android:layout_alignTop="@+id/ivReport"
         android:layout_marginRight="16dp"
         android:text="take a pic!"
-        android:textColor="#000000"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bReport"
+        android:layout_alignBottom="@+id/bReport"
+        android:layout_alignRight="@+id/checkBox3"
+        android:background="@drawable/sbutton"
+        android:text="@string/exit" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/checkBox1"
+        android:layout_toRightOf="@+id/textView3"
+        android:src="@drawable/facebook"
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>

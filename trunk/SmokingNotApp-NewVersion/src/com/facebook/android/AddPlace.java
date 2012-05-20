@@ -155,11 +155,11 @@ public class AddPlace extends MapActivity {
 
 				name = etName.getText().toString();
 				type = (String) lstTypes.getSelectedItem();
-				if (name.isEmpty()) {
+				/*if (name.isEmpty()) {
 					Toast.makeText(context, "Please enter a name",
 							Toast.LENGTH_SHORT);
 					return;
-				}
+				}*/
 				if (markerOverlay == null) {
 					Toast.makeText(context, "Please tap location on map",
 							Toast.LENGTH_SHORT);
