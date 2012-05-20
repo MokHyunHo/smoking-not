@@ -1,7 +1,5 @@
 package com.facebook.android;
 
-//import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -21,7 +19,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,8 +31,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Toast;
-//import android.widget.ImageView;
-//import android.widget.TextView;
 import android.widget.TextView;
 
 public class Places extends Activity implements View.OnClickListener {
@@ -52,15 +47,11 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_GET_PLACES_OK = 6;
 	private final int M_GET_SUGGESTIONS_OK = 7;
 	private final int M_GET_SUGGESTIONS_ERR = 8;
+	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
-
 	private final int CYCLES_TO_WAIT = 5;
-
 	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
-	// private EditText latitudeEt, longitudeEt, radiusEt;
 	private Button goBtn;
-
-	// private FoursquareApp mFsqApp;
 	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
 	private ListView mListView;
@@ -89,16 +80,12 @@ public class Places extends Activity implements View.OnClickListener {
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
 		tvProfile = (TextView) findViewById(R.id.tvPlaProfile);
-
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (ImageButton) findViewById(R.id.b_search);
 		btnCategories = (ImageButton) findViewById(R.id.b_categoies);
 		mListView = (ListView) findViewById(R.id.lv_places);
-
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
-		mLocEng = new LocationEngine(this);
-
 		mAdapter = new NearbyAdapter(this);
 		mNearbyList = new ArrayList<GooglePlace>();
 		mProgress = new ProgressDialog(this);
@@ -107,16 +94,17 @@ public class Places extends Activity implements View.OnClickListener {
 		etSearch = (AutoCompleteTextView) findViewById(R.id.et_Search);
 		mShowMeOnMap.setVisibility(View.INVISIBLE);
 		goBtn.setEnabled(false);
-
 		lastTime = System.nanoTime();
 		near_me = true;
 		addressInput = (AutoCompleteTextView) findViewById(R.id.etAddress);
 		rg = (RadioGroup) findViewById(R.id.radioGroup1);
 		rg.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 			@Override
 			public void onCheckedChanged(RadioGroup arg0, int arg1) {
-				if (arg1 == 0) {
+				Log.i("ERIC", "checked: " + arg1);
+
+				if (arg1 == R.id.radio0) {
+					addressInput.clearFocus();
 					etSearch.requestFocus();
 					addressInput.setEnabled(false);
 					near_me = true;
@@ -126,7 +114,6 @@ public class Places extends Activity implements View.OnClickListener {
 					near_me = false;
 					addressInput.requestFocus();
 				}
-
 			}
 		});
 
@@ -165,18 +152,15 @@ public class Places extends Activity implements View.OnClickListener {
 										what = M_GET_SUGGESTIONS_ERR;
 										e.printStackTrace();
 									}
-
 									mHandler.sendMessage(mHandler
 											.obtainMessage(what));
 								}
 							}
 						}
-
 					}.start();
 				}
 				return false;
 			}
-
 		});
 
 		// connection between XML & JAVA
@@ -188,7 +172,6 @@ public class Places extends Activity implements View.OnClickListener {
 
 		// START MENU BUTTON
 		exitButton = (ImageButton) findViewById(R.id.exitButton);
-
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -199,7 +182,6 @@ public class Places extends Activity implements View.OnClickListener {
 				}
 				finish();
 				startActivity(myIntent);
-
 			}
 		});
 	}
@@ -240,11 +222,11 @@ public class Places extends Activity implements View.OnClickListener {
 		goBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				Location theLoc;
 				try {
 					if (!near_me) {
 						input_str = addressInput.getText().toString();
+						fixAddress();
 						userLocation = mGooglePlacesAPI.mGeoEng
 								.getLocationFromAddress(input_str);
 						theLoc = userLocation;
@@ -269,28 +251,25 @@ public class Places extends Activity implements View.OnClickListener {
 					} else
 						Toast.makeText(Places.this, "Location is unknown",
 								Toast.LENGTH_SHORT).show();
-
 				} catch (Exception ex) {
 					Toast.makeText(Places.this,
 							"Something bad happened: " + ex.getMessage(),
 							Toast.LENGTH_SHORT).show();
 				}
 			}
-
 		});
 
 		searchBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				String searchStr = etSearch.getText().toString();
 				if (searchStr.compareTo("")==0)
 					return;
-
 				try {
 					mProgress.setMessage("Searching for places...");
 					if (!near_me) {
 						input_str = addressInput.getText().toString();
+						fixAddress();
 						userLocation = mGooglePlacesAPI.mGeoEng
 								.getLocationFromAddress(input_str);
 						loadNearbyPlaces(userLocation, true, searchStr,
@@ -302,14 +281,12 @@ public class Places extends Activity implements View.OnClickListener {
 						loadNearbyPlaces(mLocation, true, searchStr,
 								GooglePlacesAPI.MAX_RADIUS);
 					}
-
 				} catch (Exception ex) {
 					Toast.makeText(Places.this,
 							"Something bad happened: " + ex.getMessage(),
 							Toast.LENGTH_SHORT).show();
 				}
 			}
-
 		});
 
 		mShowMeOnMap.setOnClickListener(new OnClickListener() {
@@ -319,10 +296,9 @@ public class Places extends Activity implements View.OnClickListener {
 							+ "," + mLocation.getLongitude());
 					Intent i = new Intent(Intent.ACTION_VIEW, mUri);
 					startActivity(i);
-				} catch (Throwable t) {
-					;
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-
 			}
 		});
 
@@ -335,7 +311,6 @@ public class Places extends Activity implements View.OnClickListener {
 				} catch (Throwable t) {
 					;
 				}
-
 			}
 		});
 
@@ -346,11 +321,9 @@ public class Places extends Activity implements View.OnClickListener {
 							context);
 					builder.setTitle("Categories");
 					m_chosen_cats = mGooglePlacesAPI.chosen_cats;
-					// builder.setAdapter(adapter, null);
 					builder.setMultiChoiceItems(R.array.types_array,
 							mGooglePlacesAPI.chosen_cats,
 							new OnMultiChoiceClickListener() {
-
 								@Override
 								public void onClick(DialogInterface arg0,
 										int arg1, boolean arg2) {
@@ -358,7 +331,6 @@ public class Places extends Activity implements View.OnClickListener {
 
 								}
 							});
-
 					builder.setNeutralButton("Apply",
 							new DialogInterface.OnClickListener() {
 								public void onClick(
@@ -370,22 +342,17 @@ public class Places extends Activity implements View.OnClickListener {
 								}
 							});
 					builder.create().show();
-
 				} catch (Throwable t) {
 					t.printStackTrace();
 				}
 
 			}
 		});
-
 	}
 
 	public void updateLocation() {
 		mProgress.setMessage("Retrieving location...");
 		mProgress.show();
-
-		mLocEng = new LocationEngine(this);
-
 		new Thread() {
 			@Override
 			public void run() {
@@ -393,11 +360,11 @@ public class Places extends Activity implements View.OnClickListener {
 				Looper.prepare();
 				Log.i("ERIC", "upc loc thread");
 				try {
-
+					mLocEng = new LocationEngine(context);
+					mLocation = null;
 					int counter = 0;
 					if (!mLocEng.isServiceEnabled()) {
 						what = M_LS_DOWN;
-
 					} else {
 						while ((mLocation == null)
 								&& (counter < CYCLES_TO_WAIT)) {
@@ -409,11 +376,14 @@ public class Places extends Activity implements View.OnClickListener {
 							Log.i("ERIC", "counter=" + counter);
 						}
 						if (mLocation == null) {
+							mLocation = mLocEng.getLastKnownLocation();
+						}
+						if (mLocation == null) {
+							mHandler.sendMessage(mHandler.obtainMessage(M_LOC_NA));
 							mLocEng.setDebugLocation();
 							mLocation = mLocEng.getCurrentLocation();
 						}
 						counter = 0;
-						// mProgress.setMessage("Obtaining your address");
 						while ((!mGooglePlacesAPI.mGeoEng.addressEnabled)
 								&& (counter < CYCLES_TO_WAIT)) {
 							mGooglePlacesAPI.mGeoEng
@@ -424,17 +394,13 @@ public class Places extends Activity implements View.OnClickListener {
 							counter++;
 							Log.i("ERIC", "counter=" + counter);
 						}
-
 					}
-
 				} catch (Exception e) {
 					what = M_UPD_LOC_ERR;
 					e.printStackTrace();
-
 				}
 				latch.countDown();
 				mHandler.sendMessage(mHandler.obtainMessage(what));
-
 			}
 		}.start();
 		Log.i("ERIC", "upd loc thread started");
@@ -442,9 +408,7 @@ public class Places extends Activity implements View.OnClickListener {
 
 	private void loadNearbyPlaces(final Location location, final boolean query,
 			final String searchStr, final int radius) {
-
 		mProgress.show();
-
 		new Thread() {
 			@Override
 			public void run() {
@@ -464,11 +428,9 @@ public class Places extends Activity implements View.OnClickListener {
 					what = M_GET_PLACES_ERR;
 					e.printStackTrace();
 				}
-
 				mHandler.sendMessage(mHandler.obtainMessage(what));
 			}
 		}.start();
-
 	}
 
 	private Handler mHandler = new Handler() {
@@ -485,6 +447,12 @@ public class Places extends Activity implements View.OnClickListener {
 				Toast.makeText(Places.this, "Error while getting location",
 						Toast.LENGTH_LONG).show();
 				mShowMeOnMap.setVisibility(View.INVISIBLE);
+				break;
+			case M_LOC_NA:
+				Toast.makeText(
+						context,
+						"Location couldn't be determined. Putting you somewhere in Tel Aviv...",
+						Toast.LENGTH_SHORT).show();
 				break;
 			case M_LOC_OK:
 				if (mLocation != null) {
@@ -504,7 +472,6 @@ public class Places extends Activity implements View.OnClickListener {
 							.show();
 					break;
 				}
-
 				mAdapter.setData(mNearbyList);
 				mListView.setAdapter(mAdapter);
 				break;
@@ -521,13 +488,15 @@ public class Places extends Activity implements View.OnClickListener {
 					e.printStackTrace();
 				}
 				break;
-
 			}
 			latch.countDown();
 			mProgress.dismiss();
 			Log.i("ERIC", "unlatched");
 		}
-
 	};
-
+	
+	private void fixAddress() {
+		input_str = mGooglePlacesAPI.mGeoEng.getAddressFromAddress(input_str);
+		addressInput.setText(input_str);
+	}
 }

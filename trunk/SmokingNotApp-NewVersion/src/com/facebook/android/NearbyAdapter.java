@@ -3,6 +3,7 @@ package com.facebook.android;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,15 +31,14 @@ public class NearbyAdapter extends BaseAdapter {
 	private boolean isShortAdapter = false;
 	private boolean recolor = false;
 	private int new_color;
-	
+
 	Random rnd;
-	
-	private void init(Context c)
-	{
+
+	private void init(Context c) {
 		mInflater = LayoutInflater.from(c);
 		caller = c;
 	}
-	
+
 	public NearbyAdapter(Context c) {
 		init(c);
 	}
@@ -48,11 +48,11 @@ public class NearbyAdapter extends BaseAdapter {
 		isShortAdapter = shortAdapter;
 	}
 
-	public void Recolor(int color)
-	{
+	public void Recolor(int color) {
 		recolor = true;
 		new_color = color;
 	}
+
 	public void setData(ArrayList<GooglePlace> poolList) {
 		mPlacesList = poolList;
 	}
@@ -75,7 +75,7 @@ public class NearbyAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-		
+
 		final GooglePlace place = mPlacesList.get(position);
 		Log.i("ERIC", "place: " + place.name);
 		if (convertView == null) {
@@ -89,74 +89,58 @@ public class NearbyAdapter extends BaseAdapter {
 			holder.mNameTxt = (TextView) convertView.findViewById(R.id.tv_name);
 			holder.mAddressTxt = (TextView) convertView
 					.findViewById(R.id.tv_address);
-			
+
 			holder.mDistanceTxt = (TextView) convertView
 					.findViewById(R.id.tv_distance);
 			if (!isShortAdapter) {
 				holder.mRaiting = (ProgressBar) convertView
 						.findViewById(R.id.pb_Raiting);
+				holder.mRaiting.setProgressDrawable(caller.getResources()
+						.getDrawable(R.drawable.my_progress));
+
 				holder.mShowOnMap = (ImageButton) convertView
 						.findViewById(R.id.ib_ShowOnMap);
 				holder.mNumberRatings = (TextView) convertView
 						.findViewById(R.id.tv_raitings);
-				
-				// get location's rating from server
-				
-				Gson gson1 = new Gson();
-		    	WebRequest req=new WebRequest();
-		    	String str=null;
-		    	LocationRequest loc_updated=null;
-		        try {
-					JSONObject json2=req.readJsonFromUrl(caller.getString(R.string.DatabaseUrl) + "/GetLocation?locationid="+place.id);
-					str=(String)json2.get("location_req");
-					Log.w("str=",str);
-					if (str.compareTo("NotinDataBase")==0)
-						holder.mRaiting.setProgress(0);
-					else 
-						loc_updated=gson1.fromJson(str, LocationRequest.class);
-		        	}catch (JSONException e) {
-							Log.e("NearbyAdapter error, can't get response from server, JSON exception",e.toString());
-							Log.w("str=",str);
-						}
-				    catch (Exception e) {
-					Log.e("NearbyAdapter error, can't get response from server",e.toString());
-					Log.w("str=",str);
-				}
-		        
-		        // add progressbar for bad rating
-				if (loc_updated!=null)
-					holder.mRaiting.setProgress(loc_updated.getGoodRate());
 			}
-			
-			if (recolor)
-			{
-				
-				holder.mNameTxt.setTextColor(new_color);
-				holder.mAddressTxt.setTextColor(new_color);
-				
-			}
-			
-			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-	
+		// add progressbar for ratings
+		int num_raitings = place.badRate + place.goodRate;
+
+		String num_r;
+		//holder.mRaiting.setMax(num_raitings);
+		if (num_raitings > 0) {
+			double rating = ((double)place.goodRate/((double)place.badRate + (double)place.goodRate)) * 100;
+			holder.mRaiting.setVisibility(View.VISIBLE);
+			num_r = "Likes: " + place.goodRate + ", Dislikes: " + place.badRate;
+			holder.mRaiting.setProgress((int)rating);
+			Log.i("ERIC", "rating: " + rating);
+		} else {
+			holder.mRaiting.setVisibility(View.INVISIBLE);
+			num_r = "No reports for this place";
+		}
+		Log.i("ERIC", "Place raitings: " + num_raitings);
+		holder.mNumberRatings.setText(num_r);
 		
+		
+		
+		if (recolor) {
+
+			holder.mNameTxt.setTextColor(new_color);
+			holder.mAddressTxt.setTextColor(new_color);
+
+		}
+
+		convertView.setTag(holder);
 
 		holder.position = position;
 		holder.mNameTxt.setText(place.name);
 		holder.mAddressTxt.setText(place.vicinity);
 		holder.mDistanceTxt.setText(formatDistance((double) place.distance));
 		if (!isShortAdapter) {
-			// find rating of corresponding place
-			
-			try {
-				holder.mNumberRatings.setText("Number of raitings: " + String.valueOf(rnd.nextInt(10)));
-
-			} catch (Exception Ex) {
-				Log.i("ERIC", "Bad! places ratings... " + Ex.getMessage());
-			}
 			holder.mShowOnMap.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					try {
@@ -172,8 +156,6 @@ public class NearbyAdapter extends BaseAdapter {
 
 				}
 			});
-
-			Log.i("ERIC", String.valueOf(holder.mRaiting.getProgress()));
 		}
 		return convertView;
 	}
@@ -183,12 +165,10 @@ public class NearbyAdapter extends BaseAdapter {
 
 		DecimalFormat dF = new DecimalFormat("00");
 
-		if (distance < 1000)
-		{
+		if (distance < 1000) {
 			dF.applyPattern("0");
 			result = dF.format(distance) + " m";
-		}
-		else {
+		} else {
 			dF.applyPattern("0.#");
 			distance = distance / 1000.0;
 			result = dF.format(distance) + " km";

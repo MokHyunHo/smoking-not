@@ -28,8 +28,6 @@ public class LocationEngine implements LocationListener {
 
 	private Context context;
 
-	private WebRequest req;
-
 	public LocationEngine(Context context) {
 		this.context = context;
 		lm = (LocationManager) context
@@ -42,8 +40,6 @@ public class LocationEngine implements LocationListener {
 			return;
 		} else
 			serviceEnabled = true;
-
-		req = new WebRequest();
 
 		setLocationSent(false);
 
@@ -58,7 +54,6 @@ public class LocationEngine implements LocationListener {
 		Log.i("ERIC", "loc changed: " + location.toString());
 		setLocationSent(false);
 		mLocation = location;
-
 	}
 
 	@Override
@@ -112,6 +107,11 @@ public class LocationEngine implements LocationListener {
 				context,
 				"Location is unavailable. Placing you somewhere is Tel Aviv... (debug)",
 				Toast.LENGTH_LONG);
+	}
+	public Location getLastKnownLocation() {
+		mLocation =  lm.getLastKnownLocation(provider);
+		locationEnabled = (mLocation != null);
+		return getCurrentLocation();
 	}
 
 }

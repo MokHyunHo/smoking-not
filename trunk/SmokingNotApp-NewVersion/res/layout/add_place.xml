@@ -33,12 +33,9 @@
         android:layout_above="@+id/btn_submit"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/TextView01"
-        android:apiKey="@string/GoogleMapsAPIKeyRelease"
+        android:apiKey="@string/GoogleMapsAPIKeyDebug"
         android:clickable="true" />
-    
-        <!--debug key-->
-        <!--android:apiKey="0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q"-->
-        <!-- release key -->
+
 
     <Button
         android:id="@+id/btn_submit"

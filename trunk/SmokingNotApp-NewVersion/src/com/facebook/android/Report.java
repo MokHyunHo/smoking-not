@@ -1,12 +1,13 @@
 package com.facebook.android;
 
-import com.facebook.android.R;
 import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.CheckBox;
@@ -44,7 +46,7 @@ public class Report extends Activity implements View.OnClickListener {
 	public static GooglePlace[] places = new GooglePlace[10];
 
 	String[] checked;
-	String location,reason,points;
+	String location, reason, points;
 	TextView tvReport, tvPlaces, tvProfile;
 	Button report;
 	ImageButton ib;
@@ -62,6 +64,8 @@ public class Report extends Activity implements View.OnClickListener {
 	static final int uniqueId = 1234;
 	NotificationManager nm;
 	private static GooglePlace mGooglePlace = new GooglePlace();
+	private ProgressDialog mProgress;
+	private View tmpView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +102,7 @@ public class Report extends Activity implements View.OnClickListener {
 		tvPlaces.setOnClickListener(this);
 		tvProfile.setOnClickListener(this);
 		et1.setOnClickListener(this);
-		r1.setOnClickListener(this);		
+		r1.setOnClickListener(this);
 		r2.setOnClickListener(this);
 
 		report.setOnClickListener(this);
@@ -137,11 +141,12 @@ public class Report extends Activity implements View.OnClickListener {
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
 		tvProfile = (TextView) findViewById(R.id.tvPro);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
-		r1 = (RadioButton) findViewById(R.id.ReasonRB1);		
+		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
 		r2 = (RadioButton) findViewById(R.id.ReasonRB2);
 		et1 = (EditText) findViewById(R.id.etLocation);
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
+		mProgress = new ProgressDialog(this);
 	}
 
 	@Override
@@ -167,189 +172,206 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			location = et1.getText().toString();
-			RadioButton chosen = (RadioButton) findViewById(rg
-					.getCheckedRadioButtonId());
-			reason = chosen.getText().toString();
-			int user_score = 0;
-			int goodplace_rate = 0;
-			int badplace_rate = 0;
-			String locid = null;
-			// calculate new score
+			mProgress.setMessage("Sending report...");
+			mProgress.show();
+			report.setEnabled(false);
+			tmpView = v;
+			new Thread() {
+				public void run() {
+					Looper.prepare();
+					location = et1.getText().toString();
+					RadioButton chosen = (RadioButton) findViewById(rg
+							.getCheckedRadioButtonId());
+					reason = chosen.getText().toString();
+					int user_score = 0;
+					int goodplace_rate = 0;
+					int badplace_rate = 0;
+					String locid = null;
+					// calculate new score
 
-			if (reason.compareTo("Positive Report") == 0) {
-				user_score = 2;
-				goodplace_rate = 2;
-			}
-			if (reason.compareTo("Complaint") == 0) {
-				user_score = 1;
-				badplace_rate = 1;
-			}
-			points=""+user_score;
-			locid = mGooglePlace.id;
-			int conflict = 0;
-			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
-			String date = s.format(new Date());
-			if (locid != null)
-				Log.w("google places id is", locid);
-			else
-				locid = "NoPlaceFound";
-			LocationRequest loc = new LocationRequest(locid, goodplace_rate,
-					badplace_rate);
-			UserRequest ur = new UserRequest(FacebookMain.email, user_score,
-					locid, date);
-			ReportRequest rr = new ReportRequest(FacebookMain.email, locid,
-					reason, date);
-			WebRequest req = new WebRequest();
+					if (reason.compareTo("Positive Report") == 0) {
+						user_score = 2;
+						goodplace_rate = 1;
+					}
+					if (reason.compareTo("Complaint") == 0) {
+						user_score = 1;
+						badplace_rate = 1;
+					}
+					points = "" + user_score;
+					locid = mGooglePlace.id;
+					int conflict = 0;
+					SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+					String date = s.format(new Date());
+					if (locid != null)
+						Log.w("google places id is", locid);
+					else
+						locid = "NoPlaceFound";
+					LocationRequest loc = new LocationRequest(locid,
+							goodplace_rate, badplace_rate);
+					UserRequest ur = new UserRequest(FacebookMain.email,
+							user_score, locid, date);
+					ReportRequest rr = new ReportRequest(FacebookMain.email,
+							locid, reason, date);
+					WebRequest req = new WebRequest();
 
-			/* Send UserRequest to Database */
+					/* Send UserRequest to Database */
 
-			// convert UserRequest request to gson string
-			Gson gson2 = new Gson();
-			String UserStr = gson2.toJson(ur);
-			JSONStringer json2 = null;
+					// convert UserRequest request to gson string
+					Gson gson2 = new Gson();
+					String UserStr = gson2.toJson(ur);
+					JSONStringer json2 = null;
 
-			// prepare Json
-			try {
-				json2 = new JSONStringer().object().key("action")
-						.value("update_ur").key("user_request").value(UserStr)
-						.endObject();
+					// prepare Json
+					try {
+						json2 = new JSONStringer().object().key("action")
+								.value("update_ur").key("user_request")
+								.value(UserStr).endObject();
 
-			} catch (JSONException e) {
-				Log.e("json exeption-can't create jsonstringer with user request",
-						e.toString());
-			}
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with user request",
+								e.toString());
+					}
 
-			// send json to web server
-			try {
-				req.getInternetData(json2, getString(R.string.DatabaseUrl)
-						+ "/UpdateUser");
-			} catch (Exception e) {
-				Log.w("couldn't send user request to servlet", e.toString());
-			}
+					// send json to web server
+					try {
+						req.getInternetData(json2,
+								getString(R.string.DatabaseUrl) + "/UpdateUser");
+					} catch (Exception e) {
+						Log.w("couldn't send user request to servlet",
+								e.toString());
+					}
 
-			/* check if the report already exists */
-			// get user info from server
-			Gson gson4 = new Gson();
-			WebRequest res = new WebRequest();
-			String str = null;
-			UserRequest ur_check = null;
-			try {
-				JSONObject json4 = res
-						.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="
-								+ FacebookMain.email);
-				str = (String) json4.get("user_req");
-				Log.w("str=", str);
-				ur_check = gson4.fromJson(str, UserRequest.class);
-			} catch (JSONException e) {
-				Log.e("Report error, can't get response from server, JSON exception",
-						e.toString());
-				Log.w("str=", str);
-			} catch (Exception e) {
-				Log.e("Report error, can't get response from server",
-						e.toString());
-				Log.w("str=", str);
-			}
-			if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
-				showConflict(v);
-				conflict = 1;
-			}
+					/* check if the report already exists */
+					// get user info from server
+					Gson gson4 = new Gson();
+					WebRequest res = new WebRequest();
+					String str = null;
+					UserRequest ur_check = null;
+					try {
+						JSONObject json4 = res
+								.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="
+										+ FacebookMain.email);
+						str = (String) json4.get("user_req");
+						Log.w("str=", str);
+						ur_check = gson4.fromJson(str, UserRequest.class);
+					} catch (JSONException e) {
+						Log.e("Report error, can't get response from server, JSON exception",
+								e.toString());
+						Log.w("str=", str);
+					} catch (Exception e) {
+						Log.e("Report error, can't get response from server",
+								e.toString());
+						Log.w("str=", str);
+					}
+					if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
+						showConflict(tmpView);
+						conflict = 1;
+					}
 
-			/* Send location to Database */
+					/* Send location to Database */
 
-			if (conflict == 0) {
-				// convert location request to gson string
-				Gson gson1 = new Gson();
-				String LocationStr = gson1.toJson(loc);
-				JSONStringer json1 = null;
+					if (conflict == 0) {
+						// convert location request to gson string
+						Gson gson1 = new Gson();
+						String LocationStr = gson1.toJson(loc);
+						JSONStringer json1 = null;
 
-				// prepare Json
-				try {
-					json1 = new JSONStringer().object().key("action")
-							.value("update_location").key("location_request")
-							.value(LocationStr).endObject();
+						// prepare Json
+						try {
+							json1 = new JSONStringer().object().key("action")
+									.value("update_location")
+									.key("location_request").value(LocationStr)
+									.endObject();
 
-				} catch (JSONException e) {
-					Log.e("json exeption-can't create jsonstringer with location",
-							e.toString());
+						} catch (JSONException e) {
+							Log.e("json exeption-can't create jsonstringer with location",
+									e.toString());
+						}
+
+						// send json to web server
+						try {
+							req.getInternetData(json1,
+									getString(R.string.DatabaseUrl)
+											+ "/UpdateUser");
+						} catch (Exception e) {
+							Log.w("couldn't send location to servlet",
+									e.toString());
+						}
+
+						/* Send ReportRequest to Database */
+
+						// convert report request to gson string
+						Gson gson3 = new Gson();
+						String ReportStr = gson3.toJson(rr);
+						JSONStringer json3 = null;
+
+						// prepare Json
+						try {
+							json3 = new JSONStringer().object().key("action")
+									.value("update_report")
+									.key("report_request").value(ReportStr)
+									.endObject();
+
+						} catch (JSONException e) {
+							Log.e("json exeption-can't create jsonstringer with report",
+									e.toString());
+						}
+
+						// send json to web server
+						try {
+							req.getInternetData(json3,
+									getString(R.string.DatabaseUrl)
+											+ "/UpdateUser");
+						} catch (Exception e) {
+							Log.w("couldn't send report to servlet",
+									e.toString());
+						}
+
+					}
+
+					if (c1.isChecked())
+						PostStatusToFeed(MSG);
+
+					// send email
+					if (c3.isChecked()) {
+						Intent repIntent = new Intent(Report.this,
+								OfficialReport.class);
+						Bundle returnBundle = new Bundle();
+						returnBundle.putStringArray("checkedOptions", checked);
+						returnBundle.putString("StrLocation", location);
+						repIntent.putExtras(returnBundle);
+						startActivity(repIntent);
+					} else {
+						/*
+						 * String emailaddress[] = { FacebookMain.email };
+						 * String message = "Hello, \n" + "The Report about " +
+						 * location + " Has been Sent! \n" +
+						 * "The Reasons you've pointed were:\n"; for (int k = 0;
+						 * k < checked.length; k++) { if (checked[k] != null)
+						 * message += checked[k].toString() + "\n"; } message +=
+						 * "Have a pleasant Day!"; myIntent = new
+						 * Intent(android.content.Intent.ACTION_SEND);
+						 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+						 * emailaddress);
+						 * myIntent.putExtra(android.content.Intent
+						 * .EXTRA_SUBJECT, "Smoking-Not Update!");
+						 * myIntent.setType("plain/text");
+						 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+						 * message);
+						 */
+
+						if (conflict == 0) {
+							// pop-up view
+							mHandler.sendMessage(mHandler.obtainMessage(1));
+
+							// send notification to user
+							// sendNotification();
+						}
+
+					}
+					mHandler.sendMessage(mHandler.obtainMessage(0));
 				}
-
-				// send json to web server
-				try {
-					req.getInternetData(json1, getString(R.string.DatabaseUrl)
-							+ "/UpdateUser");
-				} catch (Exception e) {
-					Log.w("couldn't send location to servlet", e.toString());
-				}
-
-				/* Send ReportRequest to Database */
-
-				// convert report request to gson string
-				Gson gson3 = new Gson();
-				String ReportStr = gson3.toJson(rr);
-				JSONStringer json3 = null;
-
-				// prepare Json
-				try {
-					json3 = new JSONStringer().object().key("action")
-							.value("update_report").key("report_request")
-							.value(ReportStr).endObject();
-
-				} catch (JSONException e) {
-					Log.e("json exeption-can't create jsonstringer with report",
-							e.toString());
-				}
-
-				// send json to web server
-				try {
-					req.getInternetData(json3, getString(R.string.DatabaseUrl)
-							+ "/UpdateUser");
-				} catch (Exception e) {
-					Log.w("couldn't send report to servlet", e.toString());
-				}
-
-			}
-			
-			if(c1.isChecked())
-			   PostStatusToFeed(MSG);
-			
-			// send email
-			if (c3.isChecked()) {
-				myIntent = new Intent(Report.this, OfficialReport.class);
-				Bundle returnBundle = new Bundle();
-				returnBundle.putStringArray("checkedOptions", checked);
-				returnBundle.putString("StrLocation", location);
-				myIntent.putExtras(returnBundle);
-				startActivity(myIntent);
-			} else {
-				/*
-				 * String emailaddress[] = { FacebookMain.email }; String
-				 * message = "Hello, \n" + "The Report about " + location +
-				 * " Has been Sent! \n" + "The Reasons you've pointed were:\n";
-				 * for (int k = 0; k < checked.length; k++) { if (checked[k] !=
-				 * null) message += checked[k].toString() + "\n"; } message +=
-				 * "Have a pleasant Day!"; myIntent = new
-				 * Intent(android.content.Intent.ACTION_SEND);
-				 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-				 * emailaddress);
-				 * myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				 * "Smoking-Not Update!"); myIntent.setType("plain/text");
-				 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-				 * message);
-				 */
-
-				if (conflict == 0) {
-					// pop-up view
-					showDialog(v);
-
-					// send notification to user
-					//sendNotification();
-				}
-
-				// start email activity
-				// startActivity(myIntent);
-			}
-
+			}.start();
 			break;
 		case R.id.tvRep:
 			break;
@@ -456,54 +478,74 @@ public class Report extends Activity implements View.OnClickListener {
 		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
 					// active
 
-	}	
-	//was added
-    //--------------- Post to Wall-----------------------
-    public static final String imageURL="http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
-    public static final String linkURL="http://smokingnot2012.appspot.com";
-  
-    
-    private static final String MSG = "Report:";
-    
-   	private final Handler mFacebookHandler = new Handler();
-       final Runnable mUpdateFacebookNotification = new Runnable() {
-           public void run() {
-           	Toast.makeText(getBaseContext(), "Facebook updated !", Toast.LENGTH_LONG).show();
-           }
-       };
-       
+	}
 
+	// was added
+	// --------------- Post to Wall-----------------------
+	public static final String imageURL = "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
+	public static final String linkURL = "http://smokingnot2012.appspot.com";
 
-       // posts a string on users wall
-       public  void PostStatusToFeed(String msg) 
-       
-       {
-           Log.d("Tests", "Testing graph API wall post");
-           try 
-           {
-               String response = Utility.mFacebook.request("me");
-               Bundle parameters = new Bundle();
-               parameters.putString("message", msg);
-               
-               parameters.putString("name","Smoking Not App!");
-               parameters.putString("caption","Reported "+location+" with "+reason);
-               parameters.putString("description", "Gained "+points +" points for the report");
-               
-               parameters.putString("picture", imageURL);
-               parameters.putString("link",linkURL);
-               
-               
-               response = Utility.mFacebook.request("/me/feed", parameters, "POST");
-               mFacebookHandler.post(mUpdateFacebookNotification);  //pop up "facebook updated"
-               Log.d("Tests", "got response: " + response);
-               if (response == null || response.equals("") || response.equals("false"))
-               {
-                   Log.v("Error", "Blank response");
-               }
-            }
-            catch(Exception e)
-            {
-           	 Log.v("Error",e.toString());
-            }
-       }
+	private static final String MSG = "Report:";
+
+	private final Handler mFacebookHandler = new Handler();
+	final Runnable mUpdateFacebookNotification = new Runnable() {
+		public void run() {
+			Toast.makeText(getBaseContext(), "Facebook updated !",
+					Toast.LENGTH_LONG).show();
+		}
+	};
+
+	// posts a string on users wall
+	public void PostStatusToFeed(String msg)
+
+	{
+		Log.d("Tests", "Testing graph API wall post");
+		try {
+			String response = Utility.mFacebook.request("me");
+			Bundle parameters = new Bundle();
+			parameters.putString("message", msg);
+
+			parameters.putString("name", "Smoking Not App!");
+			parameters.putString("caption", "Reported " + location + " with "
+					+ reason);
+			parameters.putString("description", "Gained " + points
+					+ " points for the report");
+
+			parameters.putString("picture", imageURL);
+			parameters.putString("link", linkURL);
+
+			response = Utility.mFacebook
+					.request("/me/feed", parameters, "POST");
+			mFacebookHandler.post(mUpdateFacebookNotification); // pop up
+																// "facebook updated"
+			Log.d("Tests", "got response: " + response);
+			if (response == null || response.equals("")
+					|| response.equals("false")) {
+				Log.v("Error", "Blank response");
+			}
+		} catch (Exception e) {
+			Log.v("Error", e.toString());
+		}
+	}
+
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			Log.i("ERIC", "what: " + msg.what);
+			switch (msg.what) {
+			case 0:
+				report.setEnabled(true);
+				mProgress.dismiss();
+				break;
+			case 1:
+				showDialog(tmpView);
+
+				// send notification to user
+				sendNotification();
+				break;
+			}
+
+		}
+
+	};
 }
