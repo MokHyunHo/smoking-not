@@ -172,7 +172,10 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			mProgress.setMessage("Sending report...");
+			if(c3.isChecked())
+				mProgress.setMessage("Please Wait...");
+			else
+				mProgress.setMessage("Sending report...");
 			mProgress.show();
 			report.setEnabled(false);
 			tmpView = v;
@@ -329,9 +332,6 @@ public class Report extends Activity implements View.OnClickListener {
 
 					}
 
-					if (c1.isChecked())
-						PostStatusToFeed(MSG);
-
 					// send email
 					if (c3.isChecked()) {
 						Intent repIntent = new Intent(Report.this,
@@ -359,7 +359,9 @@ public class Report extends Activity implements View.OnClickListener {
 						 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
 						 * message);
 						 */
-
+						if (c1.isChecked())
+							PostStatusToFeed(MSG);
+						
 						if (conflict == 0) {
 							// pop-up view
 							mHandler.sendMessage(mHandler.obtainMessage(1));
