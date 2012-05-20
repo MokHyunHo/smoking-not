@@ -44,11 +44,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/txt"
-        android:layout_marginTop="22dp"
-        android:src="@drawable/ic_launcher" />
+        android:layout_marginTop="22dp" />
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -111,16 +110,6 @@
         </TableRow>
     </TableLayout>
 
-
-    <ProgressBar
-        android:id="@+id/progressbar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="198dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/user_pic"
-        android:layout_centerHorizontal="true"
-        android:max="100" />
-
     <TextView
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
@@ -129,55 +118,13 @@
         android:layout_centerHorizontal="true"
         android:text="score/100" />
 
-    <ImageView
-        android:id="@+id/iv_ratingbar1"
-        android:layout_width="wrap_content"
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="198dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
+        android:layout_above="@+id/tv_score"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar1" />
-
-    <ImageView
-        android:id="@+id/iv_ratingbar2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar2" />
-    <ImageView
-        android:id="@+id/iv_ratingbar3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar3" />
-     <ImageView
-        android:id="@+id/iv_ratingbar4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar4" />
-     <ImageView
-        android:id="@+id/iv_ratingbar5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar5" />
-      <ImageView
-        android:id="@+id/iv_ratingbarfull"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/exitButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:src="@drawable/rating_bar" />
-          
+        android:max="100" />
 
 </RelativeLayout>
