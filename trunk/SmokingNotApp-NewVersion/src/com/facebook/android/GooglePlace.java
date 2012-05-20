@@ -10,4 +10,8 @@ public class GooglePlace {
 	public double distance;
 	public int goodRate;
 	public int badRate;
+	
+	public String toString() {
+		return "ID: " + id + " Name" + name + " Vicinity: " + vicinity;		
+	}
 }

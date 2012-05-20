@@ -60,19 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp" >
-
-            <ImageButton
-                android:id="@+id/exitButton"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:background="@android:color/transparent"
-                android:src="@drawable/home" />
         </RelativeLayout>
     </TableLayout>
-
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
@@ -83,8 +73,9 @@
         android:layout_weight="0.04"
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent" >
+
     </ListView>
-
+
     <AutoCompleteTextView
         android:id="@+id/et_Search"
         android:layout_width="wrap_content"
@@ -99,7 +90,7 @@
         android:text=""
         android:textSize="14dp" >
     </AutoCompleteTextView>
-
+
     <RelativeLayout
         android:id="@+id/RelativeLayout2"
         android:layout_width="match_parent"
@@ -141,7 +132,7 @@
             android:gravity="center"
             android:text="Retrieving your address..."
             android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
         <AutoCompleteTextView
             android:id="@+id/etAddress"
             android:layout_width="wrap_content"
@@ -156,14 +147,14 @@
             android:textSize="10dp" />
 
         <ImageButton
-            android:id="@+id/ib_ShowMeOnMap"
+            android:id="@+id/exitButton"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:background="@android:color/transparent"
-            android:src="@drawable/show_on_map" />
+            android:src="@drawable/home" />
 
         <ImageButton
             android:id="@+id/ib_Refresh"
@@ -171,20 +162,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/ib_ShowMeOnMap"
+            android:layout_toLeftOf="@+id/exitButton"
             android:background="@android:color/transparent"
             android:src="@drawable/refresh_yellow" />
+
+        <ImageButton
+            android:id="@+id/ib_ShowMeOnMap"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/ib_Refresh"
+            android:background="@android:color/transparent"
+            android:src="@drawable/show_on_map" />
+
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/b_go"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/et_Search"
-        android:text=" Get places around"
-        android:textSize="14dp" />
-
     <ImageButton
         android:id="@+id/b_categoies"
         style="?android:attr/buttonStyleSmall"
@@ -196,16 +189,24 @@
         android:layout_marginRight="6dp"
         android:background="@android:color/transparent"
         android:src="@drawable/settings" />
-
+
     <ImageButton
         android:id="@+id/b_search"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/b_go"
         android:layout_alignTop="@+id/et_Search"
         android:layout_toLeftOf="@+id/b_categoies"
         android:background="@android:color/transparent"
         android:src="@drawable/search" />
+
+    <Button
+        android:id="@+id/b_go"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_below="@+id/et_Search"
+        android:layout_centerHorizontal="true"
+        android:text=" Get places around"
+        android:textSize="14dp" />
 
 </RelativeLayout>

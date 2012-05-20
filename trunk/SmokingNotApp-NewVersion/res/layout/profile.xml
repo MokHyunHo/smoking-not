@@ -126,5 +126,26 @@
         android:layout_below="@+id/tv_score"
         android:layout_centerHorizontal="true"
         android:max="100" />
+
+    <ListView
+        android:id="@+id/lvLastReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/exitButton"
+        android:layout_marginTop="27dp" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/tvLastReportsCaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/exitButton"
+        android:gravity="center"
+        android:text="Last reports:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
