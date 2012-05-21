@@ -1,4 +1,4 @@
-Main menu:
+1Main menu:
 
 http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/main_menu.PNG
 
@@ -16,7 +16,7 @@ http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/report.PNG
 
 Report (negative):
 
-http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/report2.PNG
+http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/report_2.PNG
 
 Choose place to report:
 
