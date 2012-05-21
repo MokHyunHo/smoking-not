@@ -28,4 +28,4 @@ http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/search_place_while_repo
 
 Add new place:
 
-not.googlecode.com/svn/wiki/images/ms2ssh/add_place.PNG
+http://smoking-not.googlecode.com/svn/wiki/images/ms2ssh/add_place.PNG
