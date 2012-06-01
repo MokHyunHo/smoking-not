@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -348,8 +350,12 @@ public class Places extends Activity implements View.OnClickListener {
 
 			}
 		});
+	
 	}
 
+
+	
+	
 	public void updateLocation() {
 		mProgress.setMessage("Retrieving location...");
 		mProgress.show();

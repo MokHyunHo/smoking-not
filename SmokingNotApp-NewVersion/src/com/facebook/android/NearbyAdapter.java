@@ -2,8 +2,10 @@ package com.facebook.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.opengl.Visibility;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +77,7 @@ public class NearbyAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-
+		
 		final GooglePlace place = mPlacesList.get(position);
 		Log.i("ERIC", "place: " + place.name);
 		if (convertView == null) {
@@ -97,9 +99,8 @@ public class NearbyAdapter extends BaseAdapter {
 						.findViewById(R.id.pb_Raiting);
 				holder.mRaiting.setProgressDrawable(caller.getResources()
 						.getDrawable(R.drawable.my_progress));
-
-				holder.mShowOnMap = (ImageButton) convertView
-						.findViewById(R.id.ib_ShowOnMap);
+				holder.mInfo = (ImageButton) convertView
+						.findViewById(R.id.ib_Info);
 				holder.mNumberRatings = (TextView) convertView
 						.findViewById(R.id.tv_raitings);
 			}
@@ -143,22 +144,28 @@ public class NearbyAdapter extends BaseAdapter {
 				Log.i("ERIC", "Place raitings: " + num_raitings);
 				holder.mNumberRatings.setText(num_r);
 
-				holder.mShowOnMap.setOnClickListener(new OnClickListener() {
+				holder.mInfo.setOnClickListener(new OnClickListener() {
+					
+					@Override
 					public void onClick(View v) {
-						try {
-							Uri mUri = Uri.parse("geo:0,0?q="
-									+ place.location.getLatitude() + ","
-									+ place.location.getLongitude());
-							Log.i("Eric", mUri.toString());
-							Intent i = new Intent(Intent.ACTION_VIEW, mUri);
-							caller.startActivity(i);
-						} catch (Throwable t) {
-							;
-						}
-
+						Log.i("ERIC", "clicked!");
+						Intent intent = new Intent(caller, PlaceDetails.class);
+						Bundle bundle = new Bundle();
+						bundle.putString("PlaceName", place.name);
+						bundle.putString("PlaceAddress", place.vicinity);
+						bundle.putInt("GoogRate", place.goodRate);
+						bundle.putInt("BadRate", place.badRate);
+						bundle.putParcelable("PlaceLocation", place.location);
+						intent.putExtras(bundle);
+						caller.startActivity(intent);
+						
 					}
 				});
+				
+				
 			}
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -189,6 +196,7 @@ public class NearbyAdapter extends BaseAdapter {
 		TextView mDistanceTxt;
 		TextView mNumberRatings;
 		ProgressBar mRaiting;
-		ImageButton mShowOnMap;
+		ImageButton mInfo;
 	}
+
 }

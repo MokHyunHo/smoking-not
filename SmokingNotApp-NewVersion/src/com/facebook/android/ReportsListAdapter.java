@@ -24,7 +24,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-public class UserReportsAdapter extends BaseAdapter {
+public class ReportsListAdapter extends BaseAdapter {
 	private ArrayList<String[]> mLst;
 	private LayoutInflater mInflater;
 	private Context caller;
@@ -34,16 +34,14 @@ public class UserReportsAdapter extends BaseAdapter {
 		caller = c;
 	}
 
-	public UserReportsAdapter(Context c) {
+	public ReportsListAdapter(Context c) {
 		init(c);
 	}
 
 	public void setData(ArrayList<String[]> poolList) {
 		//Log.i("ERIC", "X size: " + poolList.size());
 		mLst = poolList;
-		/*
-		for (int j = 0; j < mLst.size(); j++)
-		 
+		/*for (int j = 0; j < mLst.size(); j++)
 		{
 			Log.i("ERIC", mLst.get(j)[0]);
 		}
@@ -72,13 +70,13 @@ public class UserReportsAdapter extends BaseAdapter {
 		String[] report = mLst.get(position);
 		Log.i("ERIC", "position: " + position + "string[]: " + report.toString());
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.user_reports_list, null);
+			convertView = mInflater.inflate(R.layout.reports_list, null);
 
 			holder = new ViewHolder();
 
-			holder.mNameTxt = (TextView) convertView.findViewById(R.id.tvPlaceName);
-			holder.mAddressTxt = (TextView) convertView
-					.findViewById(R.id.tvPlaceAddress);
+			holder.mTypeTxt = (TextView) convertView.findViewById(R.id.tvReportType);
+			holder.mDateTxt = (TextView) convertView
+					.findViewById(R.id.tvReportDate);
 
 			holder.mDetailsTxt = (TextView) convertView
 					.findViewById(R.id.tvReportDetails);
@@ -91,8 +89,8 @@ public class UserReportsAdapter extends BaseAdapter {
 
 		holder.position = position;
 		try {
-			holder.mNameTxt.setText(report[0]);
-			holder.mAddressTxt.setText(report[1]);
+			holder.mTypeTxt.setText(report[0]);
+			holder.mDateTxt.setText(report[1]);
 			holder.mDetailsTxt.setText(report[2]);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,8 +104,8 @@ public class UserReportsAdapter extends BaseAdapter {
 
 	static class ViewHolder {
 		int position;
-		TextView mNameTxt;
-		TextView mAddressTxt;
+		TextView mTypeTxt;
+		TextView mDateTxt;
 		TextView mDetailsTxt;
 
 	}

@@ -178,19 +178,8 @@ public class Profile extends Activity implements View.OnClickListener {
 			str = (String) json2.get("report_request");
 			Log.w("str=", str);
 			fiveLst = gson2.fromJson(str, FiveLastPlaces.class);
-			int num = 6;// fiveLst.getLst().size();
-			for (int i = 0; i < num; i++) {
-				tmp = new String[3];
-				ReportRequest item = fiveLst.getLst().get(i);
-				tmp[0] = "Place name #" + i; // fiveLst.getLst().get(i).getLocationId();
-				tmp[1] = "Place address #" + i; // fiveLst.getLst().get(i).getReportdate();
-				tmp[2] = "Place details #" + i; // fiveLst.getLst().get(i).getReportkind();
-				JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
-						.getLocationId());
-				lstReports.add(tmp);
-				if (i >= 4)
-					break;
-			}
+			
+			
 
 		} catch (JSONException e) {
 			Log.e("Profile error, can't get response from server, JSON exception",
@@ -200,6 +189,27 @@ public class Profile extends Activity implements View.OnClickListener {
 		} catch (Exception e) {
 			Log.e("Profile error, can't get response from server", e.toString());
 			Log.w("str=", str);
+		}
+		int i = 0;
+		for (ReportRequest item: fiveLst.getLst() ) {
+		//int num = 6;// fiveLst.getLst().size();
+		//for (i = 0; i < num; i++) {
+			tmp = new String[3];
+			i++;
+			//ReportRequest item = fiveLst.getLst().get(i);
+			//tmp[0] = "Place name #" + i; // fiveLst.getLst().get(i).getLocationId();
+			//tmp[1] = "Place address #" + i; // fiveLst.getLst().get(i).getReportdate();
+			//tmp[2] = "Place details #" + i; // fiveLst.getLst().get(i).getReportkind();
+			
+			tmp[0] = item.getLocationId();
+			tmp[1] = item.getReportdate();
+			tmp[2] = item.getReportkind();
+			//JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
+				//	.getLocationId());
+			lstReports.add(tmp);
+			
+			if (i > 4)
+				break;
 		}
 
 		Log.i("ERIC", "size: " + lstReports.size());
