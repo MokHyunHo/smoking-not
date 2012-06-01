@@ -133,7 +133,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/exitButton"
-        android:layout_marginTop="27dp" >
+        android:layout_marginTop="27dp"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent">
 
     </ListView>
 

@@ -58,7 +58,10 @@ public class ChoosePlace extends Activity {
 		mNearbyList = new ArrayList<GooglePlace>();
 		if (mLocEng.isLocationEnabled())
 			mLocation = mLocEng.getCurrentLocation();
-		else {
+		if (mLocation == null)
+			mLocation = mLocEng.getLastKnownLocation();
+		if (mLocation == null)
+		{
 			mLocation = new Location(LocationManager.PASSIVE_PROVIDER);
 			mLocation.setLatitude(32.06);
 			mLocation.setLongitude(34.77);

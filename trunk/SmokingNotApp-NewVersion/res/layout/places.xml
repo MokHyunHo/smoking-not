@@ -190,16 +190,6 @@
         android:background="@android:color/transparent"
         android:src="@drawable/settings" />
 
-    <ImageButton
-        android:id="@+id/b_search"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/et_Search"
-        android:layout_toLeftOf="@+id/b_categoies"
-        android:background="@android:color/transparent"
-        android:src="@drawable/search" />
-
     <Button
         android:id="@+id/b_go"
         android:layout_width="wrap_content"
@@ -208,5 +198,16 @@
         android:layout_centerHorizontal="true"
         android:text=" Get places around"
         android:textSize="14dp" />
+
+    <ImageButton
+        android:id="@+id/b_search"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_Search"
+        android:layout_alignTop="@+id/et_Search"
+        android:layout_toLeftOf="@+id/b_categoies"
+        android:background="@android:color/transparent"
+        android:src="@drawable/search" />
 
 </RelativeLayout>

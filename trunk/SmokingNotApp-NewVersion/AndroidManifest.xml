@@ -105,6 +105,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+            <activity
+            android:name=".PlaceDetails"
+            android:configChanges="keyboardHidden"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.facebook.android.PLACEDETAILS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 	
     <uses-permission android:name="android.permission.INTERNET" >

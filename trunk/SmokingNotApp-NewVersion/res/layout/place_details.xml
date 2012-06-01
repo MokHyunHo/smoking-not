@@ -1,47 +1,39 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:paddingBottom="10dp" >
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="fill_parent"
+        android:id="@+id/tvPlaceName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:text="Name"
-        android:textColor="@color/black"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:layout_alignParentTop="true"
+        android:text="Place Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="fill_parent"
+        android:id="@+id/tvPlaceAddress"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/tv_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:text="Address"
-        android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:layout_below="@+id/tvPlaceName"
+        android:text="Place address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/tv_raitings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/tv_address"
+        android:layout_below="@+id/tvPlaceAddress"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:text="Number of raitings"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="10sp" />
 
     <ProgressBar
@@ -49,6 +41,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
         android:layout_height="10dp"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_raitings"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="50dp"
@@ -56,25 +49,32 @@
         android:max="100"
         android:progress="0"
         android:visibility="invisible" />
-
+
+    <ListView
+        android:id="@+id/lstReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1" >
+
+    </ListView>
+
     <ImageButton
-        android:id="@+id/ib_Info"
+        android:id="@+id/ib_ShowOnMap"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/tv_name"
+        android:layout_alignBottom="@+id/pb_Raiting"
+        android:layout_alignRight="@+id/tv_raitings"
         android:background="@android:color/transparent"
-        android:src="@drawable/info" />
+        android:src="@drawable/show_on_map" />
 
     <TextView
-        android:id="@+id/tv_distance"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_address"
-        android:text="10 km"
-        android:textColor="@color/lite_blue"
-        android:textSize="12sp" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/pb_Raiting"
+        android:text="Reports:" />
 
 </RelativeLayout>
