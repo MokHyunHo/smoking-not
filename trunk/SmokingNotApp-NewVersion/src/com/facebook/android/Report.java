@@ -202,6 +202,9 @@ public class Report extends Activity implements View.OnClickListener {
 					}
 					points = "" + user_score;
 					locid = mGooglePlace.id;
+					
+					
+					
 					int conflict = 0;
 					SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
 					String date = s.format(new Date());
@@ -209,12 +212,17 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("google places id is", locid);
 					else
 						locid = "NoPlaceFound";
-					LocationRequest loc = new LocationRequest(locid,
-							goodplace_rate, badplace_rate);
+					
+					//Change this
+					mGooglePlace.refrence="Non";
+					String comment= "No comment"; //should be text from user
+					////////////
+					LocationRequest loc = new LocationRequest(locid,mGooglePlace.refrence,mGooglePlace.name,mGooglePlace.vicinity,
+							mGooglePlace.location.getLatitude(),mGooglePlace.location.getLongitude(),goodplace_rate, badplace_rate);
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
-							locid, reason, date);
+							locid, reason, date,checked,comment);
 					WebRequest req = new WebRequest();
 
 					/* Send UserRequest to Database */
@@ -361,7 +369,7 @@ public class Report extends Activity implements View.OnClickListener {
 						 */
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
-						
+
 						if (conflict == 0) {
 							// pop-up view
 							mHandler.sendMessage(mHandler.obtainMessage(1));
@@ -415,6 +423,7 @@ public class Report extends Activity implements View.OnClickListener {
 					Log.i("ERIC", "getting place");
 					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
 					mGooglePlace.id = extras.getString("placeID");
+					//mGooglePlace.refrence=extras.
 					mGooglePlace.name = extras.getString("placeName");
 					mGooglePlace.vicinity = extras.getString("placeVicinity");
 					et1.setText(mGooglePlace.name + "\n"
@@ -484,7 +493,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	// was added
 	// --------------- Post to Wall-----------------------
-	public static final String imageURL = "http://oi46.tinypic.com/ay3x8i.jpg";
+	public static final String imageURL = "https://lh4.googleusercontent.com/Z0JYXrl0MWPiyutFRTP5CONfIJoNi_-E52SDJAnKnoS9gi1kVPlcBNseDL87ykr54Ew5u_AEd00";
 			//"http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 

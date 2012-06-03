@@ -191,7 +191,7 @@ public class Profile extends Activity implements View.OnClickListener {
 			Log.w("str=", str);
 		}
 		int i = 0;
-		for (ReportRequest item: fiveLst.getLst() ) {
+		for (ReportDetails item: fiveLst.getLst() ) {
 		//int num = 6;// fiveLst.getLst().size();
 		//for (i = 0; i < num; i++) {
 			tmp = new String[3];
@@ -201,9 +201,9 @@ public class Profile extends Activity implements View.OnClickListener {
 			//tmp[1] = "Place address #" + i; // fiveLst.getLst().get(i).getReportdate();
 			//tmp[2] = "Place details #" + i; // fiveLst.getLst().get(i).getReportkind();
 			
-			tmp[0] = item.getLocationId();
-			tmp[1] = item.getReportdate();
-			tmp[2] = item.getReportkind();
+			//tmp[0] = item.getLocationId();
+			//tmp[1] = item.getReportdate();
+			//tmp[2] = item.getReportkind();
 			//JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
 				//	.getLocationId());
 			lstReports.add(tmp);

@@ -4,6 +4,7 @@ import android.location.Location;
 
 public class GooglePlace {
 	public String id;
+	public String refrence;
 	public String name;
 	public String vicinity;
 	public Location location;
