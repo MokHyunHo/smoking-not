@@ -1,8 +1,12 @@
 package com.facebook.android;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +15,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -80,34 +85,59 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		Intent myIntent;
 		switch (v.getId()) {
 		case R.id.bReport:
 			if(!validity())
 			{
-				String emailaddress[]={"eladcoo@gmail.com"};
-				String message="Hello, \n" +
-						"The Report about " + loc +" Has been Sent! \n" +
-						"The Reasons you've pointed were:\n";
-				for(int j=0;j<checked.length;j++) { 
-					if(checked[j]!=null)
-						message+=checked[j].toString()+"\n";
-				}
-				message+="Have a pleasant Day!";
-				myIntent=new Intent(android.content.Intent.ACTION_SEND);
-				myIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emailaddress);
-				myIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Smoking-Not Update!");
-				myIntent.setType("plain/text");
-				myIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+				String email=null;
+				WebRequest req=new WebRequest(); 
+			
 				Trial t=new Trial(name.getText().toString(), phone.getText().toString(), mail.getText().toString(), add.getText().toString());
-				File f=t.CreatePdf();
-				Uri uri = Uri.fromFile(f);
-				myIntent.putExtra(Intent.EXTRA_STREAM, uri);
+				
+				try {
+				String f=t.CreatePdf();
+				System.out.println("the file is"+f);
+				
+				// create string email
+				
+				email=getString(R.string.DatabaseUrl)+
+						"/EmailReport?email_attachment="+f;
+						
+				}
+				catch (Exception e) { 
+					Log.w("can't create pdf","elad");
+					String test="not_pdf";
+					email=getString(R.string.DatabaseUrl)+
+							"/EmailReport?email_attachment="+test;
+					System.out.println("email"+email);
+					
+					
+				}
+				try {
+					req.SendEmail(email);
+			
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					Log.w("error while sending email to database-ClientProtocolException",e.getMessage());
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					Log.w("error while sending email to database-URISyntaxException",e.getMessage());
+					e.printStackTrace();
+				} catch (IOException e) {
+					Log.w("error while sending email to database-IOException",e.getMessage());
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			 catch (Exception e){
+				Log.w("error while sending email to database-exception",e.getMessage());
+				e.printStackTrace();
+			}
 				
 				// pop-up view
 				showDialog(v);
 				
-				startActivity(myIntent);
+				
 			}
 			break;
 		}

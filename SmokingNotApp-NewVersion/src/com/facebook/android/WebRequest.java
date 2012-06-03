@@ -6,10 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -95,4 +98,20 @@ public class WebRequest {
 	           
            return null;
          }
+       
+       public  void SendEmail  (String urlStr) throws URISyntaxException, ClientProtocolException, IOException
+       {
+               
+		 	try{
+		 		DefaultHttpClient httpClient = new DefaultHttpClient();
+		 		URI website= new URI (urlStr);
+		 		HttpGet request = new HttpGet();
+		 		request.setURI(website);
+		 		HttpResponse res= httpClient.execute(request);
+		 	}
+		 	catch (Exception e){
+		 		Log.w("error while sending email to database-webrequest",e.getMessage());
+		 		e.printStackTrace();
+		 	}
+       }
 }
