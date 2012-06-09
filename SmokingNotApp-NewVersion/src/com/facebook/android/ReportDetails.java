@@ -8,10 +8,10 @@ public class ReportDetails {
 	private String date;
 	private String locationid;
 	private String comment;
-	private String[] reasons;
+	private int[] reasons;
 	
 	
-	public ReportDetails(String name, String address, String reportkind, String date, String locationid, String comment, String[] reasons) {
+	public ReportDetails(String name, String address, String reportkind, String date, String locationid, String comment, int[] reasons) {
 		this.name=name;
 		this.address=address;
 		this.reportkind=reportkind;
@@ -45,9 +45,11 @@ public class ReportDetails {
 		return comment;
 	}
 	
-	public String[] getReasons() {
+	public int[] getReasons() {
 		return reasons;
 	}
+	
+
 	
 
 }

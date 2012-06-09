@@ -6,13 +6,13 @@ public class ReportRequest {
 	private String locationid;
 	private String reportkind;
 	private String date;
-	private String[] reasons;
+	private int[] reasons;
 	private String comment;
 	
 
 
 
-	public ReportRequest(String email, String locationid,String reportkind, String date,String [] reasons,String comment){
+	public ReportRequest(String email, String locationid,String reportkind, String date,int [] reasons,String comment){
 		this.email=email;
 		this.locationid=locationid;
 		this.date=date;
@@ -29,7 +29,7 @@ public class ReportRequest {
 		return email;
 	}
 	
-	public String[] getReasons(){
+	public int[] getReasons(){
 		return reasons;
 	}
 	

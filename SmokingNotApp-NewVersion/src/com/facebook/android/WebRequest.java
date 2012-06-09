@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,12 +34,23 @@ public class WebRequest {
 			 		HttpPost request = new HttpPost(urlStr);
 	                try 
 	                {
-	                        StringEntity entity = new StringEntity(jsonStr.toString());
-	                        Log.i("ERIC ortal", jsonStr.toString());
-	                        entity.setContentType("application/json;charset=UTF-8"); // text/plain;charset=UTF-8 (can be either)
+	                        StringEntity entity = new StringEntity(jsonStr.toString(), "UTF-8");
+	                        InputStream is = null;
+	                        is = entity.getContent();
+	                        Log.i("ERIC ortal1", convertStreamToString(is));
+	                        entity.setContentType("application/json;charset=UTF-8;"); // text/plain;charset=UTF-8 (can be either)
+	                        is = entity.getContent();
+	                        Log.i("ERIC ortal2", convertStreamToString(is));
 	                        entity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
-	                                        
+	                        is = entity.getContent();
+	                        Log.i("ERIC ortal3", convertStreamToString(is));
+	                        
 	                        request.setEntity(entity);
+	                        
+	                        is =  request.getEntity().getContent();
+	                        
+	                        Log.i("ERIC ortal4", convertStreamToString(is));
+	                        System.out.print(entity);
 	                        // Send request to WCF service
 	                        DefaultHttpClient httpClient = new DefaultHttpClient();
 
@@ -115,4 +127,12 @@ public class WebRequest {
 		 		e.printStackTrace();
 		 	}
        }
+       
+       String convertStreamToString(java.io.InputStream is) {
+    	    try {
+    	        return new java.util.Scanner(is).useDelimiter("\\A").next();
+    	    } catch (java.util.NoSuchElementException e) {
+    	        return "";
+    	    }
+    	}
 }

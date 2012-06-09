@@ -2,9 +2,6 @@ package com.facebook.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +17,6 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 public class NearbyAdapter extends BaseAdapter {
 	private ArrayList<GooglePlace> mPlacesList;
@@ -151,6 +143,7 @@ public class NearbyAdapter extends BaseAdapter {
 						Log.i("ERIC", "clicked!");
 						Intent intent = new Intent(caller, PlaceDetails.class);
 						Bundle bundle = new Bundle();
+						bundle.putString("PlaceID", place.id);
 						bundle.putString("PlaceName", place.name);
 						bundle.putString("PlaceAddress", place.vicinity);
 						bundle.putInt("GoogRate", place.goodRate);
