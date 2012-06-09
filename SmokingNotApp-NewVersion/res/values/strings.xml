@@ -170,4 +170,12 @@
 	<string name="GoogleMapsAPIKeyDebug">0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q</string>
 	<string name="GooglePlacesAPIKey">AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw</string>
 	
+	<string-array name="complaint_reasons">
+	   <item>Place owner did not act against a client who was smoking in a forbidden place</item>
+	   <item>Ashtrays are placed in a not completely separated smoking room</item>
+	   <item>Noticeable smell of cigarettes in the area where smoking is prohibited</item>
+	   <item>Smoking room is not valid because it is not in a completely separate area</item>
+	   <item>There is not a \"No smoking\" sign</item>
+	</string-array> 
+	
 </resources>

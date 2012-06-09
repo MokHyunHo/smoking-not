@@ -49,13 +49,13 @@
         android:max="100"
         android:progress="0"
         android:visibility="invisible" />
-
+
     <ListView
         android:id="@+id/lstReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvReportsLbl" >
+        android:layout_below="@+id/tvReasons" >
 
     </ListView>
 
@@ -68,13 +68,24 @@
         android:layout_alignRight="@+id/tv_raitings"
         android:background="@android:color/transparent"
         android:src="@drawable/show_on_map" />
-
+
     <TextView
         android:id="@+id/tvReportsLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/pb_Raiting"
         android:text="Reports:" />
+
+    <TextView
+        android:id="@+id/tvReasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvReportsLbl"
+        android:text="Reasons"
+        android:textColor="@color/orange"
+        android:textSize="16sp" />
 
 </RelativeLayout>
