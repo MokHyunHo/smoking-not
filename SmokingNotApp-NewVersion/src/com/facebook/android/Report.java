@@ -137,10 +137,6 @@ public class Report extends Activity implements View.OnClickListener {
 		startActivity(myIntent);
 	}
 
-	/**
-	 * public void onPause(Bundle savedInstanceState) { super.onPause();
-	 * finish(); }
-	 **/
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
@@ -214,22 +210,27 @@ public class Report extends Activity implements View.OnClickListener {
 					int user_score = 0;
 					int goodplace_rate = 0;
 					int badplace_rate = 0;
+					boolean is_positive = false;
 					String locid = null;
 					// calculate new score
 
 					if (reason.compareTo("Positive Report") == 0) {
 						user_score = 2;
 						goodplace_rate = 1;
+						is_positive = true;
 					}
 					if (reason.compareTo("Complaint") == 0) {
 						user_score = 1;
 						badplace_rate = 1;
+						is_positive = false;
 					}
 					points = "" + user_score;
 					locid = mGooglePlace.id;
 
 					int conflict = 0;
-					SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+					SimpleDateFormat s = new SimpleDateFormat(
+							"dd/MM/yyyy hh:mm:ss");
+
 					String date = s.format(new Date());
 					if (locid != null)
 						Log.w("google places id is", locid);
@@ -237,10 +238,20 @@ public class Report extends Activity implements View.OnClickListener {
 						locid = "NoPlaceFound";
 
 					// Change this
-
-					String comment = "No comment"; // should be text from
-													// user
+					// mGooglePlace.refrence="Non";
+					String comment = "No comment"; // should be text from user
 					// //////////
+					int reasons[];
+					if (!is_positive) {
+						reasons = new int[checked.length];
+						int f = 0;
+						for (String str : checked) {
+							reasons[f] = (str == null ? 0 : 1);
+							f++;
+						}
+					}
+					else
+						reasons = null;
 					LocationRequest loc = new LocationRequest(locid,
 							mGooglePlace.refrence, mGooglePlace.name,
 							mGooglePlace.vicinity,
@@ -250,7 +261,7 @@ public class Report extends Activity implements View.OnClickListener {
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
-							locid, reason, date, checked, comment);
+							locid, reason, date, reasons, comment);
 					WebRequest req = new WebRequest();
 
 					/* Send UserRequest to Database */
@@ -387,20 +398,23 @@ public class Report extends Activity implements View.OnClickListener {
 						 * k < checked.length; k++) { if (checked[k] != null)
 						 * message += checked[k].toString() + "\n"; } message +=
 						 * "Have a pleasant Day!"; myIntent = new
-						 * Intent(android.content.Intent.ACTION_SEND); myIntent
-						 * .putExtra(android.content.Intent.EXTRA_EMAIL,
+						 * Intent(android.content.Intent.ACTION_SEND);
+						 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
 						 * emailaddress);
 						 * myIntent.putExtra(android.content.Intent
 						 * .EXTRA_SUBJECT, "Smoking-Not Update!");
-						 * myIntent.setType("plain/text"); myIntent.putExtra(
-						 * android.content.Intent.EXTRA_TEXT, message);
+						 * myIntent.setType("plain/text");
+						 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+						 * message);
 						 */
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 
 						if (conflict == 0) {
 							mHandler.sendMessage(mHandler.obtainMessage(1));
+
 						}
+
 					}
 					mHandler.sendMessage(mHandler.obtainMessage(0));
 				}
@@ -494,6 +508,8 @@ public class Report extends Activity implements View.OnClickListener {
 
 	}
 
+
+
 	private void showConflict(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 		builder.setTitle("Error");
@@ -578,6 +594,8 @@ public class Report extends Activity implements View.OnClickListener {
 				break;
 			case 1:
 				showDialog(tmpView);
+
+				// send notification to user
 				break;
 			}
 
