@@ -89,6 +89,7 @@
     <string name="app_name">Smoking Not APP for Android!</string>
     <string name="profile">Profile</string>
     <string name="places">Places</string>
+    <string name="hazards">Hazards</string>
     <string name="report">Report</string>
     <string name="exit">Main menu</string>
     <string name="ReportWays">Choose the Publishing Ways</string>

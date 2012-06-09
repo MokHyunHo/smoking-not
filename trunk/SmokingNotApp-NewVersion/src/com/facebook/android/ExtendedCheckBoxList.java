@@ -45,6 +45,13 @@ public class ExtendedCheckBoxList extends ListActivity implements View.OnClickLi
 		select.setOnClickListener(this);
 	}
 
+	
+	public void onPause(Bundle savedInstanceState) {
+		super.onPause();
+		finish();
+	}
+	
+	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		if (v != null) {

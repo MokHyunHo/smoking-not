@@ -52,7 +52,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
 	private final int CYCLES_TO_WAIT = 5;
-	private TextView tvReport, tvPlaces, tvProfile, tvAddress;
+	private TextView tvReport, tvPlaces, tvAddress;
 	private Button goBtn;
 	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
@@ -81,7 +81,6 @@ public class Places extends Activity implements View.OnClickListener {
 		context = this;
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
-		tvProfile = (TextView) findViewById(R.id.tvPlaProfile);
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (ImageButton) findViewById(R.id.b_search);
@@ -170,7 +169,6 @@ public class Places extends Activity implements View.OnClickListener {
 		// first-up menu
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
-		tvProfile.setOnClickListener(this);
 
 		// START MENU BUTTON
 		exitButton = (ImageButton) findViewById(R.id.exitButton);
@@ -188,6 +186,12 @@ public class Places extends Activity implements View.OnClickListener {
 		});
 	}
 
+	public void onBackPressed() {
+		Intent myIntent = new Intent(getApplicationContext(),
+				FacebookMain.class);
+		startActivity(myIntent);
+	}
+	
 	@Override
 	public void onClick(View v) {
 
@@ -201,13 +205,6 @@ public class Places extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.tvPlaPlaces:
-			break;
-		case R.id.tvPlaProfile:
-			myIntent = new Intent(getApplicationContext(), Profile.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
 			break;
 		}
 	}

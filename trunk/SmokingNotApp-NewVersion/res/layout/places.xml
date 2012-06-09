@@ -17,42 +17,30 @@
             android:layout_height="50dp"
             android:background="@color/grey"
             android:baselineAligned="true"
-            android:weightSum="3" >
+            android:weightSum="2" >
 
             <TextView
                 android:id="@+id/tvPlaReport"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:background="#000000"
                 android:gravity="center"
-                android:text="Report"
+                android:text="@string/report"
                 android:textColor="#ffffff"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/tvPlaPlaces"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:layout_weight="1"
                 android:gravity="center"
-                android:text="Places"
+                android:text="@string/places"
                 android:textColor="#ffffff"
                 android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvPlaProfile"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Profile"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="1" />
         </TableRow>
 
         <RelativeLayout
@@ -62,7 +50,7 @@
             android:layout_marginLeft="5dp" >
         </RelativeLayout>
     </TableLayout>
-
+
     <ListView
         android:id="@+id/lv_places"
         android:layout_width="fill_parent"
@@ -73,7 +61,6 @@
         android:layout_weight="0.04"
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent" >
-
     </ListView>
 
     <AutoCompleteTextView
@@ -90,7 +77,7 @@
         android:text=""
         android:textSize="14dp" >
     </AutoCompleteTextView>
-
+
     <RelativeLayout
         android:id="@+id/RelativeLayout2"
         android:layout_width="match_parent"
@@ -175,7 +162,6 @@
             android:layout_toLeftOf="@+id/ib_Refresh"
             android:background="@android:color/transparent"
             android:src="@drawable/show_on_map" />
-
     </RelativeLayout>
 
     <ImageButton
@@ -198,7 +184,7 @@
         android:layout_centerHorizontal="true"
         android:text=" Get places around"
         android:textSize="14dp" />
-
+
     <ImageButton
         android:id="@+id/b_search"
         style="?android:attr/buttonStyleSmall"

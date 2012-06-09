@@ -23,10 +23,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class Profile extends Activity implements View.OnClickListener {
+public class Profile extends Activity {
 	/** Called when the activity is first created. */
 
-	private TextView tvReport, tvPlaces, tvProfile;
 	private Button exitButton;
 	private TextView mText;
 	private TextView rank;
@@ -47,11 +46,6 @@ public class Profile extends Activity implements View.OnClickListener {
 		// initialization of all the objects
 		setContentView(R.layout.profile);
 		init();
-
-		// Top Menu and switching between activities
-		tvReport.setOnClickListener(this);
-		tvPlaces.setOnClickListener(this);
-		tvProfile.setOnClickListener(this);
 
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		// get user info from server
@@ -125,10 +119,13 @@ public class Profile extends Activity implements View.OnClickListener {
 
 	}
 
+	public void onBackPressed() {
+		Intent myIntent = new Intent(getApplicationContext(),
+				FacebookMain.class);
+		startActivity(myIntent);
+	}
+	
 	private void init() {
-		tvReport = (TextView) findViewById(R.id.tvProReport);
-		tvPlaces = (TextView) findViewById(R.id.tvProPlaces);
-		tvProfile = (TextView) findViewById(R.id.tvProProfile);
 		mText = (TextView) findViewById(R.id.txt);
 		rank = (TextView) findViewById(R.id.rank);
 		mUserPic = (ImageView) findViewById(R.id.user_pic);
@@ -136,38 +133,6 @@ public class Profile extends Activity implements View.OnClickListener {
 		lvUserReports = (ListView) findViewById(R.id.lvLastReports);
 		mAdapter = new UserReportsAdapter(this);
 	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		Intent myIntent;
-		switch (v.getId()) {
-		case R.id.tvProReport:
-			/*
-			 * tvReport.setBackgroundResource(R.drawable.orange);
-			 * tvReport.setBackgroundColor(android.R.color.black);
-			 */
-			myIntent = new Intent(getApplicationContext(), Report.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvProPlaces:
-			/* tvPlaces.setBackgroundResource(R.drawable.orange); */
-			myIntent = new Intent(getApplicationContext(), Places.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvProProfile:
-			/* tvProfile.setBackgroundResource(R.drawable.orange); */
-			break;
-
-		}
-	}
-
 	private ArrayList<String[]> getUserReports(String userId) {
 		ArrayList<String[]> lstReports = new ArrayList<String[]>();
 		FiveLastPlaces fiveLst = null;

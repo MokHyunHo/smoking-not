@@ -1,19 +1,14 @@
 package com.facebook.android;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.apache.http.client.ClientProtocolException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,10 +21,6 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	
 	private EditText name,phone,add,mail;
 	private Button bRep,exitButton;
-	private String[] checked;
-	private String loc;
-	static final int uniqueId = 1234;
-	NotificationManager nm;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -38,18 +29,6 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		setContentView(R.layout.official_report);
 		Init();
 		
-		//Receive the sent data
-		Bundle gotChecked = getIntent().getExtras();
-		try {
-			checked = gotChecked.getStringArray("checkedOptions");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		try {
-			loc = gotChecked.getString("StrLocation");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
 		
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
@@ -68,9 +47,6 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		//Submit Button
 		bRep.setOnClickListener(this);
 		
-		// create notification manager
-		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.cancel(uniqueId);
 		
 	}
 	
@@ -172,22 +148,20 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		TextView sTV = new TextView(this);
 		if(name.getText().toString().compareTo("")==0)
 		{
-			sTV.setText("You have to fill the name field");
+			sTV.setText("You have to fill the name field\n");
 			flag=true;
 		}
-		if(mail.getText().toString().compareTo("")==0)
+		if(mailValidity(sTV))
 		{
-			sTV.setText("You have to fill the email field");
 			flag=true;
 		}
-		if(phone.getText().toString().compareTo("")==0)
+		if(phoneValidity(sTV))
 		{
-			sTV.setText("You have to fill the phone field");
 			flag=true;
 		}
 		if(add.getText().toString().compareTo("")==0)
 		{
-			sTV.setText("You have to fill the address field");
+			sTV.setText("You have to fill the address field\n");
 			flag=true;
 		}
 		d.setContentView(sTV);
@@ -195,5 +169,49 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 			d.show();
 		return flag;
 	}
+	
+	private boolean mailValidity(TextView sTV)
+	{
+		String str="";
+		boolean flag=false;
+		if(mail.getText().toString().compareTo("")==0)
+		{
+			str+="You have to fill the email field\n";
+			flag=true;
+		}
+		if(!mail.getText().toString().contains("@"))
+		{
+			str+="Unvalid email entry\n";
+			flag=true;
+		}
+		sTV.setText(str);
+		return flag;
+	}
+	
+	private boolean phoneValidity(TextView sTV)
+	{
+		String str="";
+		String digits =	"1234567890-";
+		String myPhone=phone.getText().toString();
+		boolean flag=false;
+		if(myPhone.compareTo("")==0)
+		{
+			str+="You have to fill the phone field\n";
+			flag=true;
+		}
+		for(int i=0;i<myPhone.length();i++)
+		{
+			if(!digits.contains(""+myPhone.charAt(i)))
+			{
+				str+="Unvalid phone entry\n";
+				flag=true;
+			}
+		}
+		sTV.setText(str);
+		return flag;
+	}
+	
+	
+
 
 }
