@@ -34,6 +34,7 @@ public class WebRequest {
 	                try 
 	                {
 	                        StringEntity entity = new StringEntity(jsonStr.toString());
+	                        Log.i("ERIC ortal", jsonStr.toString());
 	                        entity.setContentType("application/json;charset=UTF-8"); // text/plain;charset=UTF-8 (can be either)
 	                        entity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
 	                                        
