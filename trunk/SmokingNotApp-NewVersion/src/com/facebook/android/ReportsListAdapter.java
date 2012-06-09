@@ -1,31 +1,16 @@
 package com.facebook.android;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.opengl.Visibility;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-
 public class ReportsListAdapter extends BaseAdapter {
-	private ArrayList<String[]> mLst;
+	private LastUserReports mLst;
 	private LayoutInflater mInflater;
 	private Context caller;
 
@@ -38,24 +23,18 @@ public class ReportsListAdapter extends BaseAdapter {
 		init(c);
 	}
 
-	public void setData(ArrayList<String[]> poolList) {
-		//Log.i("ERIC", "X size: " + poolList.size());
+	public void setData(LastUserReports poolList) {
 		mLst = poolList;
-		/*for (int j = 0; j < mLst.size(); j++)
-		{
-			Log.i("ERIC", mLst.get(j)[0]);
-		}
-		*/
 	}
 
 	@Override
 	public int getCount() {
-		return mLst.size();
+		return mLst.getLst().size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mLst.get(position);
+		return mLst.getLst().get(position);
 	}
 
 	@Override
@@ -67,19 +46,18 @@ public class ReportsListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 
-		String[] report = mLst.get(position);
-		Log.i("ERIC", "position: " + position + "string[]: " + report.toString());
+		final ReportDetails report = mLst.getLst().get(position);
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.reports_list, null);
 
 			holder = new ViewHolder();
 
-			holder.mTypeTxt = (TextView) convertView.findViewById(R.id.tvReportType);
+			holder.mTypeTxt = (TextView) convertView
+					.findViewById(R.id.tvReportType);
 			holder.mDateTxt = (TextView) convertView
 					.findViewById(R.id.tvReportDate);
-
-			holder.mDetailsTxt = (TextView) convertView
-					.findViewById(R.id.tvReportDetails);
+			holder.mCommentTxt = (TextView) convertView
+					.findViewById(R.id.tvReportComment);
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -89,24 +67,22 @@ public class ReportsListAdapter extends BaseAdapter {
 
 		holder.position = position;
 		try {
-			holder.mTypeTxt.setText(report[0]);
-			holder.mDateTxt.setText(report[1]);
-			holder.mDetailsTxt.setText(report[2]);
+			holder.mTypeTxt.setText(report.getReportKind());
+			holder.mDateTxt.setText(report.getDate());
+			holder.mCommentTxt.setText(report.getComment());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return convertView;
 	}
-
-	
 
 	static class ViewHolder {
 		int position;
 		TextView mTypeTxt;
 		TextView mDateTxt;
-		TextView mDetailsTxt;
+		TextView mCommentTxt;
 
 	}
 }
