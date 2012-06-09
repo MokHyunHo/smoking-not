@@ -79,8 +79,10 @@ public class ChoosePlace extends Activity {
 				Intent data = new Intent();
 
 				data.putExtra("placeID", place.id);
+				data.putExtra("placeReference", place.refrence);
 				data.putExtra("placeName", place.name);
 				data.putExtra("placeVicinity", place.vicinity);
+				data.putExtra("placeLocation", place.location);
 				setResult(RESULT_OK, data);
 				Log.i("ERIC", "set result: " + data.getExtras().toString());
 				finish();

@@ -423,9 +423,10 @@ public class Report extends Activity implements View.OnClickListener {
 					Log.i("ERIC", "getting place");
 					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
 					mGooglePlace.id = extras.getString("placeID");
-					//mGooglePlace.refrence=extras.
+					mGooglePlace.refrence=extras.getString("placeReference");
 					mGooglePlace.name = extras.getString("placeName");
 					mGooglePlace.vicinity = extras.getString("placeVicinity");
+					mGooglePlace.location = extras.getParcelable("placeLocation");
 					et1.setText(mGooglePlace.name + "\n"
 							+ mGooglePlace.vicinity);
 					break;

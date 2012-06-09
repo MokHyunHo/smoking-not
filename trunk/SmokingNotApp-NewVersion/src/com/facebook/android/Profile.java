@@ -37,6 +37,8 @@ public class Profile extends Activity implements View.OnClickListener {
 	private UserReportsAdapter mAdapter;
 	private GooglePlacesAPI mGooglePlacesAPI;
 
+	private ArrayList<String[]> lst;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -97,10 +99,12 @@ public class Profile extends Activity implements View.OnClickListener {
 		mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
 		Log.i("ERIC", FacebookMain.email);
 		try {
-			ArrayList<String[]> lst = getUserReports(FacebookMain.email);
-			Log.i("ERIC", "XX size: " + lst.size());
-			mAdapter.setData(lst);
-			lvUserReports.setAdapter(mAdapter);
+			if (FacebookMain.email.compareTo("") != 0) {
+				lst = getUserReports(FacebookMain.email);
+				Log.i("ERIC", "XX size: " + lst.size());
+				mAdapter.setData(lst);
+				lvUserReports.setAdapter(mAdapter);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -178,36 +182,37 @@ public class Profile extends Activity implements View.OnClickListener {
 			str = (String) json2.get("report_request");
 			Log.w("str=", str);
 			fiveLst = gson2.fromJson(str, FiveLastPlaces.class);
-			
-			
 
 		} catch (JSONException e) {
 			Log.e("Profile error, can't get response from server, JSON exception",
 					e.toString());
-			Log.w("str=", str);
+			// Log.w("str=", str);
 
 		} catch (Exception e) {
 			Log.e("Profile error, can't get response from server", e.toString());
-			Log.w("str=", str);
+			// Log.w("str=", str);
 		}
 		int i = 0;
-		for (ReportDetails item: fiveLst.getLst() ) {
-		//int num = 6;// fiveLst.getLst().size();
-		//for (i = 0; i < num; i++) {
+		for (ReportDetails item : fiveLst.getLst()) {
+			// int num = 6;// fiveLst.getLst().size();
+			// for (i = 0; i < num; i++) {
 			tmp = new String[3];
 			i++;
-			//ReportRequest item = fiveLst.getLst().get(i);
-			//tmp[0] = "Place name #" + i; // fiveLst.getLst().get(i).getLocationId();
-			//tmp[1] = "Place address #" + i; // fiveLst.getLst().get(i).getReportdate();
-			//tmp[2] = "Place details #" + i; // fiveLst.getLst().get(i).getReportkind();
-			
-			//tmp[0] = item.getLocationId();
-			//tmp[1] = item.getReportdate();
-			//tmp[2] = item.getReportkind();
-			//JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
-				//	.getLocationId());
+			// ReportRequest item = fiveLst.getLst().get(i);
+			// tmp[0] = "Place name #" + i; //
+			// fiveLst.getLst().get(i).getLocationId();
+			// tmp[1] = "Place address #" + i; //
+			// fiveLst.getLst().get(i).getReportdate();
+			// tmp[2] = "Place details #" + i; //
+			// fiveLst.getLst().get(i).getReportkind();
+
+			tmp[0] = item.getPlaceName();
+			tmp[1] = item.getDate();
+			tmp[2] = item.getReportKind();
+			// JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
+			// .getLocationId());
 			lstReports.add(tmp);
-			
+
 			if (i > 4)
 				break;
 		}

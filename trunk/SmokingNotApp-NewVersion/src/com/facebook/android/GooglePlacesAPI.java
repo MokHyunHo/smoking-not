@@ -140,6 +140,7 @@ public class GooglePlacesAPI {
 					GooglePlace place = new GooglePlace();
 
 					place.id = item.getString("id");
+					place.refrence = item.getString("reference");
 					place.name = item.getString("name");
 
 					JSONObject location = item.getJSONObject("geometry")
