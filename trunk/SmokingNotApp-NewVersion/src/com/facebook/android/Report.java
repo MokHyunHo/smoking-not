@@ -233,6 +233,15 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("google places id is", locid);
 					else
 						locid = "NoPlaceFound";
+<<<<<<< .mine
+					
+					//Change this
+					//mGooglePlace.refrence="Non";
+					String comment= "No comment"; //should be text from user
+					////////////
+					LocationRequest loc = new LocationRequest(locid,mGooglePlace.refrence,mGooglePlace.name,mGooglePlace.vicinity,
+							mGooglePlace.location.getLatitude(),mGooglePlace.location.getLongitude(),goodplace_rate, badplace_rate);
+=======
 
 					// Change this
 					// mGooglePlace.refrence="Non";
@@ -255,6 +264,7 @@ public class Report extends Activity implements View.OnClickListener {
 							mGooglePlace.location.getLatitude(),
 							mGooglePlace.location.getLongitude(),
 							goodplace_rate, badplace_rate);
+>>>>>>> .r147
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
@@ -385,6 +395,7 @@ public class Report extends Activity implements View.OnClickListener {
 						returnBundle.putStringArray("checkedOptions", checked);
 						returnBundle.putString("StrLocation", location);
 						repIntent.putExtras(returnBundle);
+						repIntent.putExtra("BitmapImage", bmp);
 						startActivity(repIntent);
 					} else {
 						/*

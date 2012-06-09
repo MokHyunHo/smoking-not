@@ -1,5 +1,6 @@
 package com.facebook.android;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Timer;
@@ -9,6 +10,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +24,9 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	
 	private EditText name,phone,add,mail;
 	private Button bRep,exitButton;
+	private String[] checked;
+	private String loc;
+	Bitmap bmp;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,21 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		
 		setContentView(R.layout.official_report);
 		Init();
+		
+		//Receive the sent data
+		Bundle gotChecked = getIntent().getExtras();
+		try {
+			checked = gotChecked.getStringArray("checkedOptions");
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		try {
+			loc = gotChecked.getString("StrLocation");
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		
+		bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
 		
 		
 		// START MENU BUTTON
@@ -68,26 +89,31 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 				String email=null;
 				WebRequest req=new WebRequest(); 
 			
-				Trial t=new Trial(name.getText().toString(), phone.getText().toString(), mail.getText().toString(), add.getText().toString());
 				
 				try {
-				String f=t.CreatePdf();
-				System.out.println("the file is"+f);
+				
+				if (bmp!=null) {
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+					byte [] barr= bos.toByteArray();
+					email=getString(R.string.DatabaseUrl)+
+							"/EmailReport?name="+name.getText().toString()+"&phone="+phone.getText().toString()
+							+"&mail="+mail.getText().toString()+"&address="+add.getText().toString()
+							+"&location="+loc+"&reasons="+checked+"&pic="+barr;		
+				}
+				else
+					email=getString(R.string.DatabaseUrl)+
+					"/EmailReport?name="+name.getText().toString()+"&phone="+phone.getText().toString()
+					+"&mail="+mail.getText().toString()+"&address="+add.getText().toString()
+					+"&location="+loc+"&reasons="+checked+"&pic=No_picture";		
+				
 				
 				// create string email
 				
-				email=getString(R.string.DatabaseUrl)+
-						"/EmailReport?email_attachment="+f;
-						
+								
 				}
 				catch (Exception e) { 
-					Log.w("can't create pdf","elad");
-					String test="not_pdf";
-					email=getString(R.string.DatabaseUrl)+
-							"/EmailReport?email_attachment="+test;
-					System.out.println("email"+email);
-					
-					
+					Log.w("ortal","can't send email to server");	
 				}
 				try {
 					req.SendEmail(email);
