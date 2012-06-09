@@ -86,6 +86,6 @@
         android:layout_below="@+id/tvReportsLbl"
         android:text="Reasons"
         android:textColor="@color/orange"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>
