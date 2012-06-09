@@ -214,7 +214,7 @@ public class Report extends Activity implements View.OnClickListener {
 						locid = "NoPlaceFound";
 					
 					//Change this
-					mGooglePlace.refrence="Non";
+					//mGooglePlace.refrence="Non";
 					String comment= "No comment"; //should be text from user
 					////////////
 					LocationRequest loc = new LocationRequest(locid,mGooglePlace.refrence,mGooglePlace.name,mGooglePlace.vicinity,
@@ -234,6 +234,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 					// prepare Json
 					try {
+						
 						json2 = new JSONStringer().object().key("action")
 								.value("update_ur").key("user_request")
 								.value(UserStr).endObject();
