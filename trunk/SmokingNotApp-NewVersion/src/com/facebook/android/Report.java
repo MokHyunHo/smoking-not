@@ -233,20 +233,8 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("google places id is", locid);
 					else
 						locid = "NoPlaceFound";
-<<<<<<< .mine
-					
-					//Change this
-					//mGooglePlace.refrence="Non";
-					String comment= "No comment"; //should be text from user
-					////////////
-					LocationRequest loc = new LocationRequest(locid,mGooglePlace.refrence,mGooglePlace.name,mGooglePlace.vicinity,
-							mGooglePlace.location.getLatitude(),mGooglePlace.location.getLongitude(),goodplace_rate, badplace_rate);
-=======
 
-					// Change this
-					// mGooglePlace.refrence="Non";
-					String comment = "No comment"; // should be text from user
-					// //////////
+					String comment = comments.getText().toString();
 					int reasons[];
 					if (!is_positive) {
 						reasons = new int[checked.length];
@@ -264,7 +252,6 @@ public class Report extends Activity implements View.OnClickListener {
 							mGooglePlace.location.getLatitude(),
 							mGooglePlace.location.getLongitude(),
 							goodplace_rate, badplace_rate);
->>>>>>> .r147
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
@@ -398,23 +385,6 @@ public class Report extends Activity implements View.OnClickListener {
 						repIntent.putExtra("BitmapImage", bmp);
 						startActivity(repIntent);
 					} else {
-						/*
-						 * String emailaddress[] = { FacebookMain.email };
-						 * String message = "Hello, \n" + "The Report about " +
-						 * location + " Has been Sent! \n" +
-						 * "The Reasons you've pointed were:\n"; for (int k = 0;
-						 * k < checked.length; k++) { if (checked[k] != null)
-						 * message += checked[k].toString() + "\n"; } message +=
-						 * "Have a pleasant Day!"; myIntent = new
-						 * Intent(android.content.Intent.ACTION_SEND);
-						 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
-						 * emailaddress);
-						 * myIntent.putExtra(android.content.Intent
-						 * .EXTRA_SUBJECT, "Smoking-Not Update!");
-						 * myIntent.setType("plain/text");
-						 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-						 * message);
-						 */
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 
