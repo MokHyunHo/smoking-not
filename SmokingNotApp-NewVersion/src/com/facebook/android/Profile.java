@@ -2,7 +2,7 @@ package com.facebook.android;
 
 //import java.io.IOException;
 
-import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +36,7 @@ public class Profile extends Activity {
 	private UserReportsAdapter mAdapter;
 	private GooglePlacesAPI mGooglePlacesAPI;
 
-	private ArrayList<String[]> lst;
+	private LastUserReports lst;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,7 @@ public class Profile extends Activity {
 		// initialization of all the objects
 		setContentView(R.layout.profile);
 		init();
+
 
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		// get user info from server
@@ -95,7 +96,6 @@ public class Profile extends Activity {
 		try {
 			if (FacebookMain.email.compareTo("") != 0) {
 				lst = getUserReports(FacebookMain.email);
-				Log.i("ERIC", "XX size: " + lst.size());
 				mAdapter.setData(lst);
 				lvUserReports.setAdapter(mAdapter);
 			}
@@ -133,58 +133,32 @@ public class Profile extends Activity {
 		lvUserReports = (ListView) findViewById(R.id.lvLastReports);
 		mAdapter = new UserReportsAdapter(this);
 	}
-	private ArrayList<String[]> getUserReports(String userId) {
-		ArrayList<String[]> lstReports = new ArrayList<String[]>();
-		FiveLastPlaces fiveLst = null;
+
+	
+	private LastUserReports getUserReports(String userId) {
+		LastUserReports LastReportsLst = null;
 		Gson gson2 = new Gson();
 		WebRequest req = new WebRequest();
 		String str = null;
-		String[] tmp;
+		
 		try {
 			JSONObject json2 = req
 					.readJsonFromUrl(getString(R.string.DatabaseUrl)
 							+ "/GetLastPlaces?mail=" + FacebookMain.email);
 			str = (String) json2.get("report_request");
 			Log.w("str=", str);
-			fiveLst = gson2.fromJson(str, FiveLastPlaces.class);
+			LastReportsLst = gson2.fromJson(str, LastUserReports.class);
 
 		} catch (JSONException e) {
 			Log.e("Profile error, can't get response from server, JSON exception",
 					e.toString());
-			// Log.w("str=", str);
 
 		} catch (Exception e) {
 			Log.e("Profile error, can't get response from server", e.toString());
-			// Log.w("str=", str);
-		}
-		int i = 0;
-		for (ReportDetails item : fiveLst.getLst()) {
-			// int num = 6;// fiveLst.getLst().size();
-			// for (i = 0; i < num; i++) {
-			tmp = new String[3];
-			i++;
-			// ReportRequest item = fiveLst.getLst().get(i);
-			// tmp[0] = "Place name #" + i; //
-			// fiveLst.getLst().get(i).getLocationId();
-			// tmp[1] = "Place address #" + i; //
-			// fiveLst.getLst().get(i).getReportdate();
-			// tmp[2] = "Place details #" + i; //
-			// fiveLst.getLst().get(i).getReportkind();
-
-			tmp[0] = item.getPlaceName();
-			tmp[1] = item.getDate();
-			tmp[2] = item.getReportKind();
-			// JSONObject pl_det = mGooglePlacesAPI.getPlaceDetails(item
-			// .getLocationId());
-			lstReports.add(tmp);
-
-			if (i > 4)
-				break;
 		}
 
-		Log.i("ERIC", "size: " + lstReports.size());
-
-		return lstReports;
+		Collections.sort(LastReportsLst.getLst(), new ReportDateComparator());
+		return LastReportsLst;
 
 	}
 }
