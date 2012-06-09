@@ -79,6 +79,7 @@ public class FacebookMain extends Activity {
 	private Button mProfileButton;
 	private Button mReportButton;
 	private Button mHazardsButton;
+	private int fetching=0;
 
 	String[] permissions = { "publish_stream", "email", "user_photos" };
 
@@ -121,12 +122,15 @@ public class FacebookMain extends Activity {
 				Utility.mFacebook, permissions);
 
 		if (Utility.mFacebook.isSessionValid()) {
-			requestUserData();
+			fetching=requestUserData();
 		}
 
 		mProfileButton.setOnClickListener(new OnClickListener() {
-
+			
+			
 			public void onClick(View v) {
+				if (fetching==1)
+				{
 				//if (haveNetworkConnection()) {
 					Intent myIntent = new Intent(getApplicationContext(),
 							Profile.class);
@@ -141,12 +145,15 @@ public class FacebookMain extends Activity {
 					}
 
 			//	}
-			}
+			}}
 		});
+		
 
 		mReportButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				if (fetching==1)
+				{
 				//if (haveNetworkConnection()) {
 					Intent myIntent = new Intent(getApplicationContext(),
 							Report.class);
@@ -160,14 +167,15 @@ public class FacebookMain extends Activity {
 					}
 				//}
 
-			}
+			}}
 		});
 
 		mHazardsButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				//if (haveNetworkConnection()) {
-
+				if (fetching==1)
+				{
 					Intent myIntent = new Intent(getApplicationContext(),
 							Hazards.class);
 					if (!Utility.mFacebook.isSessionValid()) {
@@ -184,7 +192,7 @@ public class FacebookMain extends Activity {
 					}
 				//}
 
-			}
+			}}
 		});
 
 	}
@@ -317,7 +325,7 @@ public class FacebookMain extends Activity {
 
 		@Override
 		public void onAuthSucceed() {
-			requestUserData();
+			fetching= requestUserData();
 		}
 
 		@Override
@@ -347,11 +355,12 @@ public class FacebookMain extends Activity {
 	/*
 	 * Request user name, and picture to show on the main screen.
 	 */
-	public void requestUserData() {
+	public int requestUserData() {
 		mText.setText("Fetching user name, profile pic...");
 		Bundle params = new Bundle();
 		params.putString("fields", "name, picture, email");
 		Utility.mAsyncRunner.request("me", params, new UserRequestListener());
+		return 1;
 	}
 
 	private boolean haveNetworkConnection() {
