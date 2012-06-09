@@ -3,7 +3,10 @@ package com.facebook.android;
 import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -47,11 +50,11 @@ public class Report extends Activity implements View.OnClickListener {
 
 	String[] checked;
 	String location, reason, points;
-	TextView tvReport, tvPlaces, tvProfile;
+	TextView tvReport, tvPlaces;
 	Button report;
 	ImageButton ib;
 	ImageView iv;
-	EditText et1;
+	EditText et1, comments;
 	RadioGroup rg;
 	RadioButton r1, r2;
 	CheckBox c1, c3;
@@ -61,8 +64,6 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iEmail = 2;
 	Bitmap bmp;
 	private Button exitButton;
-	static final int uniqueId = 1234;
-	NotificationManager nm;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
 	private View tmpView;
@@ -100,7 +101,6 @@ public class Report extends Activity implements View.OnClickListener {
 		// Top Menu and switching between activities
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
-		tvProfile.setOnClickListener(this);
 		et1.setOnClickListener(this);
 		r1.setOnClickListener(this);
 		r2.setOnClickListener(this);
@@ -128,22 +128,30 @@ public class Report extends Activity implements View.OnClickListener {
 				startActivity(myIntent);
 			}
 		});
-		// create notification manager
-		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		nm.cancel(uniqueId);
+
 	}
 
+	public void onBackPressed() {
+		Intent myIntent = new Intent(getApplicationContext(),
+				FacebookMain.class);
+		startActivity(myIntent);
+	}
+
+	/**
+	 * public void onPause(Bundle savedInstanceState) { super.onPause();
+	 * finish(); }
+	 **/
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
 		iv = (ImageView) findViewById(R.id.ivReport);
 		tvReport = (TextView) findViewById(R.id.tvRep);
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
-		tvProfile = (TextView) findViewById(R.id.tvPro);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
 		r2 = (RadioButton) findViewById(R.id.ReasonRB2);
 		et1 = (EditText) findViewById(R.id.etLocation);
+		comments = (EditText) findViewById(R.id.comments);
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		mProgress = new ProgressDialog(this);
@@ -172,7 +180,24 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			if(c3.isChecked())
+			// check
+			/*if (!haveNetworkConnection()) {
+				final Runnable mInternetNotification = new Runnable() {
+					public void run() {
+						Toast.makeText(getBaseContext(),
+								"You have no internet connection!",
+								Toast.LENGTH_LONG).show();
+					}
+				};
+				msgPoster.post(mInternetNotification);
+				break;
+			}*/
+			// check that the location field is not empty
+			if (et1.getText().toString().compareTo("<<< Choose place >>>") == 0) {
+				msgPoster.post(mChoosePlaceNotification);
+				break;
+			}
+			if (c3.isChecked())
 				mProgress.setMessage("Please Wait...");
 			else
 				mProgress.setMessage("Sending report...");
@@ -202,9 +227,7 @@ public class Report extends Activity implements View.OnClickListener {
 					}
 					points = "" + user_score;
 					locid = mGooglePlace.id;
-					
-					
-					
+
 					int conflict = 0;
 					SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
 					String date = s.format(new Date());
@@ -212,17 +235,22 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("google places id is", locid);
 					else
 						locid = "NoPlaceFound";
-					
-					//Change this
-					//mGooglePlace.refrence="Non";
-					String comment= "No comment"; //should be text from user
-					////////////
-					LocationRequest loc = new LocationRequest(locid,mGooglePlace.refrence,mGooglePlace.name,mGooglePlace.vicinity,
-							mGooglePlace.location.getLatitude(),mGooglePlace.location.getLongitude(),goodplace_rate, badplace_rate);
+
+					// Change this
+
+					String comment = "No comment"; // should be text from
+													// user
+					// //////////
+					LocationRequest loc = new LocationRequest(locid,
+							mGooglePlace.refrence, mGooglePlace.name,
+							mGooglePlace.vicinity,
+							mGooglePlace.location.getLatitude(),
+							mGooglePlace.location.getLongitude(),
+							goodplace_rate, badplace_rate);
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
-							locid, reason, date,checked,comment);
+							locid, reason, date, checked, comment);
 					WebRequest req = new WebRequest();
 
 					/* Send UserRequest to Database */
@@ -234,7 +262,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 					// prepare Json
 					try {
-						
+
 						json2 = new JSONStringer().object().key("action")
 								.value("update_ur").key("user_request")
 								.value(UserStr).endObject();
@@ -359,26 +387,20 @@ public class Report extends Activity implements View.OnClickListener {
 						 * k < checked.length; k++) { if (checked[k] != null)
 						 * message += checked[k].toString() + "\n"; } message +=
 						 * "Have a pleasant Day!"; myIntent = new
-						 * Intent(android.content.Intent.ACTION_SEND);
-						 * myIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+						 * Intent(android.content.Intent.ACTION_SEND); myIntent
+						 * .putExtra(android.content.Intent.EXTRA_EMAIL,
 						 * emailaddress);
 						 * myIntent.putExtra(android.content.Intent
 						 * .EXTRA_SUBJECT, "Smoking-Not Update!");
-						 * myIntent.setType("plain/text");
-						 * myIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-						 * message);
+						 * myIntent.setType("plain/text"); myIntent.putExtra(
+						 * android.content.Intent.EXTRA_TEXT, message);
 						 */
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 
 						if (conflict == 0) {
-							// pop-up view
 							mHandler.sendMessage(mHandler.obtainMessage(1));
-
-							// send notification to user
-							// sendNotification();
 						}
-
 					}
 					mHandler.sendMessage(mHandler.obtainMessage(0));
 				}
@@ -388,13 +410,6 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 		case R.id.tvPla:
 			myIntent = new Intent(getApplicationContext(), Places.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvPro:
-			myIntent = new Intent(getApplicationContext(), Profile.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
 				startActivity(myIntent);
@@ -424,10 +439,11 @@ public class Report extends Activity implements View.OnClickListener {
 					Log.i("ERIC", "getting place");
 					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
 					mGooglePlace.id = extras.getString("placeID");
-					mGooglePlace.refrence=extras.getString("placeReference");
+					mGooglePlace.refrence = extras.getString("placeReference");
 					mGooglePlace.name = extras.getString("placeName");
 					mGooglePlace.vicinity = extras.getString("placeVicinity");
-					mGooglePlace.location = extras.getParcelable("placeLocation");
+					mGooglePlace.location = extras
+							.getParcelable("placeLocation");
 					et1.setText(mGooglePlace.name + "\n"
 							+ mGooglePlace.vicinity);
 					break;
@@ -439,6 +455,23 @@ public class Report extends Activity implements View.OnClickListener {
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
 		}
+	}
+
+	private boolean haveNetworkConnection() {
+		boolean haveConnectedWifi = false;
+		boolean haveConnectedMobile = false;
+
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+		for (NetworkInfo ni : netInfo) {
+			if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+				if (ni.isConnected())
+					haveConnectedWifi = true;
+			if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+				if (ni.isConnected())
+					haveConnectedMobile = true;
+		}
+		return haveConnectedWifi || haveConnectedMobile;
 	}
 
 	private void showDialog(View v) {
@@ -459,18 +492,6 @@ public class Report extends Activity implements View.OnClickListener {
 		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
 					// active
 
-	}
-
-	private void sendNotification() {
-		Intent new_intent = new Intent(this, Profile.class);
-		PendingIntent pi = PendingIntent.getActivity(this, 0, new_intent, 0);
-		String body = "You sccore has been increased by 1 point!";
-		String title = "New Message";
-		Notification n = new Notification(R.drawable.statusbar, title,
-				System.currentTimeMillis());
-		n.setLatestEventInfo(this, title, body, pi);
-		// n.defaults=Notification.
-		nm.notify(uniqueId, n);
 	}
 
 	private void showConflict(View v) {
@@ -496,15 +517,15 @@ public class Report extends Activity implements View.OnClickListener {
 	// was added
 	// --------------- Post to Wall-----------------------
 	public static final String imageURL = "https://lh4.googleusercontent.com/Z0JYXrl0MWPiyutFRTP5CONfIJoNi_-E52SDJAnKnoS9gi1kVPlcBNseDL87ykr54Ew5u_AEd00";
-			//"http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
+	// "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 
 	private static final String MSG = "Report:";
 
-	private final Handler mFacebookHandler = new Handler();
-	final Runnable mUpdateFacebookNotification = new Runnable() {
+	private final Handler msgPoster = new Handler();
+	final Runnable mChoosePlaceNotification = new Runnable() {
 		public void run() {
-			Toast.makeText(getBaseContext(), "Facebook updated !",
+			Toast.makeText(getBaseContext(), "You have to choose a place !",
 					Toast.LENGTH_LONG).show();
 		}
 	};
@@ -520,8 +541,13 @@ public class Report extends Activity implements View.OnClickListener {
 			parameters.putString("message", msg);
 
 			parameters.putString("name", "Smoking Not App!");
-			parameters.putString("caption", "Reported " + location + " with "
-					+ reason);
+			if (reason.compareTo("Positive Report") == 0) {
+				parameters.putString("caption", "Reported " + location
+						+ " with " + reason);
+			} else {
+				parameters.putString("caption", " ");
+
+			}
 			parameters.putString("description", "Gained " + points
 					+ " points for the report");
 
@@ -530,8 +556,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 			response = Utility.mFacebook
 					.request("/me/feed", parameters, "POST");
-			mFacebookHandler.post(mUpdateFacebookNotification); // pop up
-																// "facebook updated"
+
 			Log.d("Tests", "got response: " + response);
 			if (response == null || response.equals("")
 					|| response.equals("false")) {
@@ -553,9 +578,6 @@ public class Report extends Activity implements View.OnClickListener {
 				break;
 			case 1:
 				showDialog(tmpView);
-
-				// send notification to user
-				sendNotification();
 				break;
 			}
 

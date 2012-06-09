@@ -10,11 +10,11 @@
         android:label="@string/app_name" >
         <uses-library android:name="com.google.android.maps" />
 
-        
         <activity
             android:name=".FacebookMain"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,8 +23,9 @@
         </activity>
         <activity
             android:name=".Report"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.REPORT" />
 
@@ -33,8 +34,9 @@
         </activity>
         <activity
             android:name=".Places"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.PLACES" />
 
@@ -42,9 +44,21 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".Hazards"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.HAZARDS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Profile"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.PROFILE" />
 
@@ -54,8 +68,9 @@
 - 
         <activity
             android:name=".ExtendedCheckBoxList"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
 - 
             <intent-filter>
                 <action android:name="com.facebook.android.EXTENDEDCHECKBOXLIST" />
@@ -66,8 +81,9 @@
 - 
         <activity
             android:name=".ExtendedCheckBoxListPublish"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
 - 
             <intent-filter>
                 <action android:name="com.facebook.android.EXTENDEDCHECKBOXLISTPUBLISH" />
@@ -77,8 +93,9 @@
         </activity>
         <activity
             android:name=".OfficialReport"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.facebook.android.OFFICIALREPORT" />
 
@@ -87,8 +104,9 @@
         </activity>
         <activity
             android:name=".ChoosePlace"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.facebook.android.CHOOSEPLACE" />
 
@@ -97,18 +115,20 @@
         </activity>
         <activity
             android:name=".AddPlace"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.facebook.android.ADDPLACE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-            <activity
+        <activity
             android:name=".PlaceDetails"
-            android:configChanges="keyboardHidden"
-            android:label="@string/app_name" >
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="com.facebook.android.PLACEDETAILS" />
 
@@ -116,7 +136,7 @@
             </intent-filter>
         </activity>
     </application>
-	
+
     <uses-permission android:name="android.permission.INTERNET" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >

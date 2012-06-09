@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/brownlinesbg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/hazards"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/ivReport"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/imageplace" />
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_alignLeft="@+id/ivReport"
+        android:layout_below="@+id/ivReport"
+        android:layout_marginTop="10dp"
+        android:cursorVisible="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="center|center_horizontal"
+        android:lines="2"
+        android:text="&lt;&lt;&lt; Choose place >>>"
+        android:textSize="14dp" />
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="47dp"
+        android:background="@drawable/sbutton"
+        android:text="Report" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/etLocation"
+        android:layout_alignTop="@+id/bReport"
+        android:background="@drawable/sbutton"
+        android:text="@string/exit" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bReport"
+        android:layout_alignLeft="@+id/bReport"
+        android:layout_alignRight="@+id/exitButton"
+        android:layout_marginBottom="15dp"
+        android:ems="10"
+        android:hint="Add Comments"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        android:singleLine="false" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/bReport"
+        android:layout_below="@+id/etLocation"
+        android:text="Publish via:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/border" />
+
+    <ImageButton
+        android:id="@+id/ibReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/imageView2"
+        android:layout_marginRight="59dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/takeapic" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_below="@+id/textView3"
+        android:checked="true" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/checkBox1"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/facebook" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/ibReport"
+        android:layout_alignTop="@+id/ivReport"
+        android:layout_marginRight="18dp"
+        android:text="take a pic!"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" />
+
+</RelativeLayout>
