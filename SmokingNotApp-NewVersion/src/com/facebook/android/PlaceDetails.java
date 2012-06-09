@@ -120,11 +120,11 @@ public class PlaceDetails extends Activity {
 		} catch (JSONException e) {
 			Log.e("Profile error, can't get response from server, JSON exception",
 					e.toString());
-			Log.w("str=", str);
+			//Log.w("str=", str);
 
 		} catch (Exception e) {
 			Log.e("Profile error, can't get response from server", e.toString());
-			Log.w("str=", str);
+			//Log.w("str=", str);
 		}
 		int i = 0;
 		// for (ReportRequest item: mPlaceReports.getLst() ) {
