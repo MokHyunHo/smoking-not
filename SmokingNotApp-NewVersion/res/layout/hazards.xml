@@ -22,7 +22,7 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:src="@drawable/imageplace" />
-
+
     <EditText
         android:id="@+id/etLocation"
         android:layout_width="250dp"
@@ -35,7 +35,7 @@
         android:ems="10"
         android:gravity="center|center_horizontal"
         android:lines="2"
-        android:text="&lt;&lt;&lt; Choose place >>>"
+        android:text="&lt;&lt;&lt; Choose location >>>"
         android:textSize="14dp" />
 
     <Button

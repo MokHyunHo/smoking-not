@@ -160,21 +160,19 @@ public class AddPlace extends MapActivity {
 
 				name = etName.getText().toString();
 				type = (String) lstTypes.getSelectedItem();
-				/*if (name.isEmpty()) {
-					Toast.makeText(context, "Please enter a name",
-							Toast.LENGTH_SHORT);
-					return;
-				}*/
+				/*
+				 * if (name.isEmpty()) { Toast.makeText(context,
+				 * "Please enter a name", Toast.LENGTH_SHORT); return; }
+				 */
 				if (markerOverlay == null) {
 					Toast.makeText(context, "Please tap location on map",
-							Toast.LENGTH_SHORT);
+							Toast.LENGTH_SHORT).show();
 				}
 				assert (newPlaceLocation != null);
 				try {
 					ArrayList<GooglePlace> suspected = new ArrayList<GooglePlace>();
 					suspected = mGooglePlacesAPI.searchPlaces(newPlaceLocation,
-							true, name, (int) newPlaceLocation.getAccuracy()
-									+ 1 + GooglePlacesAPI.ALLOWED_RADIUS);
+							true, name, GooglePlacesAPI.ALLOWED_RADIUS);
 
 					if (suspected.size() > 0) {
 						mAdapter = new NearbyAdapter(context, true);
@@ -203,7 +201,9 @@ public class AddPlace extends MapActivity {
 										TransferPlaceAndFinish(
 												chosen_item.name,
 												chosen_item.id,
-												chosen_item.vicinity);
+												chosen_item.refrence,
+												chosen_item.vicinity,
+												chosen_item.location);
 
 										return;
 									}
@@ -242,11 +242,14 @@ public class AddPlace extends MapActivity {
 							String address = mGooglePlacesAPI.mGeoEng
 									.getAddressFromLocation(newPlaceLocation);
 							TransferPlaceAndFinish(name,
-									jsonResponse.getString("id"), address);
+									jsonResponse.getString("id"),
+									jsonResponse.getString("reference"),
+									address,
+									newPlaceLocation);
 
 						} else {
 							Toast.makeText(context, "Failed to add place :(",
-									Toast.LENGTH_SHORT);
+									Toast.LENGTH_SHORT).show();
 							return;
 						}
 
@@ -257,18 +260,18 @@ public class AddPlace extends MapActivity {
 				mHandler.sendMessage(mHandler.obtainMessage(0));
 			}
 		}.start();
-		
+
 	}
 
 	private void TransferPlaceAndFinish(String placeName, String placeId,
-			String vicinity) {
+			String placeReference, String vicinity, Location placeLocation) {
 
 		Intent data = new Intent();
 
 		data.putExtra("placeName", placeName);
 		data.putExtra("placeID", placeId);
 		data.putExtra("placeVicinity", vicinity);
-
+		data.putExtra("placeLocation", placeLocation);
 		setResult(RESULT_OK, data);
 		finish();
 

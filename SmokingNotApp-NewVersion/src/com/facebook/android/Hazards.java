@@ -1,15 +1,13 @@
 package com.facebook.android;
 
 import com.facebook.android.FacebookMain;
-import com.google.gson.Gson;
-
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -20,18 +18,8 @@ import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.json.JSONObject;
-import org.json.JSONStringer;
-import org.json.JSONException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,9 +27,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Hazards extends Activity implements View.OnClickListener {
@@ -56,13 +41,14 @@ public class Hazards extends Activity implements View.OnClickListener {
 	CheckBox c1;
 	Intent i, profileIntent;
 	final static int iData = 0;
-	final static int iVenue = 1;
-	final static int iEmail = 2;
+	final static int iLocation = 1;
 	Bitmap bmp;
 	private Button exitButton;
-	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
 	private View tmpView;
+	
+	private Location chosenLocation = null;
+	private String chosenAddress = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -115,9 +101,8 @@ public class Hazards extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.etLocation:
-			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
-			startActivityForResult(myIntent, iVenue);
-			Log.i("ERIC", "Should show ChooseVenue");
+			myIntent = new Intent(getApplicationContext(), ChooseHazardLocation.class);
+			startActivityForResult(myIntent, iLocation);
 			break;
 		case R.id.bReport:
 			int conflict = 0;
@@ -232,20 +217,12 @@ public class Hazards extends Activity implements View.OnClickListener {
 					bmp = (Bitmap) extras.get("data");
 					iv.setImageBitmap(bmp);
 					break;
-				case iVenue:
-					Log.i("ERIC", "getting place");
-					Log.i("ERIC", "bundle: " + extras.getString("placeName"));
-					mGooglePlace.id = extras.getString("placeID");
-					mGooglePlace.refrence = extras.getString("placeReference");
-					mGooglePlace.name = extras.getString("placeName");
-					mGooglePlace.vicinity = extras.getString("placeVicinity");
-					mGooglePlace.location = extras
-							.getParcelable("placeLocation");
-					et1.setText(mGooglePlace.name + "\n"
-							+ mGooglePlace.vicinity);
-					break;
-				case iEmail:
-
+				case iLocation:
+					
+					chosenLocation = extras.getParcelable("location");
+					chosenAddress =  extras.getString("address");
+					
+					et1.setText(chosenAddress);
 					break;
 				}
 			}
