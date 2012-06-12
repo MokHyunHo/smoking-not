@@ -1,23 +1,7 @@
 package com.facebook.android;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONStringer;
-
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,52 +9,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class OfficialReport extends Activity implements View.OnClickListener {
 	private EditText name, phone, add, mail;
-	private Button bRep, exitButton;
-	private String[] checked;
-	private String loc;
+	private Button bRep;
 	Bitmap bmp;
-	
+
 	private SharedPreferences sh_pref;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.official_report);
 		Init();
-
-		// Receive the sent data
-		Bundle gotChecked = getIntent().getExtras();
-		try {
-			checked = gotChecked.getStringArray("checkedOptions");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		try {
-			loc = gotChecked.getString("StrLocation");
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
-
-		
-		// START MENU BUTTON
-		exitButton = (Button) findViewById(R.id.exitButton);
-		exitButton.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				finish();
-			}
-		});
 
 		// Submit Button
 		bRep.setOnClickListener(this);
@@ -93,97 +48,26 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		String details = "";
+
 		switch (v.getId()) {
 		case R.id.bReport:
-			EmailDetails ed;
-
 			if (!validity()) {
 
-				details = name.getText().toString() + "\n";
-				details += add.getText().toString() + "\n";
-				details += phone.getText().toString() + "\n";
-				details += mail.getText().toString() + "\n";
-
-		try {
-				
-
-					File myFile = new File("/sdcard/TRDetails.txt");
-					myFile.createNewFile();
-					FileOutputStream fOut = new FileOutputStream(myFile);
-					OutputStreamWriter myOutWriter = new OutputStreamWriter(
-							fOut);
-					myOutWriter.append(details);
-					myOutWriter.close();
-					fOut.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-
-				}
-
-
-			
-				String checked_str = "";
-				StringBuilder sb = new StringBuilder("");
-		
-				for (int i = 0; i < checked.length; i++) {
-					if (checked[i] != null)
-						sb.append(checked[i]).append(" ");
-				}
-		
-				checked_str = sb.toString();
-				Log.i("ERIC ortal", checked_str);
-				Log.i("ortal", name.getText().toString());
-				ed = new EmailDetails(name.getText().toString(),phone.getText().toString(),
-						add.getText().toString(),mail.getText().toString(),checked_str,loc);
-				
-				
-				if (bmp!=null) {
-					ByteArrayOutputStream bos = new ByteArrayOutputStream();
-					bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
-					byte [] barr= bos.toByteArray();
-					ed.setPicture(barr);
-				}
-
-				
-				WebRequest req = new WebRequest();
-				
-				Gson gson2 = new Gson();
-				String EmailStr = gson2.toJson(ed);
-				JSONStringer json2 = null;
-
-				// prepare Json
-				try {
-
-					json2 = new JSONStringer().object().key("send_email")
-							.value(EmailStr).endObject();
-			
-
-				} catch (JSONException e) {
-					Log.e("json exeption-can't create jsonstringer with email",
-							e.toString());
-				}
-
-				// send json to web server
-
-		
-				try {
-					req.getInternetData(json2,
-							getString(R.string.DatabaseUrl) + "/EmailReport");
-				} catch (Exception e) {
-					Log.w("couldn't send email to servlet",
-							e.toString());
-				}
-						
 				// pop-up view
 				showDialog(v);
 				saveFields();
+				Intent data = new Intent();
+
+				data.putExtra("Name", name.getText().toString());
+				data.putExtra("Phone", phone.getText().toString());
+				data.putExtra("Address", add.getText().toString());
+				data.putExtra("Email", mail.getText().toString());
+
+				setResult(RESULT_OK, data);
+				finish();
 			}
 			break;
-			}
-		
-
+		}
 	}
 
 	private void showDialog(View v) {
@@ -268,12 +152,12 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 
 	private void saveFields() {
 		SharedPreferences.Editor pref_edit = sh_pref.edit();
-		
+
 		pref_edit.putString("first_last_name", name.getText().toString());
 		pref_edit.putString("address", add.getText().toString());
 		pref_edit.putString("phone", phone.getText().toString());
 		pref_edit.putString("mail", mail.getText().toString());
-		
+
 		pref_edit.commit();
 	}
 

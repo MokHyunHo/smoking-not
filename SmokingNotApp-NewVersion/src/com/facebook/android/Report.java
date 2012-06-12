@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +58,7 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iData = 0;
 	final static int iVenue = 1;
 	final static int iEmail = 2;
+	final static int iORData=3;
 	Bitmap bmp;
 	private boolean exitFlag=false;
 	private Button exitButton;
@@ -161,6 +163,7 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.ReasonRB2:
+			exitFlag=true;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			Bundle cbBundle = new Bundle();
 			location = et1.getText().toString();
@@ -170,6 +173,7 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.ibReport:
+			exitFlag=true;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -414,7 +418,7 @@ public class Report extends Activity implements View.OnClickListener {
 						returnBundle.putString("StrLocation", location);
 						repIntent.putExtras(returnBundle);
 						repIntent.putExtra("BitmapImage", bmp);
-						startActivity(repIntent);
+						startActivityForResult(repIntent,iORData);
 					} else {
 						
 						if (c1.isChecked())
@@ -477,8 +481,58 @@ public class Report extends Activity implements View.OnClickListener {
 					et1.setText(mGooglePlace.name + "\n"
 							+ mGooglePlace.vicinity);
 					break;
-				case iEmail:
+				case iORData:
+					EmailDetails ed;
+					String orname = extras.getString("Name");
+					String orphone = extras.getString("Phone");
+					String oradd = extras.getString("Address");
+					String oremail = extras.getString("Email");
+					String orloc=et1.getText().toString();
+					String checked_str = "";
+					StringBuilder sb = new StringBuilder("");
 
+					for (int i = 0; i < checked.length; i++) {
+						if (checked[i] != null)
+							sb.append(checked[i]).append(" ");
+					}
+
+					checked_str = sb.toString();
+					Log.i("ERIC ortal", checked_str);
+					Log.i("ortal", orname);
+					ed = new EmailDetails(orname, orphone, oradd, oremail, checked_str, orloc);
+
+					if (bmp != null) {
+						ByteArrayOutputStream bos = new ByteArrayOutputStream();
+						bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+						byte[] barr = bos.toByteArray();
+						ed.setPicture(barr);
+					}
+
+					WebRequest req = new WebRequest();
+
+					Gson gson2 = new Gson();
+					String EmailStr = gson2.toJson(ed);
+					JSONStringer json2 = null;
+
+					// prepare Json
+					try {
+
+						json2 = new JSONStringer().object().key("send_email")
+								.value(EmailStr).endObject();
+
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with email",
+								e.toString());
+					}
+
+					// send json to web server
+
+					try {
+						req.getInternetData(json2, getString(R.string.DatabaseUrl)
+								+ "/EmailReport");
+					} catch (Exception e) {
+						Log.w("couldn't send email to servlet", e.toString());
+					}
 					break;
 				}
 			}
