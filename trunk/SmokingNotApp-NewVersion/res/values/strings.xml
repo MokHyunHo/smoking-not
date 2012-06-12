@@ -86,7 +86,7 @@
     <string name="refresh_token_binding_error">Binding to the Facebook Android Application failed (is it installed?).</string>
     <string name="access_token_label">Current access token:</string>
     <string name="access_token_expires_label">Token expires at:</string>
-    <string name="app_name">Smoking Not APP for Android!</string>
+    <string name="app_name">The Reporter APP for Android!</string>
     <string name="profile">Profile</string>
     <string name="places">Places</string>
     <string name="hazards">Hazards</string>
@@ -96,7 +96,7 @@
     <string name="ReportReason">Choose the Reason of the Report</string>
     <string name="Thanks">Your Report has been accepted!</string>
 
-    <string name="Credits">All right reserved to SmokingNot! team.</string>
+    <string name="Credits">All right reserved to The Reporter team.</string>
 
     <string name="OfficialReport"> 3891-ג\"משתה ,ןושיעל הפישחהו םיירוביצ תומוקמב ןושיעה תעינמל קוחל דוגינב ירוביצ םוקמב ןושיע לע חוויד ספוט
  ______________:ךיראת             _______________ :דובכל

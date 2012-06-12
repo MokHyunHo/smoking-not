@@ -200,6 +200,15 @@ public class Hazards extends Activity implements View.OnClickListener {
 				}
 
 			}.start();
+			
+			Intent repIntent = new Intent(Hazards.this,
+					OfficialReport.class);
+			Bundle returnBundle = new Bundle();
+			returnBundle.putString("StrLocation", location);
+			repIntent.putExtras(returnBundle);
+			repIntent.putExtra("BitmapImage", bmp);
+			startActivity(repIntent);
+			
 			break;
 		}
 

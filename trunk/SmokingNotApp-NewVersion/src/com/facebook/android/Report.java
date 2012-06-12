@@ -569,7 +569,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	// was added
 	// --------------- Post to Wall-----------------------
-	public static final String imageURL = "https://lh4.googleusercontent.com/Z0JYXrl0MWPiyutFRTP5CONfIJoNi_-E52SDJAnKnoS9gi1kVPlcBNseDL87ykr54Ew5u_AEd00";
+	public static final String imageURL = "http://i49.tinypic.com/2d9r2r.png";
 	// "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 
