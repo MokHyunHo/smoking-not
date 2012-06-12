@@ -42,9 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Report extends Activity implements View.OnClickListener {
-
-	public static GooglePlace[] places = new GooglePlace[10];
-
+	
 	String[] checked;
 	String location, reason, points;
 	TextView tvReport, tvPlaces;
