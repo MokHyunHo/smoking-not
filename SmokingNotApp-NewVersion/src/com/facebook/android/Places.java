@@ -187,23 +187,13 @@ public class Places extends Activity implements View.OnClickListener {
 		});
 	}
 
-	public void onBackPressed() {
-
-		Intent myIntent = new Intent(getApplicationContext(),
-
-				FacebookMain.class);
-
-		startActivity(myIntent);
-
-	}
 	
-/**
 	public void onPause()
 	{
 		super.onPause();
 		finish();
 	}
-	**/
+	
 	@Override
 	public void onClick(View v) {
 

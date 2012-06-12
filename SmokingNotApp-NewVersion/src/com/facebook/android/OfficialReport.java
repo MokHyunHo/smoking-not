@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +29,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class OfficialReport extends Activity implements View.OnClickListener {
-
 	private EditText name, phone, add, mail;
 	private Button bRep, exitButton;
 	private String[] checked;
@@ -36,37 +36,11 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	Bitmap bmp;
 	
 	private SharedPreferences sh_pref;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		String[] readDel = new String[4];
-		int i = 0;
 		setContentView(R.layout.official_report);
 		Init();
-
-		try {
-			File myFile = new File("/sdcard/mysdfile.txt");
-			FileInputStream fIn = new FileInputStream(myFile);
-			BufferedReader myReader = new BufferedReader(new InputStreamReader(
-					fIn));
-			String aDataRow = "";
-			while ((aDataRow = myReader.readLine()) != null) {
-				readDel[i] = aDataRow;
-				i++;
-			}
-			name.setText(readDel[0]);
-			add.setText(readDel[1]);
-			phone.setText(readDel[2]);
-			mail.setText(readDel[3]);
-			myReader.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		// Receive the sent data
 		Bundle gotChecked = getIntent().getExtras();
@@ -83,17 +57,13 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 
 		bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
 
+		
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent myIntent = new Intent(getApplicationContext(),
-						FacebookMain.class);
-				if (Utility.mFacebook.isSessionValid()) {
-					Utility.objectID = "me";
-				}
-				startActivity(myIntent);
+				finish();
 			}
 		});
 
@@ -122,24 +92,7 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		switch (v.getId()) {
 		case R.id.bReport:
 			if (!validity()) {
-				details = name.getText().toString() + "\n";
-				details += add.getText().toString() + "\n";
-				details += phone.getText().toString() + "\n";
-				details += mail.getText().toString() + "\n";
-				try {
-					File myFile = new File("/sdcard/TRDetails.txt");
-					myFile.createNewFile();
-					FileOutputStream fOut = new FileOutputStream(myFile);
-					OutputStreamWriter myOutWriter = new OutputStreamWriter(
-							fOut);
-					myOutWriter.append(details);
-					myOutWriter.close();
-					fOut.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+				
 				String email = null;
 				WebRequest req = new WebRequest();
 
@@ -179,6 +132,7 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 
 				} catch (Exception e) {
 					Log.w("ortal", "can't send email to server");
+					
 				}
 				try {
 					req.SendEmail(email);
@@ -292,7 +246,7 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		sTV.setText(str);
 		return flag;
 	}
-	
+
 	private void saveFields() {
 		SharedPreferences.Editor pref_edit = sh_pref.edit();
 		

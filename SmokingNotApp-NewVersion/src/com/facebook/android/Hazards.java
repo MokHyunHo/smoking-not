@@ -113,7 +113,8 @@ public class Hazards extends Activity implements View.OnClickListener {
 					ChooseHazardLocation.class);
 			startActivityForResult(myIntent, iLocation);
 			break;
-		case R.id.bReport:
+			
+		case R.id.bhReport:
 			mProgress.setMessage("Sending report...");
 			mProgress.show();
 			report.setEnabled(false);
@@ -211,26 +212,18 @@ public class Hazards extends Activity implements View.OnClickListener {
 			startActivity(repIntent);
 			
 			break;
+
 		}
 
 	}
 
-	public void onBackPressed() {
 
-		Intent myIntent = new Intent(getApplicationContext(),
-
-				FacebookMain.class);
-
-		startActivity(myIntent);
-
-	}
-	/**
 	public void onPause()
 	{
 			isMain=0;
 			super.onPause();
 	}
-**/
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {

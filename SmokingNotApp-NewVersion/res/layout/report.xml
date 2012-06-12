@@ -106,69 +106,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ReasonSp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="2dp"
         android:src="@drawable/border" />
-
-    <Button
-        android:id="@+id/bReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ReasonSp"
-        android:layout_below="@+id/imageView2"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/sbutton"
-        android:text="Report" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etLocation"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_marginTop="16dp"
-        android:text="Official Report"
-        android:visibility="invisible" />
-
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkBox3"
-        android:layout_alignBottom="@+id/checkBox3"
-        android:layout_alignLeft="@+id/ReasonSp"
-        android:checked="true" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/checkBox1"
-        android:layout_alignRight="@+id/bReport"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/facebook" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/checkBox1"
-        android:layout_alignLeft="@+id/checkBox1"
-        android:text="Publish via:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <EditText
-        android:id="@+id/comments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bReport"
-        android:layout_alignLeft="@+id/checkBox1"
-        android:layout_alignRight="@+id/checkBox3"
-        android:ems="10"
-        android:hint="Add Comment"
-        android:inputType="textMultiLine"
-        android:lines="1"
-        android:singleLine="false" >
-    </EditText>
 
     <ImageButton
         android:id="@+id/ibReport"
@@ -191,6 +130,49 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#000000" />
 
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ReasonSp"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_marginTop="5dp"
+        android:checked="true" />
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/etLocation"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_marginTop="5dp"
+        android:text="Official Report"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkBox1"
+        android:layout_alignRight="@+id/checkBox3"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:hint="Add Comment"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        android:singleLine="false" />
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/comments"
+        android:layout_below="@+id/comments"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/sbutton"
+        android:text="Report" />
+
     <Button
         android:id="@+id/exitButton"
         android:layout_width="wrap_content"
@@ -200,5 +182,24 @@
         android:layout_alignRight="@+id/comments"
         android:background="@drawable/sbutton"
         android:text="@string/exit" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/bReport"
+        android:layout_alignTop="@+id/checkBox1"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/facebook" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bReport"
+        android:layout_alignRight="@+id/bReport"
+        android:layout_marginBottom="115dp"
+        android:text="Publish via:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

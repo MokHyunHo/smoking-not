@@ -30,7 +30,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Smoking Not!"
+        android:text="The Reporter"
         android:textColor="#ffffff"
         android:textSize="30dp"
         android:textStyle="bold" />
