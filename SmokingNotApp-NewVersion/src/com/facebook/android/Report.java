@@ -309,6 +309,7 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("str=", str);
 					}
 					if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
+						Log.e("ortal","report already exsits in database");
 						showConflict(tmpView);
 						conflict = 1;
 					}
@@ -392,6 +393,7 @@ public class Report extends Activity implements View.OnClickListener {
 							mHandler.sendMessage(mHandler.obtainMessage(1));
 
 						}
+						
 
 					}
 					mHandler.sendMessage(mHandler.obtainMessage(0));
@@ -575,7 +577,9 @@ public class Report extends Activity implements View.OnClickListener {
 
 				// send notification to user
 				break;
-			}
+			
+
+		}
 
 		}
 
