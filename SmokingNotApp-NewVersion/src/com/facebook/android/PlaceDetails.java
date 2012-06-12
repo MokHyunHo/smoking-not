@@ -1,9 +1,6 @@
 package com.facebook.android;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +11,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,16 +23,17 @@ import android.widget.TextView;
 
 public class PlaceDetails extends Activity {
 
-	private TextView tvPlaceName, tvPlaceAddress, tvNumRaiting, tvReportsLbl,
-			tvReasons;
+	private TextView tvPlaceName, tvPlaceAddress, tvNumRaiting, tvReasons, tvNoReports;
 	private ListView lvReports;
-	private ProgressBar pbRaitings;
+	private ProgressBar pbRaitings, pbLoading;
 	private ImageButton ibShowOnMap;
 	private Location location;
 
 	private ReportsListAdapter mAdapter;
 	private int num_raitings;
 
+	private LastUserReports mPlaceReports;
+	private String PlaceID;
 	private String reasons_str[];
 	private int reasons[];
 	int num_of_reasons;
@@ -49,9 +49,10 @@ public class PlaceDetails extends Activity {
 		tvPlaceName = (TextView) findViewById(R.id.tvPlaceName);
 		tvPlaceAddress = (TextView) findViewById(R.id.tvPlaceAddress);
 		tvNumRaiting = (TextView) findViewById(R.id.tv_raitings);
-		tvReportsLbl = (TextView) findViewById(R.id.tvReportsLbl);
 		tvReasons = (TextView) findViewById(R.id.tvReasons);
 		lvReports = (ListView) findViewById(R.id.lstReports);
+		tvNoReports = (TextView) findViewById(R.id.tvNoReports);
+		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 		pbRaitings = (ProgressBar) findViewById(R.id.pb_Raiting);
 		pbRaitings.setProgressDrawable(getResources().getDrawable(
 				R.drawable.my_progress));
@@ -62,7 +63,7 @@ public class PlaceDetails extends Activity {
 		tvPlaceName.setText(extras.getString("PlaceName"));
 		tvPlaceAddress.setText(extras.getString("PlaceAddress"));
 
-		String PlaceID = extras.getString("PlaceID");
+		PlaceID = extras.getString("PlaceID");
 
 		location = extras.getParcelable("PlaceLocation");
 		int badRate = extras.getInt("BadRate");
@@ -95,69 +96,83 @@ public class PlaceDetails extends Activity {
 			}
 		});
 
-		if (num_raitings > 0) {
-			mAdapter = new ReportsListAdapter(this);
-			try {
-				LastUserReports lst = getPlaceReports(PlaceID);
-				Log.i("ERIC", "XX size: " + lst.getLst().size());
-				mAdapter.setData(lst);
-				lvReports.setAdapter(mAdapter);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			tvReportsLbl.setVisibility(View.INVISIBLE);
-		}
+		mAdapter = new ReportsListAdapter(this);
+
+		getPlaceReports();
 
 	}
 
-	private LastUserReports getPlaceReports(String PlaceId) {
-		LastUserReports mPlaceReports = null;
-		Gson gson2 = new Gson();
-		WebRequest req = new WebRequest();
-		String str = null;
-		try {
-			JSONObject json2 = req
-					.readJsonFromUrl(getString(R.string.DatabaseUrl)
-							+ "/GetHistoryPlaces?locationid=" + PlaceId);
-			str = (String) json2.get("report_request");
-			Log.w("str=", str);
-			mPlaceReports = gson2.fromJson(str, LastUserReports.class);
+	void getPlaceReports() {
 
-			for (ReportDetails r : mPlaceReports.getLst()) {
-				Log.i("Reasons", "num reasons: " + r.getReasons().length);
-				if (r.getReasons().length == num_of_reasons) 
-				{
-					Log.i("Reasons", "Entered summing: " + r.getDate());
-					for (int i = 0; i < num_of_reasons; i++) {
-						Log.i("Reasons", "summed: " + i);
-						reasons[i] += r.getReasons()[i];
+		new Thread() {
+			public void run() {
+				Gson gson2 = new Gson();
+				WebRequest req = new WebRequest();
+				String str = null;
+				try {
+					JSONObject json2 = req
+							.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ "/GetHistoryPlaces?locationid=" + PlaceID);
+					str = (String) json2.get("report_request");
+					Log.w("str=", str);
+					mPlaceReports = gson2.fromJson(str, LastUserReports.class);
+
+					for (ReportDetails r : mPlaceReports.getLst()) {
+						Log.i("Reasons", "num reasons: "
+								+ r.getReasons().length);
+						if (r.getReasons().length == num_of_reasons) {
+							Log.i("Reasons", "Entered summing: " + r.getDate());
+							for (int i = 0; i < num_of_reasons; i++) {
+								Log.i("Reasons", "summed: " + i);
+								reasons[i] += r.getReasons()[i];
+							}
+						}
 					}
+					StringBuilder my_reasons = new StringBuilder("");
+
+					for (int i = 0; i < num_of_reasons; i++) {
+						Log.i("Reasons", "reasons[i]=" + reasons[i]);
+						if (reasons[i] > 0) {
+							my_reasons.append(reasons_str[i]).append(": ")
+									.append(reasons[i]).append("\n");
+						}
+					}
+					Log.i("Reasons", "my_reasons: " + my_reasons.toString());
+					tvReasons.setText(my_reasons.toString());
+
+				} catch (JSONException e) {
+					Log.e("Profile error, can't get response from server, JSON exception",
+							e.toString());
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
+				Collections.sort(mPlaceReports.getLst(), new ReportDateComparator());
+				mHandler.sendMessage(mHandler.obtainMessage(0));
 			}
-			StringBuilder my_reasons = new StringBuilder("");
+		}.start();
+	}
 
-			for (int i = 0; i < num_of_reasons; i++) 
-			{
-				Log.i("Reasons", "reasons[i]=" + reasons[i]); 
-				if (reasons[i] > 0) {
-					my_reasons.append(reasons_str[i]).append(": ").append(reasons[i]).append("\n");
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				pbLoading.setVisibility(View.INVISIBLE);
+				if (mPlaceReports.getLst().size() > 0) {
+					mAdapter.setData(mPlaceReports);
+					lvReports.setAdapter(mAdapter);
+					lvReports.setVisibility(View.VISIBLE);
+
+				} else {
+					tvNoReports.setVisibility(View.VISIBLE);
 				}
+				break;
+
 			}
-			Log.i("Reasons", "my_reasons: " + my_reasons.toString()); 
-			tvReasons.setText(my_reasons.toString());
 
-		} catch (JSONException e) {
-			Log.e("Profile error, can't get response from server, JSON exception",
-					e.toString());
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
-		Collections.sort(mPlaceReports.getLst(), new ReportDateComparator());
-		return mPlaceReports;
-
-	}
+	};
 
 }

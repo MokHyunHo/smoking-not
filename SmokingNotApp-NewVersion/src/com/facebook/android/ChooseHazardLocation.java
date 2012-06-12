@@ -132,6 +132,7 @@ public class ChooseHazardLocation extends MapActivity {
 		setContentView(R.layout.choose_hazard_location);
 
 		mProgress = new ProgressDialog(this);
+		mProgress.setCancelable(false);
 
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		

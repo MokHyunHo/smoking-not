@@ -49,6 +49,7 @@ public class AddPlace extends MapActivity {
 
 	private NearbyAdapter mAdapter;
 	private ProgressDialog mProgress;
+	
 	String name;
 	String type;
 
@@ -117,6 +118,7 @@ public class AddPlace extends MapActivity {
 		setContentView(R.layout.add_place);
 
 		mProgress = new ProgressDialog(this);
+		mProgress.setCancelable(false);
 
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		etName = (EditText) findViewById(R.id.et_Name);

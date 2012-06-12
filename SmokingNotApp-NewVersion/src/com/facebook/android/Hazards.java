@@ -96,6 +96,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 		comments = (EditText) findViewById(R.id.comments);
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		mProgress = new ProgressDialog(this);
+		mProgress.setCancelable(false);
 	}
 
 	@Override

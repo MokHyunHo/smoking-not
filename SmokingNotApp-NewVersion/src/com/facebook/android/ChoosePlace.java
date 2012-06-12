@@ -54,6 +54,7 @@ public class ChoosePlace extends Activity {
 		mLocEng = new LocationEngine(this);
 		mAdapter = new NearbyAdapter(this, true);
 		mProgress = new ProgressDialog(this);
+		mProgress.setCancelable(false);
 		mListView = (ListView) findViewById(R.id.places_list);
 		mNearbyList = new ArrayList<GooglePlace>();
 		if (mLocEng.isLocationEnabled())

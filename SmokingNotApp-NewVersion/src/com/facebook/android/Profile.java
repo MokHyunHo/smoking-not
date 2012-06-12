@@ -12,8 +12,11 @@ import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,29 +29,25 @@ import android.widget.TextView;
 public class Profile extends Activity {
 	/** Called when the activity is first created. */
 
+	private Context context;
 	private Button exitButton;
 	private TextView mText;
 	private TextView rank;
 	private ImageView mUserPic;
-	private ProgressBar pb;
-	private TextView total_score;
+	private ProgressBar pb, pbLoading;
+	private TextView total_score, tvNoReports;
 	private ListView lvUserReports;
 	private UserReportsAdapter mAdapter;
-	private GooglePlacesAPI mGooglePlacesAPI;
-
 	private LastUserReports lst;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// connection between XML & JAVA
-
-		// initialization of all the objects
+		context = this;
 		setContentView(R.layout.profile);
 		init();
 
-
-		mGooglePlacesAPI = new GooglePlacesAPI(this);
+		new GooglePlacesAPI(this);
 		// get user info from server
 		Gson gson2 = new Gson();
 		WebRequest req = new WebRequest();
@@ -95,13 +94,35 @@ public class Profile extends Activity {
 		Log.i("ERIC", FacebookMain.email);
 		try {
 			if (FacebookMain.email.compareTo("") != 0) {
-				lst = getUserReports(FacebookMain.email);
-				mAdapter.setData(lst);
-				lvUserReports.setAdapter(mAdapter);
+				getUserReports(FacebookMain.email);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	public void onBackPressed() {
+
+		Intent myIntent = new Intent(getApplicationContext(),
+
+		FacebookMain.class);
+
+		startActivity(myIntent);
+
+	}
+
+	/**
+	 * public void onPause() { super.onPause(); finish(); }
+	 **/
+
+	private void init() {
+		mText = (TextView) findViewById(R.id.txt);
+		tvNoReports = (TextView) findViewById(R.id.tvNoReports);
+		rank = (TextView) findViewById(R.id.rank);
+		mUserPic = (ImageView) findViewById(R.id.user_pic);
+
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -117,59 +138,66 @@ public class Profile extends Activity {
 			}
 		});
 
-	}
-
-	public void onBackPressed() {
-
-		Intent myIntent = new Intent(getApplicationContext(),
-
-				FacebookMain.class);
-
-		startActivity(myIntent);
-
-	}
-	/**
-	public void onPause()
-	{
-		super.onPause();
-		finish();
-	}
-	**/
-	
-	private void init() {
-		mText = (TextView) findViewById(R.id.txt);
-		rank = (TextView) findViewById(R.id.rank);
-		mUserPic = (ImageView) findViewById(R.id.user_pic);
-
 		lvUserReports = (ListView) findViewById(R.id.lvLastReports);
-		mAdapter = new UserReportsAdapter(this);
+		mAdapter = new UserReportsAdapter(context);
+
+		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 	}
 
-	
-	private LastUserReports getUserReports(String userId) {
-		LastUserReports LastReportsLst = null;
-		Gson gson2 = new Gson();
-		WebRequest req = new WebRequest();
-		String str = null;
-		
-		try {
-			JSONObject json2 = req
-					.readJsonFromUrl(getString(R.string.DatabaseUrl)
-							+ "/GetLastPlaces?mail=" + FacebookMain.email);
-			str = (String) json2.get("report_request");
-			Log.w("str=", str);
-			LastReportsLst = gson2.fromJson(str, LastUserReports.class);
+	private void getUserReports(String userId) {
 
-		} catch (JSONException e) {
-			Log.e("Profile error, can't get response from server, JSON exception",
-					e.toString());
+		new Thread() {
+			public void run() {
 
-		} catch (Exception e) {
-			Log.e("Profile error, can't get response from server", e.toString());
+				Gson gson2 = new Gson();
+				WebRequest req = new WebRequest();
+				String str = null;
+
+				try {
+					JSONObject json2 = req
+							.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ "/GetLastPlaces?mail="
+									+ FacebookMain.email);
+					str = (String) json2.get("report_request");
+					Log.w("str=", str);
+					lst = gson2.fromJson(str, LastUserReports.class);
+
+				} catch (JSONException e) {
+					Log.e("Profile error, can't get response from server, JSON exception",
+							e.toString());
+
+				} catch (Exception e) {
+					Log.e("Profile error, can't get response from server",
+							e.toString());
+				}
+
+				Collections.sort(lst.getLst(), new ReportDateComparator());
+
+				mHandler.sendMessage(mHandler.obtainMessage(0));
+
+			}
+		}.start();
+	}
+
+	private Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 0:
+				pbLoading.setVisibility(View.INVISIBLE);
+				Log.i("Eric lst", "size: " + lst.getLst().size());
+				if (lst.getLst().size() > 0) {
+					mAdapter.setData(lst);
+					lvUserReports.setAdapter(mAdapter);
+					lvUserReports.setVisibility(View.VISIBLE);
+				} else {
+					tvNoReports.setVisibility(View.VISIBLE);
+				}
+				break;
+
+			}
+
 		}
 
-		Collections.sort(LastReportsLst.getLst(), new ReportDateComparator());
-		return LastReportsLst;
-
-	}
+	};
 }

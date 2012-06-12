@@ -5,7 +5,7 @@
     android:background="@drawable/brownlinesbg"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
-
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
@@ -71,7 +71,7 @@
             android:layout_height="50dp"
             android:background="@color/grey"
             android:baselineAligned="true"
-            android:weightSum="3"  >
+            android:weightSum="3" >
         </TableRow>
     </TableLayout>
 
@@ -91,19 +91,19 @@
         android:layout_below="@+id/tv_score"
         android:layout_centerHorizontal="true"
         android:max="100" />
-
+
     <ListView
         android:id="@+id/lvLastReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/exitButton"
-        android:layout_marginTop="27dp"
+        android:layout_below="@+id/tvLastReportsCaption"
         android:background="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent">
+        android:cacheColorHint="@android:color/transparent"
+        android:visibility="invisible" >
 
     </ListView>
-
+
     <TextView
         android:id="@+id/tvLastReportsCaption"
         android:layout_width="wrap_content"
@@ -114,5 +114,29 @@
         android:gravity="center"
         android:text="Last reports:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/exitButton"
+        android:layout_below="@+id/tvLastReportsCaption"
+        android:layout_marginTop="39dp" />
+
+    <TextView
+        android:id="@+id/tvNoReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/pbLoading"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="21dp"
+        android:gravity="center"
+        android:lines="2"
+        android:text="No reports sent so far.
+\nTry sending one :)"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible" />
 
 </RelativeLayout>
