@@ -17,14 +17,12 @@
 package com.facebook.android;
 
 import java.io.IOException;
-
+import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-//import android.app.AlertDialog;
 import android.app.ProgressDialog;
-//import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -33,18 +31,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-//import android.provider.MediaStore;
-//import android.view.LayoutInflater;
 import android.view.View;
-//import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-//import android.widget.AdapterView;
-//import android.widget.AdapterView.OnItemClickListener;
-//import android.widget.ArrayAdapter;
-//import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-//import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,11 +65,12 @@ public class FacebookMain extends Activity {
 	public static String picURL;
 	public static String name;
 	public static String email;
+	public static  int   fetching=0;
 
 	private Button mProfileButton;
 	private Button mReportButton;
 	private Button mHazardsButton;
-	private int fetching=0;
+	Intent i;
 
 	String[] permissions = { "publish_stream", "email", "user_photos" };
 
@@ -122,29 +113,30 @@ public class FacebookMain extends Activity {
 				Utility.mFacebook, permissions);
 
 		if (Utility.mFacebook.isSessionValid()) {
-			fetching=requestUserData();
+			
+				//Log.i("", " ");
+				fetching=requestUserData();
+			
 		}
 
 		mProfileButton.setOnClickListener(new OnClickListener() {
 			
 			
 			public void onClick(View v) {
-				if (fetching==1)
-				{
-				//if (haveNetworkConnection()) {
+				
 					Intent myIntent = new Intent(getApplicationContext(),
 							Profile.class);
 					if (!Utility.mFacebook.isSessionValid()) {
-						mText.setText("Please login first to Smoking Not APP!");
+						mText.setText("Please login first!");
 						mText.setTextColor(Color.BLUE);
 
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						Utility.objectID = "me";
-						startActivity(myIntent);
-					}
-
-			//	}
+						if (fetching==1)
+						{
+							Utility.objectID = "me";
+							startActivity(myIntent);
+						}
 			}}
 		});
 		
@@ -152,46 +144,38 @@ public class FacebookMain extends Activity {
 		mReportButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				if (fetching==1)
-				{
-				//if (haveNetworkConnection()) {
+				
 					Intent myIntent = new Intent(getApplicationContext(),
 							Report.class);
 					if (!Utility.mFacebook.isSessionValid()) {
-						mText.setText("Please login first to Smoking Not APP!");
+						mText.setText("Please login first!");
 						mText.setTextColor(Color.BLUE);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						Utility.objectID = "me";
-						startActivity(myIntent);
-					}
-				//}
-
+						if (fetching==1)
+						{
+							Utility.objectID = "me";
+							startActivity(myIntent);
+						}
 			}}
 		});
 
 		mHazardsButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				//if (haveNetworkConnection()) {
-				if (fetching==1)
-				{
+				
 					Intent myIntent = new Intent(getApplicationContext(),
 							Hazards.class);
 					if (!Utility.mFacebook.isSessionValid()) {
-						/*
-						 * mText.setText("Please login first to Smoking Not APP!"
-						 * ); mText.setTextColor(Color.BLUE);
-						 */
-						Utility.objectID = "me";
-						startActivity(myIntent);
+						mText.setText("Please login first!");
+						mText.setTextColor(Color.BLUE);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						Utility.objectID = "me";
-						startActivity(myIntent);
-					}
-				//}
-
+						if (fetching==1)
+						{
+							Utility.objectID = "me";
+							startActivity(myIntent);
+						}
 			}}
 		});
 
@@ -325,7 +309,7 @@ public class FacebookMain extends Activity {
 
 		@Override
 		public void onAuthSucceed() {
-			fetching= requestUserData();
+				fetching= requestUserData();
 		}
 
 		@Override
