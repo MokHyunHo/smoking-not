@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class OfficialReport extends Activity implements View.OnClickListener {
@@ -86,6 +87,7 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		case R.id.bReport:
 			if(!validity())
 			{
+				clearForm();
 				String email=null;
 				WebRequest req=new WebRequest(); 
 			
@@ -145,6 +147,15 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		}
 		
 	}
+	
+	private void clearForm()
+	{
+		phone .setText("");
+		name .setText("");
+		mail .setText("");
+		add .setText("");
+	}
+	
 	private void showDialog(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 		builder.setTitle("Your Report Has Been Sent!");

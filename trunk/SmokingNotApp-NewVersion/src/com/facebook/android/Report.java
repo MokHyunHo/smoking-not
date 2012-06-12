@@ -127,11 +127,22 @@ public class Report extends Activity implements View.OnClickListener {
 	}
 
 	public void onBackPressed() {
-		Intent myIntent = new Intent(getApplicationContext(),
-				FacebookMain.class);
-		startActivity(myIntent);
-	}
 
+		Intent myIntent = new Intent(getApplicationContext(),
+
+				FacebookMain.class);
+
+		startActivity(myIntent);
+
+	}
+	
+	/**
+	public void onPause()
+	{
+		super.onPause();
+		finish();
+	}
+**/
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
@@ -410,6 +421,7 @@ public class Report extends Activity implements View.OnClickListener {
 						repIntent.putExtra("BitmapImage", bmp);
 						startActivity(repIntent);
 					} else {
+						clearForm();
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 
@@ -479,6 +491,23 @@ public class Report extends Activity implements View.OnClickListener {
 		}
 	}
 
+	
+	private void clearForm()
+	{
+		
+		iv.setImageBitmap(null);
+		tvReport.setText("");
+		tvPlaces.setText("");
+		rg = (RadioGroup) findViewById(R.id.ReasonSp);
+		r1.setSelected(true);
+		r2.setSelected(false);
+		et1.setText("");
+		comments.setText("");
+		c1.setSelected(true);
+		c3.setSelected(false);
+		c3.setVisibility(c3.INVISIBLE);
+	}
+	
 	private boolean haveNetworkConnection() {
 		boolean haveConnectedWifi = false;
 		boolean haveConnectedMobile = false;
