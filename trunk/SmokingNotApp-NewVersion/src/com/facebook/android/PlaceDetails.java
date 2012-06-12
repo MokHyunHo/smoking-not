@@ -36,7 +36,8 @@ public class PlaceDetails extends Activity {
 	private String PlaceID;
 	private String reasons_str[];
 	private int reasons[];
-	int num_of_reasons;
+	private int num_of_reasons;
+	private String reasons_string;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -137,9 +138,8 @@ public class PlaceDetails extends Activity {
 									.append(reasons[i]).append("\n");
 						}
 					}
-					Log.i("Reasons", "my_reasons: " + my_reasons.toString());
-					tvReasons.setText(my_reasons.toString());
-
+					reasons_string = my_reasons.toString();
+					
 				} catch (JSONException e) {
 					Log.e("Profile error, can't get response from server, JSON exception",
 							e.toString());
@@ -159,6 +159,7 @@ public class PlaceDetails extends Activity {
 			switch (msg.what) {
 			case 0:
 				pbLoading.setVisibility(View.INVISIBLE);
+				tvReasons.setText(reasons_string);
 				if (mPlaceReports.getLst().size() > 0) {
 					mAdapter.setData(mPlaceReports);
 					lvReports.setAdapter(mAdapter);
