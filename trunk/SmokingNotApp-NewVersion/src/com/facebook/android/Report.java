@@ -210,13 +210,9 @@ public class Report extends Activity implements View.OnClickListener {
 					// calculate new score
 
 					if (reason.compareTo("Positive Report") == 0) {
-						user_score = 2;
-						goodplace_rate = 1;
 						is_positive = true;
 					}
 					if (reason.compareTo("Complaint") == 0) {
-						user_score = 1;
-						badplace_rate = 1;
 						is_positive = false;
 					}
 					points = "" + user_score;
@@ -244,12 +240,7 @@ public class Report extends Activity implements View.OnClickListener {
 					}
 					else
 						reasons = null;
-					LocationRequest loc = new LocationRequest(locid,
-							mGooglePlace.refrence, mGooglePlace.name,
-							mGooglePlace.vicinity,
-							mGooglePlace.location.getLatitude(),
-							mGooglePlace.location.getLongitude(),
-							goodplace_rate, badplace_rate);
+					
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
@@ -310,6 +301,42 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.e("ortal","report already exsits in database");
 						conflict = 1;
 					}
+					
+					/* update location score according to user's level */
+					
+					// display current stage
+					if ((ur_check.GetScore() >= 0) && (ur_check.GetScore() < 45))
+						if (is_positive)
+							goodplace_rate=1;
+						else
+							badplace_rate=1;
+					if ((ur_check.GetScore() >= 45) && (ur_check.GetScore() < 135))
+						if (is_positive)
+							goodplace_rate=1;
+						else
+							badplace_rate=1;
+					if ((ur_check.GetScore() >= 135) && (ur_check.GetScore() < 270))
+						if (is_positive)
+							goodplace_rate=2;
+						else
+							badplace_rate=2;
+					if ((ur_check.GetScore() >= 270) && (ur_check.GetScore() < 405))
+						if (is_positive)
+							goodplace_rate=2;
+						else
+							badplace_rate=2;
+					if (ur_check.GetScore() >= 405)
+						if (is_positive)
+							goodplace_rate=3;
+						else
+							badplace_rate=3;
+					
+					LocationRequest loc = new LocationRequest(locid,
+							mGooglePlace.refrence, mGooglePlace.name,
+							mGooglePlace.vicinity,
+							mGooglePlace.location.getLatitude(),
+							mGooglePlace.location.getLongitude(),
+							goodplace_rate, badplace_rate);
 
 					/* Send location to Database */
 
