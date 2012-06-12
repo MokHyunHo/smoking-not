@@ -1,6 +1,8 @@
 package com.facebook.android;
 
 import com.facebook.android.FacebookMain;
+import com.google.gson.Gson;
+
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -15,8 +17,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,8 +38,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class Hazards extends Activity implements View.OnClickListener {
-
-	public static GooglePlace[] places = new GooglePlace[10];
 
 	String location, points;
 	Button report;
@@ -110,7 +116,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			String date = s.format(new Date());
 			UserRequest ur = new UserRequest(FacebookMain.email, 1, null, date);
 			HazardRequest hr = new HazardRequest(FacebookMain.email, date,
-					"address", 0, 0, comments.getText().toString());
+					chosenAddress, chosenLocation.getLatitude(), chosenLocation.getLongitude(), comments.getText().toString());
 			WebRequest req = new WebRequest();
 
 			/* Send UserRequest to Database */
