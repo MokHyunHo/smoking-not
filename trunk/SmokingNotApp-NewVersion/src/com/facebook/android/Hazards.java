@@ -52,7 +52,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	Button report;
 	ImageButton ib;
 	ImageView iv;
-	EditText et1;
+	EditText et1, comments;
 	CheckBox c1;
 	Intent i, profileIntent;
 	final static int iData = 0;
@@ -100,6 +100,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 		ib = (ImageButton) findViewById(R.id.ibReport);
 		iv = (ImageView) findViewById(R.id.ivReport);
 		et1 = (EditText) findViewById(R.id.etLocation);
+		comments = (EditText) findViewById(R.id.comments);
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		mProgress = new ProgressDialog(this);
 	}
@@ -112,16 +113,108 @@ public class Hazards extends Activity implements View.OnClickListener {
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
-		
+
 		case R.id.etLocation:
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
 			break;
+		case R.id.bReport:
+			int conflict = 0;
+			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+			String date = s.format(new Date());
+			UserRequest ur = new UserRequest(FacebookMain.email, 1, null, date);
+			HazardRequest hr = new HazardRequest(FacebookMain.email, date,
+					"address", 0, 0, comments.getText().toString());
+			WebRequest req = new WebRequest();
+
+			/* Send UserRequest to Database */
+
+			// convert UserRequest request to gson string
+			Gson gson2 = new Gson();
+			String UserStr = gson2.toJson(ur);
+			JSONStringer json2 = null;
+
+			// prepare Json
+			try {
+
+				json2 = new JSONStringer().object().key("action")
+						.value("update_ur").key("user_request").value(UserStr)
+						.endObject();
+
+			} catch (JSONException e) {
+				Log.e("json exeption-can't create jsonstringer with user request",
+						e.toString());
+			}
+
+			// send json to web server
+			try {
+				req.getInternetData(json2, getString(R.string.DatabaseUrl)
+						+ "/UpdateHazard");
+			} catch (Exception e) {
+				Log.w("couldn't send user request to servlet", e.toString());
+			}
+
+			/* check if the report already exists */
+			// get user info from server
+			Gson gson4 = new Gson();
+			WebRequest res = new WebRequest();
+			String str = null;
+			UserRequest ur_check = null;
+			try {
+				JSONObject json4 = res
+						.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="
+								+ FacebookMain.email);
+				str = (String) json4.get("user_req");
+				Log.w("str=", str);
+				ur_check = gson4.fromJson(str, UserRequest.class);
+			} catch (JSONException e) {
+				Log.e("Report error, can't get response from server, JSON exception",
+						e.toString());
+				Log.w("str=", str);
+			} catch (Exception e) {
+				Log.e("Report error, can't get response from server",
+						e.toString());
+				Log.w("str=", str);
+			}
+			if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
+				showConflict(tmpView);
+				conflict = 1;
+			}
+
+			/* Send HazardRequest to Database */
+
+			if (conflict == 0) {
+				// convert location request to gson string
+				Gson gson1 = new Gson();
+				String LocationStr = gson1.toJson(hr);
+				JSONStringer json1 = null;
+
+				// prepare Json
+				try {
+					json1 = new JSONStringer().object().key("action")
+							.value("update_hazard").key("hazard_request")
+							.value(LocationStr).endObject();
+
+				} catch (JSONException e) {
+					Log.e("json exeption-can't create jsonstringer with hazard",
+							e.toString());
+				}
+
+				// send json to web server
+				try {
+					req.getInternetData(json1, getString(R.string.DatabaseUrl)
+							+ "/UpdateHazard");
+				} catch (Exception e) {
+					Log.w("couldn't send hazard to servlet", e.toString());
+				}
+
+				break;
+			}
 		}
 
 	}
-	
+
 	public void onBackPressed() {
 		Intent myIntent = new Intent(getApplicationContext(),
 				FacebookMain.class);
@@ -245,7 +338,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			parameters.putString("message", msg);
 
 			parameters.putString("name", "Smoking Not App!");
-				parameters.putString("caption", " ");
+			parameters.putString("caption", " ");
 
 			parameters.putString("description", "Gained " + points
 					+ " points for the hazard report");
