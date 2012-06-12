@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,8 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 	private String[] checked;
 	private String loc;
 	Bitmap bmp;
+	
+	private SharedPreferences sh_pref;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,11 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		name = (EditText) findViewById(R.id.etORName);
 		mail = (EditText) findViewById(R.id.etOREmail);
 		add = (EditText) findViewById(R.id.etORAdd);
+		sh_pref = this.getSharedPreferences("OfficialReport", 0);
+		name.setText(sh_pref.getString("first_last_name", ""));
+		add.setText(sh_pref.getString("address", ""));
+		phone.setText(sh_pref.getString("phone", ""));
+		mail.setText(sh_pref.getString("mail", ""));
 	}
 
 	@Override
@@ -198,18 +206,11 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 
 				// pop-up view
 				showDialog(v);
-				clearForm();
+				saveFields();
 			}
 			break;
 		}
 
-	}
-
-	private void clearForm() {
-		phone.setText("");
-		name.setText("");
-		mail.setText("");
-		add.setText("");
 	}
 
 	private void showDialog(View v) {
@@ -290,6 +291,17 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		}
 		sTV.setText(str);
 		return flag;
+	}
+	
+	private void saveFields() {
+		SharedPreferences.Editor pref_edit = sh_pref.edit();
+		
+		pref_edit.putString("first_last_name", name.getText().toString());
+		pref_edit.putString("address", add.getText().toString());
+		pref_edit.putString("phone", phone.getText().toString());
+		pref_edit.putString("mail", mail.getText().toString());
+		
+		pref_edit.commit();
 	}
 
 }

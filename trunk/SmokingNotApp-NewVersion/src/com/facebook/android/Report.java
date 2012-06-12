@@ -497,12 +497,11 @@ public class Report extends Activity implements View.OnClickListener {
 	{
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.imageplace);
 		iv.setImageBitmap(bmp);
-		tvReport.setText("");
-		tvPlaces.setText("");
+		
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1.setSelected(true);
 		r2.setSelected(false);
-		et1.setText("");
+		et1.setText("<<< Choose place >>>");
 		comments.setText("");
 		c1.setSelected(true);
 		c3.setSelected(false);
