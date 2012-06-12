@@ -157,6 +157,7 @@ public class Report extends Activity implements View.OnClickListener {
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		mProgress = new ProgressDialog(this);
+		mProgress.setCancelable(false);
 	}
 
 	@Override
@@ -421,7 +422,7 @@ public class Report extends Activity implements View.OnClickListener {
 						repIntent.putExtra("BitmapImage", bmp);
 						startActivity(repIntent);
 					} else {
-						clearForm();
+						
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 
@@ -494,8 +495,8 @@ public class Report extends Activity implements View.OnClickListener {
 	
 	private void clearForm()
 	{
-		
-		iv.setImageBitmap(null);
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.imageplace);
+		iv.setImageBitmap(bmp);
 		tvReport.setText("");
 		tvPlaces.setText("");
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
@@ -626,10 +627,12 @@ public class Report extends Activity implements View.OnClickListener {
 			Log.i("ERIC", "what: " + msg.what);
 			switch (msg.what) {
 			case 0:
+				clearForm();
 				report.setEnabled(true);
 				mProgress.dismiss();
 				break;
 			case 1:
+				clearForm();
 				showDialog(tmpView);
 
 				// send notification to user

@@ -49,13 +49,14 @@
         android:max="100"
         android:progress="0"
         android:visibility="invisible" />
-
+
     <ListView
         android:id="@+id/lstReports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvReasons" >
+        android:layout_below="@+id/tvReasons"
+        android:visibility="invisible" >
 
     </ListView>
 
@@ -87,5 +88,26 @@
         android:text="Reasons"
         android:textColor="@color/orange"
         android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvReasons"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvNoReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/lstReports"
+        android:gravity="center"
+        android:lines="2"
+        android:text="No reports for this place yes."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible" />
 
 </RelativeLayout>
