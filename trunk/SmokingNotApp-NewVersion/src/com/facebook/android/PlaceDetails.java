@@ -78,7 +78,7 @@ public class PlaceDetails extends Activity {
 			pbRaitings.setProgress((int) rating);
 		} else {
 			pbRaitings.setVisibility(View.INVISIBLE);
-			num_r = "No reports for this place";
+			num_r = "No ratings for this place";
 		}
 		tvNumRaiting.setText(num_r);
 
