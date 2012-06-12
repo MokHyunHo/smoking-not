@@ -214,9 +214,11 @@ public class Report extends Activity implements View.OnClickListener {
 					// calculate new score
 
 					if (reason.compareTo("Positive Report") == 0) {
+						user_score=2;
 						is_positive = true;
 					}
 					if (reason.compareTo("Complaint") == 0) {
+						user_score=1;
 						is_positive = false;
 					}
 					points = "" + user_score;

@@ -13,6 +13,11 @@ import java.net.URISyntaxException;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONStringer;
+
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -91,79 +96,93 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		String details = "";
 		switch (v.getId()) {
 		case R.id.bReport:
+			EmailDetails ed;
+
 			if (!validity()) {
+
+				details = name.getText().toString() + "\n";
+				details += add.getText().toString() + "\n";
+				details += phone.getText().toString() + "\n";
+				details += mail.getText().toString() + "\n";
+
+		try {
 				
-				String email = null;
+
+					File myFile = new File("/sdcard/TRDetails.txt");
+					myFile.createNewFile();
+					FileOutputStream fOut = new FileOutputStream(myFile);
+					OutputStreamWriter myOutWriter = new OutputStreamWriter(
+							fOut);
+					myOutWriter.append(details);
+					myOutWriter.close();
+					fOut.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+
+				}
+
+
+			
+				String checked_str = "";
+				StringBuilder sb = new StringBuilder("");
+		
+				for (int i = 0; i < checked.length; i++) {
+					if (checked[i] != null)
+						sb.append(checked[i]).append(" ");
+				}
+		
+				checked_str = sb.toString();
+				Log.i("ERIC ortal", checked_str);
+				Log.i("ortal", name.getText().toString());
+				ed = new EmailDetails(name.getText().toString(),phone.getText().toString(),
+						add.getText().toString(),mail.getText().toString(),checked_str,loc);
+				
+				
+				if (bmp!=null) {
+					ByteArrayOutputStream bos = new ByteArrayOutputStream();
+					bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+					byte [] barr= bos.toByteArray();
+					ed.setPicture(barr);
+				}
+
+				
 				WebRequest req = new WebRequest();
+				
+				Gson gson2 = new Gson();
+				String EmailStr = gson2.toJson(ed);
+				JSONStringer json2 = null;
 
+				// prepare Json
 				try {
-					String checked_str = "";
-					StringBuilder sb = new StringBuilder("");
 
-					for (int i = 0; i < checked.length; i++) {
-						if (checked[i] != null)
-							sb.append(checked[i]).append(" ");
-					}
+					json2 = new JSONStringer().object().key("send_email")
+							.value(EmailStr).endObject();
+			
 
-					checked_str = sb.toString();
-					Log.i("ERIC ortal", checked_str);
-
-					if (bmp != null) {
-						ByteArrayOutputStream bos = new ByteArrayOutputStream();
-						bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
-						byte[] barr = bos.toByteArray();
-						email = getString(R.string.DatabaseUrl)
-								+ "/EmailReport?name="
-								+ name.getText().toString() + "&phone="
-								+ phone.getText().toString() + "&mail="
-								+ mail.getText().toString() + "&address="
-								+ add.getText().toString() + "&location=" + loc
-								+ "&reasons=" + checked_str + "&pic=No_picture";
-					} else
-						email = getString(R.string.DatabaseUrl)
-								+ "/EmailReport?name="
-								+ name.getText().toString() + "&phone="
-								+ phone.getText().toString() + "&mail="
-								+ mail.getText().toString() + "&address="
-								+ add.getText().toString() + "&location=" + loc
-								+ "&reasons=" + checked_str + "&pic=No_picture";
-
-					// create string email
-
-				} catch (Exception e) {
-					Log.w("ortal", "can't send email to server");
-					
-				}
-				try {
-					req.SendEmail(email);
-
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					Log.w("error while sending email to database-ClientProtocolException",
-							e.getMessage());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					Log.w("error while sending email to database-URISyntaxException",
-							e.getMessage());
-					e.printStackTrace();
-				} catch (IOException e) {
-					Log.w("error while sending email to database-IOException",
-							e.getMessage());
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception e) {
-					Log.w("error while sending email to database-exception",
-							e.getMessage());
-					e.printStackTrace();
+				} catch (JSONException e) {
+					Log.e("json exeption-can't create jsonstringer with email",
+							e.toString());
 				}
 
+				// send json to web server
+
+		
+				try {
+					req.getInternetData(json2,
+							getString(R.string.DatabaseUrl) + "/EmailReport");
+				} catch (Exception e) {
+					Log.w("couldn't send email to servlet",
+							e.toString());
+				}
+						
 				// pop-up view
 				showDialog(v);
 				saveFields();
 			}
 			break;
-		}
+			}
+		
 
 	}
 
