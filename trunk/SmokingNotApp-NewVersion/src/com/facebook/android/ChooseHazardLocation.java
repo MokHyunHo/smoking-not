@@ -61,10 +61,9 @@ public class ChooseHazardLocation extends MapActivity {
 	@SuppressWarnings("unused")
 	private final int M_ADDRESS_OK = 4;
 	private final int M_LOC_NA = 9;
-	private final int CYCLES_TO_WAIT = 5;
+	private final int CYCLES_TO_WAIT = 3;
 	
-	
-	private CountDownLatch latch;
+	private CountDownLatch latch = new CountDownLatch(1);
 	
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -142,14 +141,6 @@ public class ChooseHazardLocation extends MapActivity {
 		mapView = (MapView) findViewById(R.id.mapview);
 		mapView.setBuiltInZoomControls(true);
 
-		try {
-		latch = new CountDownLatch(1);
-		updateLocation();
-		latch.await();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		mRefreshButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
@@ -192,6 +183,9 @@ public class ChooseHazardLocation extends MapActivity {
 
 			}
 		});
+		
+		updateLocation();
+
 
 	}
 	
@@ -303,8 +297,8 @@ public class ChooseHazardLocation extends MapActivity {
 				break;
 
 			}
-			latch.countDown();
 			mProgress.dismiss();
+			latch.countDown();
 			Log.i("ERIC", "unlatched");
 		}
 	};	
