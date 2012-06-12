@@ -58,6 +58,7 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iVenue = 1;
 	final static int iEmail = 2;
 	Bitmap bmp;
+	private boolean exitFlag=false;
 	private Button exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
@@ -126,23 +127,13 @@ public class Report extends Activity implements View.OnClickListener {
 
 	}
 
-	public void onBackPressed() {
-
-		Intent myIntent = new Intent(getApplicationContext(),
-
-				FacebookMain.class);
-
-		startActivity(myIntent);
-
-	}
-	
-	/**
 	public void onPause()
 	{
 		super.onPause();
-		finish();
+		if(!exitFlag)
+			finish();
 	}
-**/
+
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
@@ -183,6 +174,7 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
+			exitFlag=false;
 			// check
 			/*if (!haveNetworkConnection()) {
 				final Runnable mInternetNotification = new Runnable() {
@@ -451,6 +443,7 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.etLocation:
+			exitFlag=true;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
@@ -492,7 +485,7 @@ public class Report extends Activity implements View.OnClickListener {
 		}
 	}
 
-	
+
 	private void clearForm()
 	{
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.imageplace);
@@ -508,6 +501,7 @@ public class Report extends Activity implements View.OnClickListener {
 		c3.setVisibility(c3.INVISIBLE);
 	}
 	
+
 	private boolean haveNetworkConnection() {
 		boolean haveConnectedWifi = false;
 		boolean haveConnectedMobile = false;
@@ -569,7 +563,9 @@ public class Report extends Activity implements View.OnClickListener {
 
 	// was added
 	// --------------- Post to Wall-----------------------
-	public static final String imageURL = "http://i49.tinypic.com/2d9r2r.png";
+
+	public static final String imageURL = "http://i47.tinypic.com/29peplz.png";
+
 	// "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 

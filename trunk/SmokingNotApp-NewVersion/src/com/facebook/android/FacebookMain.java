@@ -242,7 +242,11 @@ public class FacebookMain extends Activity {
 		}
 		}
 	}
-
+	
+	public void onBackPressed()
+	{
+		finish();
+	}
 	/*
 	 * callback for the photo upload
 	 */

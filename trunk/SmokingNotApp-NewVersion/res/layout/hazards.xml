@@ -38,56 +38,21 @@
         android:text="&lt;&lt;&lt; Choose location >>>"
         android:textSize="14dp" />
 
-    <Button
-        android:id="@+id/bReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etLocation"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="47dp"
-        android:background="@drawable/sbutton"
-        android:text="Report" />
-
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etLocation"
-        android:layout_alignTop="@+id/bReport"
-        android:background="@drawable/sbutton"
-        android:text="@string/exit" />
-
-    <EditText
-        android:id="@+id/comments"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bReport"
-        android:layout_alignLeft="@+id/bReport"
-        android:layout_alignRight="@+id/exitButton"
-        android:layout_marginBottom="15dp"
-        android:ems="10"
-        android:hint="Add Comments"
-        android:inputType="textMultiLine"
-        android:lines="1"
-        android:singleLine="false" >
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/bReport"
-        android:layout_below="@+id/etLocation"
-        android:text="Publish via:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView3"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:src="@drawable/border" />
+
+    <CheckBox
+        android:id="@+id/checkBox1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/etLocation"
+        android:layout_centerVertical="true"
+        android:checked="true" />
 
     <ImageButton
         android:id="@+id/ibReport"
@@ -96,35 +61,70 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/imageView2"
         android:layout_marginRight="59dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/takeapic" />
 
-    <CheckBox
-        android:id="@+id/checkBox1"
+    <EditText
+        android:id="@+id/comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/etLocation"
-        android:layout_below="@+id/textView3"
-        android:checked="true" />
+        android:layout_alignLeft="@+id/checkBox1"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:hint="Add Comments"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        android:singleLine="false" >
 
-    <ImageView
-        android:id="@+id/imageView1"
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/bhReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/checkBox1"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/facebook" />
+        android:layout_alignLeft="@+id/comments"
+        android:layout_below="@+id/comments"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/sbutton"
+        android:text="Report" />
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bhReport"
+        android:layout_alignBottom="@+id/bhReport"
+        android:layout_alignRight="@+id/comments"
+        android:background="@drawable/sbutton"
+        android:text="@string/exit" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/bhReport"
+        android:layout_below="@+id/etLocation"
+        android:text="Publish via:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ibReport"
+        android:layout_alignLeft="@+id/exitButton"
         android:layout_alignTop="@+id/ivReport"
-        android:layout_marginRight="18dp"
         android:text="take a pic!"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#000000" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_centerVertical="true"
+        android:src="@drawable/facebook" />
 
 </RelativeLayout>
