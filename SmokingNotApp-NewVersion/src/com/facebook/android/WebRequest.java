@@ -109,8 +109,9 @@ public class WebRequest {
                
 		 	try{
 		 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		 		urlStr.replace(" ", "%20");
-		 		URI website= new URI (urlStr);
+		 		String newUrlStr = urlStr.replace(" ", "%20").replace("\n", "%20");
+		 		Log.i("ERIC ortal", newUrlStr);
+		 		URI website= new URI (newUrlStr);
 		 		HttpGet request = new HttpGet();
 		 		request.setURI(website);
 		 		HttpResponse res= httpClient.execute(request);
