@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +24,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import android.app.Activity;
@@ -52,7 +52,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private Button exitButton;
 	private ProgressDialog mProgress;
 	private View tmpView;
-	
+
 	private Location chosenLocation = null;
 	private String chosenAddress = "";
 
@@ -107,101 +107,99 @@ public class Hazards extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.etLocation:
-			myIntent = new Intent(getApplicationContext(), ChooseHazardLocation.class);
+			myIntent = new Intent(getApplicationContext(),
+					ChooseHazardLocation.class);
 			startActivityForResult(myIntent, iLocation);
 			break;
 		case R.id.bReport:
-			int conflict = 0;
-			SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-			String date = s.format(new Date());
-			UserRequest ur = new UserRequest(FacebookMain.email, 1, null, date);
-			HazardRequest hr = new HazardRequest(FacebookMain.email, date,
-					chosenAddress, chosenLocation.getLatitude(), chosenLocation.getLongitude(), comments.getText().toString());
-			WebRequest req = new WebRequest();
+			mProgress.setMessage("Sending report...");
+			mProgress.show();
+			report.setEnabled(false);
+			tmpView = v;
+			new Thread() {
+				public void run() {
+					Looper.prepare();
+					SimpleDateFormat s = new SimpleDateFormat(
+							"dd/MM/yyyy hh:mm:ss");
+					String date = s.format(new Date());
+					String comments_str = comments.getText().toString();
+					UserRequest ur = new UserRequest(FacebookMain.email, 1,
+							null, date);
+					HazardRequest hr = new HazardRequest(FacebookMain.email,
+							date, chosenAddress, chosenLocation.getLatitude(),
+							chosenLocation.getLongitude(), comments_str);
+					WebRequest req = new WebRequest();
 
-			/* Send UserRequest to Database */
+					/* Send UserRequest to Database */
 
-			// convert UserRequest request to gson string
-			Gson gson2 = new Gson();
-			String UserStr = gson2.toJson(ur);
-			JSONStringer json2 = null;
+					// convert UserRequest request to gson string
+					Gson gson2 = new Gson();
+					String UserStr = gson2.toJson(ur);
+					JSONStringer json2 = null;
 
-			// prepare Json
-			try {
+					// prepare Json
+					try {
 
-				json2 = new JSONStringer().object().key("action")
-						.value("update_ur").key("user_request").value(UserStr)
-						.endObject();
+						json2 = new JSONStringer().object().key("action")
+								.value("update_ur").key("user_request")
+								.value(UserStr).endObject();
 
-			} catch (JSONException e) {
-				Log.e("json exeption-can't create jsonstringer with user request",
-						e.toString());
-			}
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with user request",
+								e.toString());
+					}
 
-			// send json to web server
-			try {
-				req.getInternetData(json2, getString(R.string.DatabaseUrl)
-						+ "/UpdateHazard");
-			} catch (Exception e) {
-				Log.w("couldn't send user request to servlet", e.toString());
-			}
+					// send json to web server
+					try {
+						req.getInternetData(json2,
+								getString(R.string.DatabaseUrl)
+										+ "/UpdateHazard");
+					} catch (Exception e) {
+						Log.w("couldn't send user request to servlet",
+								e.toString());
+					}
 
-			/* check if the report already exists */
-			// get user info from server
-			Gson gson4 = new Gson();
-			WebRequest res = new WebRequest();
-			String str = null;
-			UserRequest ur_check = null;
-			try {
-				JSONObject json4 = res
-						.readJsonFromUrl("http://www.smokingnot2012.appspot.com/GetUser?mail="
-								+ FacebookMain.email);
-				str = (String) json4.get("user_req");
-				Log.w("str=", str);
-				ur_check = gson4.fromJson(str, UserRequest.class);
-			} catch (JSONException e) {
-				Log.e("Report error, can't get response from server, JSON exception",
-						e.toString());
-				Log.w("str=", str);
-			} catch (Exception e) {
-				Log.e("Report error, can't get response from server",
-						e.toString());
-				Log.w("str=", str);
-			}
-			if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
-				showConflict(tmpView);
-				conflict = 1;
-			}
+					/* Send HazardRequest to Database */
 
-			/* Send HazardRequest to Database */
+					// convert location request to gson string
+					Gson gson1 = new Gson();
+					String LocationStr = gson1.toJson(hr);
+					JSONStringer json1 = null;
 
-			if (conflict == 0) {
-				// convert location request to gson string
-				Gson gson1 = new Gson();
-				String LocationStr = gson1.toJson(hr);
-				JSONStringer json1 = null;
+					// prepare Json
+					try {
+						json1 = new JSONStringer().object().key("action")
+								.value("update_hazard").key("hazard_request")
+								.value(LocationStr).endObject();
 
-				// prepare Json
-				try {
-					json1 = new JSONStringer().object().key("action")
-							.value("update_hazard").key("hazard_request")
-							.value(LocationStr).endObject();
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with hazard",
+								e.toString());
+					}
 
-				} catch (JSONException e) {
-					Log.e("json exeption-can't create jsonstringer with hazard",
-							e.toString());
+					// send json to web server
+					try {
+						req.getInternetData(json1,
+								getString(R.string.DatabaseUrl)
+										+ "/UpdateHazard");
+					} catch (Exception e) {
+						Log.w("couldn't send hazard to servlet", e.toString());
+					}
+
+					if (c1.isChecked()) {
+						String msg = MSG
+								+ "\nReported a hazard at address "
+								+ chosenAddress
+								+ (comments_str.compareTo("") == 0 ? "\n "
+										+ comments_str : "");
+						PostStatusToFeed(msg);
+					}
+					mHandler.sendMessage(mHandler.obtainMessage(0));
+
 				}
 
-				// send json to web server
-				try {
-					req.getInternetData(json1, getString(R.string.DatabaseUrl)
-							+ "/UpdateHazard");
-				} catch (Exception e) {
-					Log.w("couldn't send hazard to servlet", e.toString());
-				}
-
-				break;
-			}
+			}.start();
+			break;
 		}
 
 	}
@@ -224,10 +222,10 @@ public class Hazards extends Activity implements View.OnClickListener {
 					iv.setImageBitmap(bmp);
 					break;
 				case iLocation:
-					
+
 					chosenLocation = extras.getParcelable("location");
-					chosenAddress =  extras.getString("address");
-					
+					chosenAddress = extras.getString("address");
+
 					et1.setText(chosenAddress);
 					break;
 				}
@@ -256,8 +254,8 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 	private void showDialog(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-		builder.setTitle("Your Report Has Been Sent!");
-		builder.setMessage("please check out your profile.");
+		builder.setTitle("Your Hazard report Has Been Sent!");
+		builder.setMessage("Please check out your profile.");
 		builder.setCancelable(true);
 
 		final AlertDialog dlg = builder.create();
@@ -300,7 +298,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	// "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 
-	private static final String MSG = "Report:";
+	private static final String MSG = "Hazard report!";
 
 	private final Handler msgPoster = new Handler();
 	final Runnable mChoosePlaceNotification = new Runnable() {
@@ -350,8 +348,6 @@ public class Hazards extends Activity implements View.OnClickListener {
 			case 0:
 				report.setEnabled(true);
 				mProgress.dismiss();
-				break;
-			case 1:
 				showDialog(tmpView);
 				break;
 			}

@@ -397,7 +397,7 @@ public class Report extends Activity implements View.OnClickListener {
 						
 
 					}
-					mHandler.sendMessage(mHandler.obtainMessage(0));
+					mHandler.sendMessage(mHandler.obtainMessage(1));
 				}
 			}.start();
 			break;
@@ -581,9 +581,8 @@ public class Report extends Activity implements View.OnClickListener {
 			case 2:
 				showConflict(tmpView);
 				break;
-			
 
-		}
+			}
 
 		}
 
