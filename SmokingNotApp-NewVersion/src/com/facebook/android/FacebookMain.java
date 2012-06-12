@@ -114,8 +114,11 @@ public class FacebookMain extends Activity {
 
 		if (Utility.mFacebook.isSessionValid()) {
 			
-				//Log.i("", " ");
+			if (fetching==0)
+			{
 				fetching=requestUserData();
+			}
+			fetching=requestUserData();  //delete after it
 			
 		}
 
@@ -309,7 +312,11 @@ public class FacebookMain extends Activity {
 
 		@Override
 		public void onAuthSucceed() {
+			if(fetching==0)
+			{
 				fetching= requestUserData();
+			}
+			fetching=requestUserData();  //delete after it
 		}
 
 		@Override

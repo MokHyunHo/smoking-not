@@ -120,10 +120,21 @@ public class Profile extends Activity {
 	}
 
 	public void onBackPressed() {
+
 		Intent myIntent = new Intent(getApplicationContext(),
+
 				FacebookMain.class);
+
 		startActivity(myIntent);
+
 	}
+	/**
+	public void onPause()
+	{
+		super.onPause();
+		finish();
+	}
+	**/
 	
 	private void init() {
 		mText = (TextView) findViewById(R.id.txt);

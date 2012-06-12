@@ -52,6 +52,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private Button exitButton;
 	private ProgressDialog mProgress;
 	private View tmpView;
+	private int isMain=0;
 
 	private Location chosenLocation = null;
 	private String chosenAddress = "";
@@ -205,11 +206,21 @@ public class Hazards extends Activity implements View.OnClickListener {
 	}
 
 	public void onBackPressed() {
-		Intent myIntent = new Intent(getApplicationContext(),
-				FacebookMain.class);
-		startActivity(myIntent);
-	}
 
+		Intent myIntent = new Intent(getApplicationContext(),
+
+				FacebookMain.class);
+
+		startActivity(myIntent);
+
+	}
+	/**
+	public void onPause()
+	{
+			isMain=0;
+			super.onPause();
+	}
+**/
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
