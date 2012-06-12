@@ -436,7 +436,7 @@ public class Report extends Activity implements View.OnClickListener {
 						
 
 					}
-					mHandler.sendMessage(mHandler.obtainMessage(1));
+					mHandler.sendMessage(mHandler.obtainMessage(0));
 				}
 			}.start();
 			break;
