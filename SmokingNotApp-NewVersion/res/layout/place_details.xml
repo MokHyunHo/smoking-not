@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvReportsLbl"
-        android:text="Reasons"
+        android:text=""
         android:textColor="@color/orange"
         android:textSize="14sp" />
 
