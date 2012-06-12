@@ -36,21 +36,13 @@ public class WebRequest {
 	                {
 	                        StringEntity entity = new StringEntity(jsonStr.toString(), "UTF-8");
 	                        InputStream is = null;
-	                        is = entity.getContent();
-	                        Log.i("ERIC ortal1", convertStreamToString(is));
 	                        entity.setContentType("application/json;charset=UTF-8;"); // text/plain;charset=UTF-8 (can be either)
-	                        is = entity.getContent();
-	                        Log.i("ERIC ortal2", convertStreamToString(is));
 	                        entity.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE,"application/json;charset=UTF-8"));
-	                        is = entity.getContent();
-	                        Log.i("ERIC ortal3", convertStreamToString(is));
-	                        
 	                        request.setEntity(entity);
 	                        
 	                        is =  request.getEntity().getContent();
-	                        
 	                        Log.i("ERIC ortal4", convertStreamToString(is));
-	                        System.out.print(entity);
+	                        
 	                        // Send request to WCF service
 	                        DefaultHttpClient httpClient = new DefaultHttpClient();
 
@@ -117,6 +109,7 @@ public class WebRequest {
                
 		 	try{
 		 		DefaultHttpClient httpClient = new DefaultHttpClient();
+		 		urlStr.replace(" ", "%20");
 		 		URI website= new URI (urlStr);
 		 		HttpGet request = new HttpGet();
 		 		request.setURI(website);

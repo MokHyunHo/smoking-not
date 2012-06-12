@@ -26,12 +26,12 @@ public class HttpClient {
 			HttpPost httpPostRequest = new HttpPost(URL);
 
 			StringEntity se;
-			se = new StringEntity(jsonObjSend.toString());
+			se = new StringEntity(jsonObjSend.toString(), "UTF-8");
 
 			// Set HTTP parameters
 			httpPostRequest.setEntity(se);
 			httpPostRequest.setHeader("Accept", "application/json");
-			httpPostRequest.setHeader("Content-type", "application/json");
+			httpPostRequest.setHeader("Content-type", "application/json;charset=UTF-8");
 			httpPostRequest.setHeader("Accept-Encoding", "gzip"); // only set this parameter if you would like to use gzip compression
 
 			long t = System.currentTimeMillis();
