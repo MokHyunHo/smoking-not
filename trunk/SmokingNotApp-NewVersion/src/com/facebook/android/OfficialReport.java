@@ -93,6 +93,17 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 			
 				
 				try {
+				String checked_str = "";
+				StringBuilder sb = new StringBuilder("");
+				
+				for (int i = 0; i < checked.length; i ++)
+				{
+					if (checked[i] != null)
+						sb.append(checked[i]).append(" ");
+				}
+			
+				checked_str = sb.toString();
+				Log.i("ERIC ortal", checked_str);
 				
 				if (bmp!=null) {
 					ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -101,13 +112,13 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 					email=getString(R.string.DatabaseUrl)+
 							"/EmailReport?name="+name.getText().toString()+"&phone="+phone.getText().toString()
 							+"&mail="+mail.getText().toString()+"&address="+add.getText().toString()
-							+"&location="+loc+"&reasons="+checked+"&pic="+barr;		
+							+"&location="+loc+"&reasons="+checked_str+"&pic=No_picture";
 				}
 				else
 					email=getString(R.string.DatabaseUrl)+
 					"/EmailReport?name="+name.getText().toString()+"&phone="+phone.getText().toString()
 					+"&mail="+mail.getText().toString()+"&address="+add.getText().toString()
-					+"&location="+loc+"&reasons="+checked+"&pic=No_picture";		
+					+"&location="+loc+"&reasons="+checked_str+"&pic=No_picture";		
 				
 				
 				// create string email
