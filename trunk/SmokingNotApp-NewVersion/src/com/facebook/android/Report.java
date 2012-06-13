@@ -64,11 +64,12 @@ public class Report extends Activity implements View.OnClickListener {
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
 	private View tmpView;
+	private Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		context = this;
 		// initialization of all the objects
 		setContentView(R.layout.report);
 		Init();
@@ -417,8 +418,7 @@ public class Report extends Activity implements View.OnClickListener {
 							PostStatusToFeed(MSG);
 						if (conflict == 1) {
 							mHandler.sendMessage(mHandler.obtainMessage(2));
-						}
-						else
+						} else
 							mHandler.sendMessage(mHandler.obtainMessage(0));
 					}
 				}
@@ -473,7 +473,8 @@ public class Report extends Activity implements View.OnClickListener {
 					String oradd = extras.getString("Address");
 					String oremail = extras.getString("Email");
 					String comment = comments.getText().toString();
-					Log.i("Elad", "get result: " + orname+orphone+oradd+oremail);
+					Log.i("Elad", "get result: " + orname + orphone + oradd
+							+ oremail);
 					String orloc = et1.getText().toString();
 					String checked_str = "";
 					StringBuilder sb = new StringBuilder("");
@@ -481,13 +482,13 @@ public class Report extends Activity implements View.OnClickListener {
 					for (int i = 0; i < checked.length; i++) {
 						if (checked[i] != null)
 							sb.append(checked[i]).append(";");
-					} 
+					}
 
 					checked_str = sb.toString();
 					Log.i("ERIC ortal", checked_str);
 					Log.i("ortal", orname);
 					ed = new EmailDetails(orname, orphone, oradd, oremail,
-							checked_str, orloc,comment);
+							checked_str, orloc, comment);
 
 					if (bmp != null) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -505,10 +506,9 @@ public class Report extends Activity implements View.OnClickListener {
 					// prepare Json
 					try {
 
-						json2=new JSONStringer().object().key("action")
-								.value("send_reportemail")
-								.key("report_email").value(EmailStr)
-								.endObject();
+						json2 = new JSONStringer().object().key("action")
+								.value("send_reportemail").key("report_email")
+								.value(EmailStr).endObject();
 
 					} catch (JSONException e) {
 						Log.e("json exeption-can't create jsonstringer with email",
@@ -531,6 +531,7 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
+			mHandler.sendMessage(mHandler.obtainMessage(3));
 		}
 	}
 
@@ -665,22 +666,23 @@ public class Report extends Activity implements View.OnClickListener {
 		@Override
 		public void handleMessage(Message msg) {
 			Log.i("ERIC", "what: " + msg.what);
+			report.setEnabled(true);
+			mProgress.dismiss();
 			switch (msg.what) {
 			case 0:
 				clearForm();
-				report.setEnabled(true);
-				mProgress.dismiss();
 				break;
 			case 1:
 				clearForm();
 				showDialog(tmpView);
-
 				// send notification to user
 				break;
 			case 2:
 				showConflict(tmpView);
 				break;
-
+			case 3:
+				Toast.makeText(context, "Error occured...", Toast.LENGTH_LONG);
+				
 			}
 
 		}
