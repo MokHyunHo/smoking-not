@@ -1,9 +1,6 @@
 package com.facebook.android;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,9 +49,6 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		switch (v.getId()) {
 		case R.id.bReport:
 			if (!validity()) {
-
-				// pop-up view
-				showDialog(v);
 				saveFields();
 				Intent data = new Intent();
 
@@ -62,32 +56,12 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 				data.putExtra("Phone", phone.getText().toString());
 				data.putExtra("Address", add.getText().toString());
 				data.putExtra("Email", mail.getText().toString());
-
-				setResult(RESULT_OK, data);
+				setResult(Activity.RESULT_OK, data);
+				//Log.i("Elad", "set result: " + name.getText().toString()+phone.getText().toString()+mail.getText().toString()+mail.getText().toString());
 				finish();
 			}
 			break;
 		}
-	}
-
-	private void showDialog(View v) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-		builder.setTitle("Your Report Has Been Sent!");
-		builder.setMessage("please check out your profile.");
-		builder.setCancelable(true);
-
-		final AlertDialog dlg = builder.create();
-		dlg.show();
-		final Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			public void run() {
-				dlg.dismiss(); // when the task active then close the dialog
-				t.cancel(); // also just top the timer thread, otherwise, you
-							// may receive a crash report
-			}
-		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
-					// active
-
 	}
 
 	private boolean validity() {

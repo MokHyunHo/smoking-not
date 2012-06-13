@@ -67,14 +67,4 @@
         android:background="@drawable/sbutton"
         android:text="Report" />
 
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bReport"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/sbutton"
-        android:text="@string/exit" />
-
 </RelativeLayout>

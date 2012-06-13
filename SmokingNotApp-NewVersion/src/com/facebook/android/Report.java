@@ -43,7 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Report extends Activity implements View.OnClickListener {
-	
+
 	String[] checked;
 	String location, reason, points;
 	TextView tvReport, tvPlaces;
@@ -58,9 +58,8 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iData = 0;
 	final static int iVenue = 1;
 	final static int iEmail = 2;
-	final static int iORData=3;
 	Bitmap bmp;
-	private boolean exitFlag=false;
+	private boolean exitFlag = false;
 	private Button exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
@@ -129,10 +128,9 @@ public class Report extends Activity implements View.OnClickListener {
 
 	}
 
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
-		if(!exitFlag)
+		if (!exitFlag)
 			finish();
 	}
 
@@ -163,7 +161,7 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.ReasonRB2:
-			exitFlag=true;
+			exitFlag = true;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			Bundle cbBundle = new Bundle();
 			location = et1.getText().toString();
@@ -173,24 +171,19 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.ibReport:
-			exitFlag=true;
+			exitFlag = true;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
 		case R.id.bReport:
-			exitFlag=false;
 			// check
-			/*if (!haveNetworkConnection()) {
-				final Runnable mInternetNotification = new Runnable() {
-					public void run() {
-						Toast.makeText(getBaseContext(),
-								"You have no internet connection!",
-								Toast.LENGTH_LONG).show();
-					}
-				};
-				msgPoster.post(mInternetNotification);
-				break;
-			}*/
+			/*
+			 * if (!haveNetworkConnection()) { final Runnable
+			 * mInternetNotification = new Runnable() { public void run() {
+			 * Toast.makeText(getBaseContext(),
+			 * "You have no internet connection!", Toast.LENGTH_LONG).show(); }
+			 * }; msgPoster.post(mInternetNotification); break; }
+			 */
 			// check that the location field is not empty
 			if (et1.getText().toString().compareTo("<<< Choose place >>>") == 0) {
 				msgPoster.post(mChoosePlaceNotification);
@@ -218,11 +211,11 @@ public class Report extends Activity implements View.OnClickListener {
 					// calculate new score
 
 					if (reason.compareTo("Positive Report") == 0) {
-						user_score=2;
+						user_score = 2;
 						is_positive = true;
 					}
 					if (reason.compareTo("Complaint") == 0) {
-						user_score=1;
+						user_score = 1;
 						is_positive = false;
 					}
 					points = "" + user_score;
@@ -247,10 +240,9 @@ public class Report extends Activity implements View.OnClickListener {
 							reasons[f] = (str == null ? 0 : 1);
 							f++;
 						}
-					}
-					else
+					} else
 						reasons = null;
-					
+
 					UserRequest ur = new UserRequest(FacebookMain.email,
 							user_score, locid, date);
 					ReportRequest rr = new ReportRequest(FacebookMain.email,
@@ -308,39 +300,43 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("str=", str);
 					}
 					if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
-						Log.e("ortal","report already exsits in database");
+						Log.e("ortal", "report already exsits in database");
 						conflict = 1;
 					}
-					
+
 					/* update location score according to user's level */
-					
+
 					// display current stage
-					if ((ur_check.GetScore() >= 0) && (ur_check.GetScore() < 45))
+					if ((ur_check.GetScore() >= 0)
+							&& (ur_check.GetScore() < 45))
 						if (is_positive)
-							goodplace_rate=1;
+							goodplace_rate = 1;
 						else
-							badplace_rate=1;
-					if ((ur_check.GetScore() >= 45) && (ur_check.GetScore() < 135))
+							badplace_rate = 1;
+					if ((ur_check.GetScore() >= 45)
+							&& (ur_check.GetScore() < 135))
 						if (is_positive)
-							goodplace_rate=1;
+							goodplace_rate = 1;
 						else
-							badplace_rate=1;
-					if ((ur_check.GetScore() >= 135) && (ur_check.GetScore() < 270))
+							badplace_rate = 1;
+					if ((ur_check.GetScore() >= 135)
+							&& (ur_check.GetScore() < 270))
 						if (is_positive)
-							goodplace_rate=2;
+							goodplace_rate = 2;
 						else
-							badplace_rate=2;
-					if ((ur_check.GetScore() >= 270) && (ur_check.GetScore() < 405))
+							badplace_rate = 2;
+					if ((ur_check.GetScore() >= 270)
+							&& (ur_check.GetScore() < 405))
 						if (is_positive)
-							goodplace_rate=2;
+							goodplace_rate = 2;
 						else
-							badplace_rate=2;
+							badplace_rate = 2;
 					if (ur_check.GetScore() >= 405)
 						if (is_positive)
-							goodplace_rate=3;
+							goodplace_rate = 3;
 						else
-							badplace_rate=3;
-					
+							badplace_rate = 3;
+
 					LocationRequest loc = new LocationRequest(locid,
 							mGooglePlace.refrence, mGooglePlace.name,
 							mGooglePlace.vicinity,
@@ -411,31 +407,20 @@ public class Report extends Activity implements View.OnClickListener {
 
 					// send email
 					if (c3.isChecked()) {
+						exitFlag = true;
 						Intent repIntent = new Intent(Report.this,
 								OfficialReport.class);
-						Bundle returnBundle = new Bundle();
-						returnBundle.putStringArray("checkedOptions", checked);
-						returnBundle.putString("StrLocation", location);
-						repIntent.putExtras(returnBundle);
-						repIntent.putExtra("BitmapImage", bmp);
-						startActivityForResult(repIntent,iORData);
+						startActivityForResult(repIntent, iEmail);
 					} else {
-						
+						exitFlag = false;
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
-
-						if (conflict == 0) {
-							mHandler.sendMessage(mHandler.obtainMessage(1));
-
-						}
-						if (conflict==1)
-						{
+						if (conflict == 1) {
 							mHandler.sendMessage(mHandler.obtainMessage(2));
 						}
-						
-
+						else
+							mHandler.sendMessage(mHandler.obtainMessage(0));
 					}
-					mHandler.sendMessage(mHandler.obtainMessage(0));
 				}
 			}.start();
 			break;
@@ -449,7 +434,7 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.etLocation:
-			exitFlag=true;
+			exitFlag = true;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
@@ -481,13 +466,14 @@ public class Report extends Activity implements View.OnClickListener {
 					et1.setText(mGooglePlace.name + "\n"
 							+ mGooglePlace.vicinity);
 					break;
-				case iORData:
+				case iEmail:
 					EmailDetails ed;
 					String orname = extras.getString("Name");
 					String orphone = extras.getString("Phone");
 					String oradd = extras.getString("Address");
 					String oremail = extras.getString("Email");
-					String orloc=et1.getText().toString();
+					Log.i("Elad", "get result: " + orname+orphone+oradd+oremail);
+					String orloc = et1.getText().toString();
 					String checked_str = "";
 					StringBuilder sb = new StringBuilder("");
 
@@ -499,7 +485,8 @@ public class Report extends Activity implements View.OnClickListener {
 					checked_str = sb.toString();
 					Log.i("ERIC ortal", checked_str);
 					Log.i("ortal", orname);
-					ed = new EmailDetails(orname, orphone, oradd, oremail, checked_str, orloc);
+					ed = new EmailDetails(orname, orphone, oradd, oremail,
+							checked_str, orloc);
 
 					if (bmp != null) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -528,11 +515,14 @@ public class Report extends Activity implements View.OnClickListener {
 					// send json to web server
 
 					try {
-						req.getInternetData(json2, getString(R.string.DatabaseUrl)
-								+ "/EmailReport");
+						req.getInternetData(json2,
+								getString(R.string.DatabaseUrl)
+										+ "/EmailReport");
 					} catch (Exception e) {
 						Log.w("couldn't send email to servlet", e.toString());
 					}
+					// pop-up view
+					mHandler.sendMessage(mHandler.obtainMessage(1));
 					break;
 				}
 			}
@@ -541,12 +531,11 @@ public class Report extends Activity implements View.OnClickListener {
 		}
 	}
 
-
-	private void clearForm()
-	{
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(),R.drawable.imageplace);
+	private void clearForm() {
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+				R.drawable.imageplace);
 		iv.setImageBitmap(bmp);
-		
+
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1.setSelected(true);
 		r2.setSelected(false);
@@ -556,7 +545,6 @@ public class Report extends Activity implements View.OnClickListener {
 		c3.setSelected(false);
 		c3.setVisibility(c3.INVISIBLE);
 	}
-	
 
 	private boolean haveNetworkConnection() {
 		boolean haveConnectedWifi = false;
@@ -594,8 +582,6 @@ public class Report extends Activity implements View.OnClickListener {
 					// active
 
 	}
-
-
 
 	private void showConflict(View v) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
