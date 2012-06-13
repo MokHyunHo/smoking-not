@@ -4,6 +4,7 @@ import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -56,6 +57,9 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private ProgressDialog mProgress;
 	private View tmpView;
 	private int isMain=0;
+//  added---------------------------------------------------------------------
+	private Button mQuestionButton;
+	//private View tmpView;
 
 	private Location chosenLocation = null;
 	private String chosenAddress = "";
@@ -75,6 +79,20 @@ public class Hazards extends Activity implements View.OnClickListener {
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
 		bmp = BitmapFactory.decodeStream(is);
 
+		//added---------------------------------------------------------------------
+		mQuestionButton= (Button) findViewById(R.id.question);
+		
+		mQuestionButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				
+				tmpView = v;
+				showQuestionDialog(tmpView);
+				
+			}
+		});
+
+				
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -436,4 +454,21 @@ public class Hazards extends Activity implements View.OnClickListener {
 		}
 
 	};
+//  added---------------------------------------------------------------------
+	private void showQuestionDialog(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle("Report safety hazards");
+		String str= "- By selecting the Hazards option, you can add a photo of the hazard, the location of the hazard and a free text describing it.\n"
+				+ "- The report will be sent to the municipal service center and will be taken care as soon as possible.\n";
+		alertDialog.setMessage(str);
+
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which)
+		    {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show(); 
+	} 
 }

@@ -12,7 +12,9 @@ import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +41,9 @@ public class Profile extends Activity {
 	private ListView lvUserReports;
 	private UserReportsAdapter mAdapter;
 	private LastUserReports lst;
+//  added---------------------------------------------------------------------
+	private Button mQuestionButton;
+	private View tmpView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,24 @@ public class Profile extends Activity {
 		pb.setProgress(ur_updated.GetScore());
 		total_score.setText(ur_updated.GetScore() + "/100");
 
+		
+		
+		//added---------------------------------------------------------------------
+		mQuestionButton= (Button) findViewById(R.id.question);
+		
+		mQuestionButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				
+				tmpView = v;
+				showQuestionDialog(tmpView);
+				
+			}
+		});
+
+				
+		
+		
 		// display current stage
 		if ((ur_updated.GetScore() >= 0) && (ur_updated.GetScore() < 45))
 			rank.setText("Beginner");
@@ -200,4 +223,26 @@ public class Profile extends Activity {
 		}
 
 	};
+
+	
+	//  added---------------------------------------------------------------------
+	private void showQuestionDialog(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle("Your Report Has Been Sent!");
+		String str="By selecting the Profile option, you'll be able to see your reports' history and your number of points. you get points in following ways:\n"
+					+ "•	For every positive report, you'll get 2 points.\n"
+					+ "•	For every negative report, you'll get 1 point.\n"
+					+ "•	For every hazards report, you'll get 1 point.\n"
+					+ "The more points you'll get, the higher your level will be and the higher the value of your report will get. In other words, in the highest level, your report will have a bigger influence because we consider you as very credible.\n";
+		alertDialog.setMessage(str);
+
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show();
+		 
+	} 
 }
