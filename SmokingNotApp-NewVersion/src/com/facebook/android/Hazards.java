@@ -36,6 +36,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class Hazards extends Activity implements View.OnClickListener {
@@ -112,6 +113,12 @@ public class Hazards extends Activity implements View.OnClickListener {
 			break;
 			
 		case R.id.bhReport:
+			
+			if (et1.getText().toString().compareTo("<<< Choose location >>>") == 0) {
+				msgPoster.post(mChoosePlaceNotification);
+				break;
+			}
+			
 			mProgress.setMessage("Sending report...");
 			mProgress.show();
 			report.setEnabled(false);
@@ -199,12 +206,11 @@ public class Hazards extends Activity implements View.OnClickListener {
 					Intent repIntent = new Intent(Hazards.this,
 							OfficialReport.class);
 					startActivityForResult(repIntent, iEmail);
-					mHandler.sendMessage(mHandler.obtainMessage(0));
 
 				}
 
 			}.start();
-			
+			/*
 			Intent repIntent = new Intent(Hazards.this,
 					OfficialReport.class);
 			Bundle returnBundle = new Bundle();
@@ -212,7 +218,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			repIntent.putExtras(returnBundle);
 			repIntent.putExtra("BitmapImage", bmp);
 			startActivity(repIntent);
-			
+			*/
 			break;
 
 		}
@@ -288,6 +294,8 @@ public class Hazards extends Activity implements View.OnClickListener {
 					} catch (Exception e) {
 						Log.w("couldn't send email to servlet", e.toString());
 					}
+					
+					mHandler.sendMessage(mHandler.obtainMessage(0));
 					break;
 				}
 			}
@@ -364,7 +372,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private final Handler msgPoster = new Handler();
 	final Runnable mChoosePlaceNotification = new Runnable() {
 		public void run() {
-			Toast.makeText(getBaseContext(), "You have to choose a place !",
+			Toast.makeText(getBaseContext(), "You have to choose a location!",
 					Toast.LENGTH_LONG).show();
 		}
 	};
@@ -400,6 +408,17 @@ public class Hazards extends Activity implements View.OnClickListener {
 			Log.v("Error", e.toString());
 		}
 	}
+	
+	private void clearForm() {
+		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+				R.drawable.imageplace);
+		iv.setImageBitmap(bmp);
+
+		et1.setText("<<< Choose location >>>");
+		comments.setText("");
+		c1.setSelected(true);
+
+	}
 
 	private Handler mHandler = new Handler() {
 		@Override
@@ -410,6 +429,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 				report.setEnabled(true);
 				mProgress.dismiss();
 				showDialog(tmpView);
+				clearForm();
 				break;
 			}
 
