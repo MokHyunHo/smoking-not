@@ -5,22 +5,44 @@
     android:background="@drawable/brownlinesbg"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/reportFirstRL"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/TableLayout"
-        android:gravity="center"
-        android:text="@string/report"
-        android:textColor="#ffffff"
-        android:textSize="30dp"
-        android:textStyle="bold" />
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TableLayout"
+            android:gravity="center"
+            android:text="@string/report"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/qm" />
+
+        <Button
+            android:id="@+id/question2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/qm" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/reportSecondRL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/reportFirstRL"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" >
 
@@ -162,7 +184,6 @@
             android:layout_marginLeft="68dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/facebook" />
-
     </RelativeLayout>
 
     <EditText
@@ -178,27 +199,6 @@
         android:inputType="textMultiLine"
         android:lines="1"
         android:singleLine="false" />
-
-    <ImageButton
-        android:id="@+id/ibReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/reportFourthRL"
-        android:layout_alignTop="@+id/textView1"
-        android:layout_marginRight="60dp"
-        android:layout_marginTop="45dp"
-        android:background="@drawable/takeapic" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ibReport"
-        android:layout_alignTop="@+id/reportSecondRL"
-        android:layout_marginRight="14dp"
-        android:text="take a pic!"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/textView3"
@@ -230,56 +230,25 @@
         android:background="@drawable/sbutton"
         android:text="Report" />
 
-
-    <Button
-        android:id="@+id/exitButton"
+    <ImageButton
+        android:id="@+id/ibReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bReport"
-        android:layout_alignBottom="@+id/bReport"
-        android:layout_alignRight="@+id/comments"
-        android:background="@drawable/sbutton"
-        android:text="@string/exit" />
-
-    <Button
-        android:id="@+id/question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView1"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/TableLayout"
-        android:layout_toRightOf="@+id/ivReport"
-        android:background="@drawable/qm" />
-
-    <Button
-        android:id="@+id/question2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView1"
-        android:layout_alignLeft="@+id/question"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/ReasonSp"
-        android:background="@drawable/qm" />
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/bReport"
-        android:layout_alignTop="@+id/checkBox1"
-        android:layout_marginTop="13dp"
-        android:src="@drawable/facebook" />
+        android:layout_alignRight="@+id/reportSecondRL"
+        android:layout_below="@+id/reportFirstRL"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/takeapic" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bReport"
-        android:layout_alignRight="@+id/bReport"
-        android:layout_marginBottom="115dp"
-        android:text="Publish via:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
+        android:layout_alignRight="@+id/ibReport"
+        android:layout_alignTop="@+id/reportSecondRL"
+        android:layout_marginRight="16dp"
+        android:text="take a pic!"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" />
 
 </RelativeLayout>

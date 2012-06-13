@@ -119,7 +119,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	public void onClick(View v) {
 		Intent myIntent;
 		switch (v.getId()) {
-		case R.id.ibReport:
+		case R.id.ibhReport:
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -381,7 +381,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 	// was added
 	// --------------- Post to Wall-----------------------
-	public static final String imageURL = "https://lh4.googleusercontent.com/Z0JYXrl0MWPiyutFRTP5CONfIJoNi_-E52SDJAnKnoS9gi1kVPlcBNseDL87ykr54Ew5u_AEd00";
+	public static final String imageURL = "http://i47.tinypic.com/29peplz.png";
 	// "http://www.facebookmobileweb.com/hackbook/img/facebook_icon_large.png";
 	public static final String linkURL = "http://smokingnot2012.appspot.com";
 
@@ -405,7 +405,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			Bundle parameters = new Bundle();
 			parameters.putString("message", msg);
 
-			parameters.putString("name", "Smoking Not App!");
+			parameters.putString("name", "The Reporter!");
 			parameters.putString("caption", " ");
 
 			parameters.putString("description", "Gained " + points

@@ -451,9 +451,9 @@ public class Report extends Activity implements View.OnClickListener {
 						exitFlag = false;
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
-						if (conflict == 1) {
+						if (conflict == 1)
 							mHandler.sendMessage(mHandler.obtainMessage(2));
-						} else
+						else
 							mHandler.sendMessage(mHandler.obtainMessage(0));
 					}
 				}
@@ -669,13 +669,15 @@ public class Report extends Activity implements View.OnClickListener {
 		try {
 			String response = Utility.mFacebook.request("me");
 			Bundle parameters = new Bundle();
-			parameters.putString("message", msg);
+			
 
-			parameters.putString("name", "Smoking Not App!");
+			parameters.putString("name", "The Reporter!");
 			if (reason.compareTo("Positive Report") == 0) {
+				parameters.putString("message", "Positive Report:");
 				parameters.putString("caption", "Reported " + location
 						+ " with " + reason);
 			} else {
+				parameters.putString("message", "Negative Report:");
 				parameters.putString("caption", " ");
 
 			}
