@@ -48,6 +48,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	Intent i, profileIntent;
 	final static int iData = 0;
 	final static int iLocation = 1;
+	final static int iEmail = 2;
 	Bitmap bmp;
 	private Button exitButton;
 	private ProgressDialog mProgress;
@@ -77,24 +78,19 @@ public class Hazards extends Activity implements View.OnClickListener {
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent myIntent = new Intent(getApplicationContext(),
-						FacebookMain.class);
-				if (Utility.mFacebook.isSessionValid()) {
-					Utility.objectID = "me";
-				}
-				startActivity(myIntent);
+				finish();
 			}
 		});
 
 	}
 
 	private void Init() {
-		report = (Button) findViewById(R.id.bReport);
+		report = (Button) findViewById(R.id.bhReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
 		iv = (ImageView) findViewById(R.id.ivReport);
 		et1 = (EditText) findViewById(R.id.etLocation);
 		comments = (EditText) findViewById(R.id.comments);
-		c1 = (CheckBox) findViewById(R.id.checkBox1);
+		c1 = (CheckBox) findViewById(R.id.hCB);
 		mProgress = new ProgressDialog(this);
 		mProgress.setCancelable(false);
 	}
@@ -197,6 +193,11 @@ public class Hazards extends Activity implements View.OnClickListener {
 										+ comments_str : "");
 						PostStatusToFeed(msg);
 					}
+					
+					
+					Intent repIntent = new Intent(Hazards.this,
+							OfficialReport.class);
+					startActivityForResult(repIntent, iEmail);
 					mHandler.sendMessage(mHandler.obtainMessage(0));
 
 				}
@@ -236,11 +237,18 @@ public class Hazards extends Activity implements View.OnClickListener {
 					iv.setImageBitmap(bmp);
 					break;
 				case iLocation:
-
 					chosenLocation = extras.getParcelable("location");
 					chosenAddress = extras.getString("address");
-
 					et1.setText(chosenAddress);
+					break;
+				case iEmail:
+					String orname = extras.getString("Name");
+					String orphone = extras.getString("Phone");
+					String oradd = extras.getString("Address");
+					String oremail = extras.getString("Email");
+					
+					//HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+					comments.getText().toString();
 					break;
 				}
 			}
