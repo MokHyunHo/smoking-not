@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -246,9 +247,47 @@ public class Hazards extends Activity implements View.OnClickListener {
 					String orphone = extras.getString("Phone");
 					String oradd = extras.getString("Address");
 					String oremail = extras.getString("Email");
+					String comment=comments.getText().toString();
+					String loc= et1.getText().toString();
 					
-					//HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-					comments.getText().toString();
+					
+					EmailDetails ed = new EmailDetails(orname, orphone, oradd, oremail,
+							null, loc,comment);
+
+					if (bmp != null) {
+						ByteArrayOutputStream bos = new ByteArrayOutputStream();
+						bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+						byte[] barr = bos.toByteArray();
+						ed.setPicture(barr);
+					}
+
+					WebRequest req = new WebRequest();
+
+					Gson gson2 = new Gson();
+					String EmailStr = gson2.toJson(ed);
+					JSONStringer json2 = null;
+
+					// prepare Json
+					try {
+						json2=new JSONStringer().object().key("action")
+								.value("send_hazardemail")
+								.key("hazard_email").value(EmailStr)
+								.endObject();
+					
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with email",
+								e.toString());
+					}
+
+					// send json to web server
+
+					try {
+						req.getInternetData(json2,
+								getString(R.string.DatabaseUrl)
+										+ "/EmailReport");
+					} catch (Exception e) {
+						Log.w("couldn't send email to servlet", e.toString());
+					}
 					break;
 				}
 			}
