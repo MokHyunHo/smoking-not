@@ -166,7 +166,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	public void onPause() {
 		super.onPause();
-		if (!exitFlag)
+		if (exitFlag)
 			finish();
 	}
 
@@ -197,7 +197,6 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.ReasonRB2:
-			exitFlag = true;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			Bundle cbBundle = new Bundle();
 			location = et1.getText().toString();
@@ -207,7 +206,6 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.ibReport:
-			exitFlag = true;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -443,12 +441,11 @@ public class Report extends Activity implements View.OnClickListener {
 
 					// send email
 					if (c3.isChecked()) {
-						exitFlag = true;
 						Intent repIntent = new Intent(Report.this,
 								OfficialReport.class);
 						startActivityForResult(repIntent, iEmail);
 					} else {
-						exitFlag = false;
+						exitFlag = true;
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 						if (conflict == 1)
@@ -469,7 +466,6 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.etLocation:
-			exitFlag = true;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
