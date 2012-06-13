@@ -13,7 +13,7 @@
         android:layout_above="@+id/btn_choose"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/TextView02"
-        android:apiKey="@string/GoogleMapsAPIKeyDebug"
+        android:apiKey="@string/GoogleMapsAPIKeyRelease"
         android:clickable="true" />
 
     <Button
