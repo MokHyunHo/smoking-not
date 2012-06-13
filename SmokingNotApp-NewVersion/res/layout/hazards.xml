@@ -61,29 +61,6 @@
             android:layout_height="50dp"
             android:background="@color/grey"
             android:baselineAligned="true" >
-
-            <TextView
-                android:id="@+id/tvRep"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Report"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvPla"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Places"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
         </TableRow>
     </TableLayout>
 
@@ -177,18 +154,6 @@
         android:layout_alignLeft="@+id/etLocation"
         android:background="@drawable/sbutton"
         android:text="Report" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_alignRight="@+id/ibReport"
-        android:layout_alignTop="@+id/ivReport"
-        android:layout_marginRight="15dp"
-        android:text="take a pic!"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000" />
 
 
     <Button

@@ -86,7 +86,7 @@
     <string name="refresh_token_binding_error">Binding to the Facebook Android Application failed (is it installed?).</string>
     <string name="access_token_label">Current access token:</string>
     <string name="access_token_expires_label">Token expires at:</string>
-    <string name="app_name">The Reporter APP for Android!</string>
+    <string name="app_name">The Reporter</string>
     <string name="profile">Profile</string>
     <string name="places">Places</string>
     <string name="hazards">Hazards</string>

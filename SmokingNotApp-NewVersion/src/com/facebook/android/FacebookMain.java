@@ -100,7 +100,7 @@ public class FacebookMain extends Activity {
 		mUserPic = (ImageView) FacebookMain.this.findViewById(R.id.user_pic);
 
 		// Create the Facebook Object using the app id.
-		Utility.mFacebook = new Facebook(APP_ID);
+		Utility.mFacebook = new Facebook(APP_ID); 
 		// Instantiate the asynrunner object for asynchronous api calls.
 		Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
