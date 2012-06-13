@@ -2,7 +2,6 @@ package com.facebook.android;
 
 import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,17 +16,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.json.JSONException;
 import org.json.JSONStringer;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -37,7 +33,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class Hazards extends Activity implements View.OnClickListener {
@@ -56,8 +51,8 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private Button exitButton;
 	private ProgressDialog mProgress;
 	private View tmpView;
-	private int isMain = 0;
-	// added---------------------------------------------------------------------
+//  added---------------------------------------------------------------------
+
 	private Button mQuestionButton;
 	// private View tmpView;
 
@@ -97,6 +92,9 @@ public class Hazards extends Activity implements View.OnClickListener {
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				if (Utility.mFacebook.isSessionValid()) {
+					Utility.objectID = "me";
+				}
 				finish();
 			}
 		});
@@ -242,10 +240,10 @@ public class Hazards extends Activity implements View.OnClickListener {
 		}
 
 	}
-
-	public void onPause() {
-		isMain = 0;
-		super.onPause();
+	
+	public void onPause()
+	{
+			super.onPause();
 	}
 
 	@Override
@@ -404,8 +402,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			parameters.putString("name", "The Reporter!");
 			parameters.putString("caption", " ");
 
-			parameters.putString("description", "Gained " + points
-					+ " points for the hazard report");
+			parameters.putString("description", "Gained 1 point for the hazard report");
 
 			parameters.putString("picture", imageURL);
 			parameters.putString("link", linkURL);

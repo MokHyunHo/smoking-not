@@ -195,13 +195,10 @@ public class Places extends Activity implements View.OnClickListener {
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent myIntent = new Intent(getApplicationContext(),
-						FacebookMain.class);
 				if (Utility.mFacebook.isSessionValid()) {
 					Utility.objectID = "me";
 				}
 				finish();
-				startActivity(myIntent);
 			}
 		});
 	}
