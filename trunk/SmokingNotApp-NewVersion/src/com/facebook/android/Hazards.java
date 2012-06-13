@@ -88,7 +88,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 	private void Init() {
 		report = (Button) findViewById(R.id.bhReport);
-		ib = (ImageButton) findViewById(R.id.ibReport);
+		ib = (ImageButton) findViewById(R.id.ibhReport);
 		iv = (ImageView) findViewById(R.id.ivReport);
 		et1 = (EditText) findViewById(R.id.etLocation);
 		comments = (EditText) findViewById(R.id.comments);
