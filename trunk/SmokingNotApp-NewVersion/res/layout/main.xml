@@ -121,4 +121,13 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/snicon" />
 
+    <Button
+        android:id="@+id/question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/login"
+        android:background="@drawable/qm" />
+
 </RelativeLayout>

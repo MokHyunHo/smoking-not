@@ -230,4 +230,56 @@
         android:background="@drawable/sbutton"
         android:text="Report" />
 
+
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/bReport"
+        android:layout_alignBottom="@+id/bReport"
+        android:layout_alignRight="@+id/comments"
+        android:background="@drawable/sbutton"
+        android:text="@string/exit" />
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TableLayout"
+        android:layout_toRightOf="@+id/ivReport"
+        android:background="@drawable/qm" />
+
+    <Button
+        android:id="@+id/question2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/imageView1"
+        android:layout_alignLeft="@+id/question"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ReasonSp"
+        android:background="@drawable/qm" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/bReport"
+        android:layout_alignTop="@+id/checkBox1"
+        android:layout_marginTop="13dp"
+        android:src="@drawable/facebook" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bReport"
+        android:layout_alignRight="@+id/bReport"
+        android:layout_marginBottom="115dp"
+        android:text="Publish via:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+
 </RelativeLayout>

@@ -17,13 +17,18 @@
 package com.facebook.android;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -70,6 +75,9 @@ public class FacebookMain extends Activity {
 	private Button mProfileButton;
 	private Button mReportButton;
 	private Button mHazardsButton;
+//  added---------------------------------------------------------------------
+	private Button mQuestionButton;
+	private View tmpView;
 	Intent i;
 
 	String[] permissions = { "publish_stream", "email", "user_photos" };
@@ -100,6 +108,8 @@ public class FacebookMain extends Activity {
 		mProfileButton = (Button) findViewById(R.id.profileButton);
 		mReportButton = (Button) findViewById(R.id.reportButton);
 		mHazardsButton = (Button) findViewById(R.id.hazardsButton);
+//added---------------------------------------------------------------------
+		mQuestionButton= (Button) findViewById(R.id.question);
 
 		// restore session if one exists
 		SessionStore.restore(Utility.mFacebook, this);
@@ -181,6 +191,19 @@ public class FacebookMain extends Activity {
 						}
 			}}
 		});
+
+	
+		
+		//  added---------------------------------------------------------------------
+	mQuestionButton.setOnClickListener(new OnClickListener() {
+
+		public void onClick(View v) {
+			
+			tmpView = v;
+			showQuestionDialog(tmpView);
+			
+		}
+	});
 
 	}
 
@@ -374,4 +397,42 @@ public class FacebookMain extends Activity {
 		}
 		return haveConnectedWifi || haveConnectedMobile;
 	}
+	
+	
+	//  added---------------------------------------------------------------------
+	private void showQuestionDialog(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle("The Report App!");
+		String str="The Reporter offers you the ultimate tool- a real time report. \n\n"
+				+ "The application allows you to:\n" 
+				+ " 1.	Report places that are/aren't enforcing the rules concerning smoking. \n"
+				+ " 2.	Watch a full list of places around a specific location. (Report)\n" 
+				+ " 3.	Report safety hazards.\n"
+				+ " 4.	Manage a personal profile.\n";
+		alertDialog.setMessage(str);
+
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which)
+		    {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show(); 
+	} 
 }
+
+
+
+/**
+AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+ alertDialog.setTitle("Reset...");
+ alertDialog.setMessage("Are you sure?");
+ alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+    public void onClick(DialogInterface dialog, int which) {
+       // here you can add functions
+    }
+ });
+ alertDialog.setIcon(R.drawable.icon);
+ alertDialog.show();
+**/

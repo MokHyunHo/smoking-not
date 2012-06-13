@@ -4,6 +4,7 @@ import com.facebook.android.FacebookMain;
 import com.google.gson.Gson;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -64,7 +65,14 @@ public class Report extends Activity implements View.OnClickListener {
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
 	private View tmpView;
+
+//  added---------------------------------------------------------------------
+	private Button mQuestionButton;
+	private Button mQuestionButton2;
+	//private View tmpView;
+
 	private Context context;
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -113,6 +121,33 @@ public class Report extends Activity implements View.OnClickListener {
 			r2.setChecked(true);
 		}
 
+		
+		//added---------------------------------------------------------------------
+				mQuestionButton= (Button) findViewById(R.id.question);
+				
+				mQuestionButton.setOnClickListener(new OnClickListener() {
+
+					public void onClick(View v) {
+						
+						tmpView = v;
+						showQuestionDialog(tmpView);
+						
+					}
+				});
+
+				mQuestionButton2= (Button) findViewById(R.id.question2);
+				
+				mQuestionButton2.setOnClickListener(new OnClickListener() {
+
+					public void onClick(View v) {
+						
+						tmpView = v;
+						showQuestionDialog2(tmpView);
+						
+					}
+				});
+						
+		
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -574,6 +609,7 @@ public class Report extends Activity implements View.OnClickListener {
 		builder.setCancelable(true);
 
 		final AlertDialog dlg = builder.create();
+		
 		dlg.show();
 		final Timer t = new Timer();
 		t.schedule(new TimerTask() {
@@ -688,4 +724,45 @@ public class Report extends Activity implements View.OnClickListener {
 		}
 
 	};
+	
+	//  added---------------------------------------------------------------------
+	private void showQuestionDialog(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle("Report places concerning smoking rules");
+		
+		String str= "You can choose the place you're at, you can choose Complaint or add Positive Report.\n"
+				+ "- Based on this report and previous reports the rating of the place will be determined.\n" 
+				+ "- Your facebook profile will be updated with an application status that confirms your actions.\n";
+
+		alertDialog.setMessage(str);
+
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show();
+		 
+	}
+	
+	private void showQuestionDialog2(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle("Official Report");
+		
+		String str= "If you choose Complaint option, you'll need to check the Official Report option in the publish via area.\n"
+				+ "- An official report is a report that sends to the municipal service center and this report might be a reason for the municipality to investigate the place and punish it accordingly.\n" 
+				+ "- Plz fill correct details so the municipality will be able to contact you and send you an update SMS.\n";
+
+		alertDialog.setMessage(str);
+
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show();
+		 
+	}
 }

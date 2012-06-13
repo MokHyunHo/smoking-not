@@ -71,6 +71,9 @@ public class Places extends Activity implements View.OnClickListener {
 	private CountDownLatch latch = new CountDownLatch(1);
 	private Context context;
 	boolean m_chosen_cats[];
+//  added---------------------------------------------------------------------
+	private Button mQuestionButton;
+	private View tmpView;
 
 	long lastTime;
 	String input_str;
@@ -171,6 +174,22 @@ public class Places extends Activity implements View.OnClickListener {
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
 
+		
+		//added---------------------------------------------------------------------
+		mQuestionButton= (Button) findViewById(R.id.question);
+		
+		mQuestionButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				
+				tmpView = v;
+				showQuestionDialog(tmpView);
+				
+			}
+		});
+
+				
+		
 		// START MENU BUTTON
 		exitButton = (ImageButton) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -504,4 +523,24 @@ public class Places extends Activity implements View.OnClickListener {
 		input_str = mGooglePlacesAPI.mGeoEng.getAddressFromAddress(input_str);
 		addressInput.setText(input_str);
 	}
+
+	
+	//  added---------------------------------------------------------------------
+	private void showQuestionDialog(View v) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		alertDialog.setTitle(" Places around a specific location");
+		String str= "By choosing the Places category, you can get a list of pubs, bars, restaurants and etc.\n" 
+				+ " Every place will be presented with its current rating.\n";
+
+		alertDialog.setMessage(str);
+		
+		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int which) {
+		       // here you can add functions
+		    }
+		 });
+		 alertDialog.setIcon(R.drawable.qm);
+		 alertDialog.show();
+		 
+	} 
 }
