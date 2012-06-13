@@ -60,7 +60,7 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iVenue = 1;
 	final static int iEmail = 2;
 	Bitmap bmp;
-	private boolean exitFlag = false;
+	private boolean exitFlag = true;
 	private Button exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
@@ -124,26 +124,18 @@ public class Report extends Activity implements View.OnClickListener {
 		
 		//added---------------------------------------------------------------------
 				mQuestionButton= (Button) findViewById(R.id.question);
-				
 				mQuestionButton.setOnClickListener(new OnClickListener() {
-
 					public void onClick(View v) {
-						
 						tmpView = v;
 						showQuestionDialog(tmpView);
-						
 					}
 				});
 
 				mQuestionButton2= (Button) findViewById(R.id.question2);
-				
 				mQuestionButton2.setOnClickListener(new OnClickListener() {
-
 					public void onClick(View v) {
-						
 						tmpView = v;
 						showQuestionDialog2(tmpView);
-						
 					}
 				});
 						
@@ -153,12 +145,10 @@ public class Report extends Activity implements View.OnClickListener {
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Intent myIntent = new Intent(getApplicationContext(),
-						FacebookMain.class);
 				if (Utility.mFacebook.isSessionValid()) {
 					Utility.objectID = "me";
 				}
-				startActivity(myIntent);
+				finish();
 			}
 		});
 
@@ -197,6 +187,7 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.ReasonRB2:
+			exitFlag=false;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			Bundle cbBundle = new Bundle();
 			location = et1.getText().toString();
@@ -206,6 +197,7 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iData);
 			break;
 		case R.id.ibReport:
+			exitFlag=false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -224,9 +216,15 @@ public class Report extends Activity implements View.OnClickListener {
 				break;
 			}
 			if (c3.isChecked())
+			{
+				exitFlag=false;
 				mProgress.setMessage("Please Wait...");
+			}
 			else
+			{
 				mProgress.setMessage("Sending report...");
+				exitFlag = true;
+			}
 			mProgress.show();
 			report.setEnabled(false);
 			tmpView = v;
@@ -445,7 +443,6 @@ public class Report extends Activity implements View.OnClickListener {
 								OfficialReport.class);
 						startActivityForResult(repIntent, iEmail);
 					} else {
-						exitFlag = true;
 						if (c1.isChecked())
 							PostStatusToFeed(MSG);
 						if (conflict == 1)
