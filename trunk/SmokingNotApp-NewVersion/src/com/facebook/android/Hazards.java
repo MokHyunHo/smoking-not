@@ -56,10 +56,10 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private Button exitButton;
 	private ProgressDialog mProgress;
 	private View tmpView;
-	private int isMain=0;
-//  added---------------------------------------------------------------------
+	private int isMain = 0;
+	// added---------------------------------------------------------------------
 	private Button mQuestionButton;
-	//private View tmpView;
+	// private View tmpView;
 
 	private Location chosenLocation = null;
 	private String chosenAddress = "";
@@ -79,20 +79,19 @@ public class Hazards extends Activity implements View.OnClickListener {
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
 		bmp = BitmapFactory.decodeStream(is);
 
-		//added---------------------------------------------------------------------
-		mQuestionButton= (Button) findViewById(R.id.question);
-		
+		// added---------------------------------------------------------------------
+		mQuestionButton = (Button) findViewById(R.id.question);
+
 		mQuestionButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
+
 				tmpView = v;
 				showQuestionDialog(tmpView);
-				
+
 			}
 		});
 
-				
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -129,14 +128,14 @@ public class Hazards extends Activity implements View.OnClickListener {
 					ChooseHazardLocation.class);
 			startActivityForResult(myIntent, iLocation);
 			break;
-			
+
 		case R.id.bhReport:
-			
+
 			if (et1.getText().toString().compareTo("<<< Choose location >>>") == 0) {
 				msgPoster.post(mChoosePlaceNotification);
 				break;
 			}
-			
+
 			mProgress.setMessage("Sending report...");
 			mProgress.show();
 			report.setEnabled(false);
@@ -212,15 +211,18 @@ public class Hazards extends Activity implements View.OnClickListener {
 					}
 
 					if (c1.isChecked()) {
-						String msg = MSG
-								+ "\nReported a hazard at address "
-								+ chosenAddress
-								+ (comments_str.compareTo("") == 0 ? "\n "
-										+ comments_str : "");
-						PostStatusToFeed(msg);
+						StringBuilder msg = new StringBuilder(MSG);
+
+						msg.append("\nReported a hazard at address "
+								+ chosenAddress);
+						if (comments_str.compareTo("") != 0)
+							msg.append("\n ").append(comments_str);
+						
+						Log.i("Eric hzrd", "c: " + comments_str + ", msg: "
+								+ msg);
+						PostStatusToFeed(msg.toString());
 					}
-					
-					
+
 					Intent repIntent = new Intent(Hazards.this,
 							OfficialReport.class);
 					startActivityForResult(repIntent, iEmail);
@@ -229,25 +231,21 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 			}.start();
 			/*
-			Intent repIntent = new Intent(Hazards.this,
-					OfficialReport.class);
-			Bundle returnBundle = new Bundle();
-			returnBundle.putString("StrLocation", location);
-			repIntent.putExtras(returnBundle);
-			repIntent.putExtra("BitmapImage", bmp);
-			startActivity(repIntent);
-			*/
+			 * Intent repIntent = new Intent(Hazards.this,
+			 * OfficialReport.class); Bundle returnBundle = new Bundle();
+			 * returnBundle.putString("StrLocation", location);
+			 * repIntent.putExtras(returnBundle);
+			 * repIntent.putExtra("BitmapImage", bmp); startActivity(repIntent);
+			 */
 			break;
 
 		}
 
 	}
 
-
-	public void onPause()
-	{
-			isMain=0;
-			super.onPause();
+	public void onPause() {
+		isMain = 0;
+		super.onPause();
 	}
 
 	@Override
@@ -271,12 +269,11 @@ public class Hazards extends Activity implements View.OnClickListener {
 					String orphone = extras.getString("Phone");
 					String oradd = extras.getString("Address");
 					String oremail = extras.getString("Email");
-					String comment=comments.getText().toString();
-					String loc= et1.getText().toString();
-					
-					
-					EmailDetails ed = new EmailDetails(orname, orphone, oradd, oremail,
-							null, loc,comment);
+					String comment = comments.getText().toString();
+					String loc = et1.getText().toString();
+
+					EmailDetails ed = new EmailDetails(orname, orphone, oradd,
+							oremail, null, loc, comment);
 
 					if (bmp != null) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -293,11 +290,10 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 					// prepare Json
 					try {
-						json2=new JSONStringer().object().key("action")
-								.value("send_hazardemail")
-								.key("hazard_email").value(EmailStr)
-								.endObject();
-					
+						json2 = new JSONStringer().object().key("action")
+								.value("send_hazardemail").key("hazard_email")
+								.value(EmailStr).endObject();
+
 					} catch (JSONException e) {
 						Log.e("json exeption-can't create jsonstringer with email",
 								e.toString());
@@ -312,7 +308,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 					} catch (Exception e) {
 						Log.w("couldn't send email to servlet", e.toString());
 					}
-					
+
 					mHandler.sendMessage(mHandler.obtainMessage(0));
 					break;
 				}
@@ -426,7 +422,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 			Log.v("Error", e.toString());
 		}
 	}
-	
+
 	private void clearForm() {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.imageplace);
@@ -454,21 +450,22 @@ public class Hazards extends Activity implements View.OnClickListener {
 		}
 
 	};
-//  added---------------------------------------------------------------------
+
+	// added---------------------------------------------------------------------
 	private void showQuestionDialog(View v) {
-		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+				.create();
 		alertDialog.setTitle("Report safety hazards");
-		String str= "- By selecting the Hazards option, you can add a photo of the hazard, the location of the hazard and a free text describing it.\n"
+		String str = "- By selecting the Hazards option, you can add a photo of the hazard, the location of the hazard and a free text describing it.\n"
 				+ "- The report will be sent to the municipal service center and will be taken care as soon as possible.\n";
 		alertDialog.setMessage(str);
 
-		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int which)
-		    {
-		       // here you can add functions
-		    }
-		 });
-		 alertDialog.setIcon(R.drawable.qm);
-		 alertDialog.show(); 
-	} 
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// here you can add functions
+			}
+		});
+		alertDialog.setIcon(R.drawable.qm);
+		alertDialog.show();
+	}
 }
