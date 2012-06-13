@@ -1,10 +1,13 @@
 package com.facebook.android;
 
 import com.facebook.android.R;
+
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -64,7 +67,6 @@ public class ExtendedCheckBoxList extends ListActivity implements
 
 		case R.id.bSelect:
 			// passing values to the 'Send' action
-			String loc = "";
 			String[] checked = new String[NumOfOptions];
 			ExtendedCheckBox cb;
 			int j = 0;
@@ -75,20 +77,12 @@ public class ExtendedCheckBoxList extends ListActivity implements
 					j++;
 				}
 			}
-			Bundle gotLoc = getIntent().getExtras();
-			try {
-				loc = gotLoc.getString("StrLocation");
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-			Bundle returnBundle = new Bundle();
-			returnBundle.putStringArray("checkedOptions", checked);
-			returnBundle.putString("StrLocation", loc);
-			Bitmap bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
-			Intent int_a = new Intent(getApplicationContext(), Report.class);
-			int_a.putExtras(returnBundle);
-			int_a.putExtra("BitmapImage", bmp);
-			startActivity(int_a);
+			
+			Intent int_a = new Intent();
+			Log.i("ERIC", checked.toString());
+			int_a.putExtra("checkedOptions", checked);
+			
+			setResult(Activity.RESULT_OK, int_a);
 			finish();
 			break;
 		}
