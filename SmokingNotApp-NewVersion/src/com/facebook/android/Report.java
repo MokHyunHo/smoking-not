@@ -476,7 +476,7 @@ public class Report extends Activity implements View.OnClickListener {
 					Log.i("Elad", "get result: " + orname + orphone + oradd
 							+ oremail);
 					String orloc = et1.getText().toString();
-					String checked_str = "";
+					String checked_str = ""; 
 					StringBuilder sb = new StringBuilder("");
 
 					for (int i = 0; i < checked.length; i++) {
@@ -525,10 +525,10 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("couldn't send email to servlet", e.toString());
 					}
 					// pop-up view
-					mHandler.sendMessage(mHandler.obtainMessage(1));
+					//mHandler.sendMessage(mHandler.obtainMessage(1));
 					break;
 				}
-			}
+			} 
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
 			mHandler.sendMessage(mHandler.obtainMessage(3));
