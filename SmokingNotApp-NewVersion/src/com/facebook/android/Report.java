@@ -59,6 +59,7 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iData = 0;
 	final static int iVenue = 1;
 	final static int iEmail = 2;
+	final static int iCheckBox = 3;
 	Bitmap bmp;
 	private boolean exitFlag = true;
 	private Button exitButton;
@@ -81,28 +82,7 @@ public class Report extends Activity implements View.OnClickListener {
 		// initialization of all the objects
 		setContentView(R.layout.report);
 		Init();
-		Bundle gotChecked = getIntent().getExtras();
-		try {
-			checked = gotChecked.getStringArray("checkedOptions");
-			if (checked != null)
-				c3.setVisibility(View.VISIBLE);
-		} catch (NullPointerException e) {
-			Log.w("user didn't check any box", e.toString());
-		}
-		try {
-			location = gotChecked.getString("StrLocation");
-			et1.setText(location);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		try {
-			if (bmp != null) {
-				bmp = (Bitmap) getIntent().getParcelableExtra("BitmapImage");
-				iv.setImageBitmap(bmp);
-			}
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+
 
 		// Top Menu and switching between activities
 		tvReport.setOnClickListener(this);
@@ -189,12 +169,12 @@ public class Report extends Activity implements View.OnClickListener {
 		case R.id.ReasonRB2:
 			exitFlag=false;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
-			Bundle cbBundle = new Bundle();
-			location = et1.getText().toString();
-			cbBundle.putString("StrLocation", location);
-			i.putExtras(cbBundle);
-			i.putExtra("BitmapImage", bmp);
-			startActivityForResult(i, iData);
+			//Bundle cbBundle = new Bundle();
+			//location = et1.getText().toString();
+			//cbBundle.putString("StrLocation", location);
+			//i.putExtras(cbBundle);
+			//i.putExtra("BitmapImage", bmp);
+			startActivityForResult(i, iCheckBox);
 			break;
 		case R.id.ibReport:
 			exitFlag=false;
@@ -481,6 +461,17 @@ public class Report extends Activity implements View.OnClickListener {
 				case iData:
 					bmp = (Bitmap) extras.get("data");
 					iv.setImageBitmap(bmp);
+					break;
+				case iCheckBox:
+
+					try {
+						checked = data.getStringArrayExtra("checkedOptions");
+						if (checked.length > 0)
+							c3.setVisibility(View.VISIBLE);
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+					}
+					
 					break;
 				case iVenue:
 					Log.i("ERIC", "getting place");
