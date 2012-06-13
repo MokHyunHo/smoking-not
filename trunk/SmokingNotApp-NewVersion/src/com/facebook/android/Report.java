@@ -472,6 +472,7 @@ public class Report extends Activity implements View.OnClickListener {
 					String orphone = extras.getString("Phone");
 					String oradd = extras.getString("Address");
 					String oremail = extras.getString("Email");
+					String comment = comments.getText().toString();
 					Log.i("Elad", "get result: " + orname+orphone+oradd+oremail);
 					String orloc = et1.getText().toString();
 					String checked_str = "";
@@ -479,14 +480,14 @@ public class Report extends Activity implements View.OnClickListener {
 
 					for (int i = 0; i < checked.length; i++) {
 						if (checked[i] != null)
-							sb.append(checked[i]).append(" ");
-					}
+							sb.append(checked[i]).append(";");
+					} 
 
 					checked_str = sb.toString();
 					Log.i("ERIC ortal", checked_str);
 					Log.i("ortal", orname);
 					ed = new EmailDetails(orname, orphone, oradd, oremail,
-							checked_str, orloc);
+							checked_str, orloc,comment);
 
 					if (bmp != null) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -504,8 +505,10 @@ public class Report extends Activity implements View.OnClickListener {
 					// prepare Json
 					try {
 
-						json2 = new JSONStringer().object().key("send_email")
-								.value(EmailStr).endObject();
+						json2=new JSONStringer().object().key("action")
+								.value("send_reportemail")
+								.key("report_email").value(EmailStr)
+								.endObject();
 
 					} catch (JSONException e) {
 						Log.e("json exeption-can't create jsonstringer with email",

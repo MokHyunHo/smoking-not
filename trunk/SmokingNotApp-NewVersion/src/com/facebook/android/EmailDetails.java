@@ -8,9 +8,10 @@ public class EmailDetails {
 	 private byte[] pic;
 	 private String text;
 	 private String loc_name;
+	 private String comment;
 	// private String loc_address;
 	 
-	 public EmailDetails(String name, String phone, String add, String mail,String text, String loc_name)
+	 public EmailDetails(String name, String phone, String add, String mail,String text, String loc_name,String comment)
 	 {
 		 this.name=name;
 		 this.phone=phone;
@@ -18,6 +19,7 @@ public class EmailDetails {
 		 this.mail=mail;
 		 this.text=text;
 		 this.loc_name=loc_name;
+		 this.comment=comment;
 		// this.loc_address=loc_address;
 		 
 		 
@@ -51,6 +53,11 @@ public class EmailDetails {
 	 public byte[] getPicture(){
 		 return pic;
 	 }
+	 
+	 public String getComment() {
+		 return comment;
+	 }
+	 
 	 
 	 
 	 
