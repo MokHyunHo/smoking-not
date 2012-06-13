@@ -560,7 +560,7 @@ public class Report extends Activity implements View.OnClickListener {
 						Log.w("couldn't send email to servlet", e.toString());
 					}
 					// pop-up view
-					//mHandler.sendMessage(mHandler.obtainMessage(1));
+					mHandler.sendMessage(mHandler.obtainMessage(1));
 					break;
 				}
 			} 
