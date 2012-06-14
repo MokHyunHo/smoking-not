@@ -39,6 +39,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,7 +77,7 @@ public class FacebookMain extends Activity {
 	private Button mReportButton;
 	private Button mHazardsButton;
 //  added---------------------------------------------------------------------
-	private Button mQuestionButton;
+	private ImageButton mQuestionButton;
 	private View tmpView;
 	Intent i;
 
@@ -109,7 +110,7 @@ public class FacebookMain extends Activity {
 		mReportButton = (Button) findViewById(R.id.reportButton);
 		mHazardsButton = (Button) findViewById(R.id.hazardsButton);
 //added---------------------------------------------------------------------
-		mQuestionButton= (Button) findViewById(R.id.question);
+		mQuestionButton= (ImageButton) findViewById(R.id.question);
 
 		// restore session if one exists
 		SessionStore.restore(Utility.mFacebook, this);

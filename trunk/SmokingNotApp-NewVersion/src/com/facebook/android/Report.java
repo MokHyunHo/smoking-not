@@ -60,6 +60,7 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iVenue = 1;
 	final static int iEmail = 2;
 	final static int iCheckBox = 3;
+
 	Bitmap bmp;
 	private boolean exitFlag = true;
 	private Button exitButton;
@@ -169,12 +170,8 @@ public class Report extends Activity implements View.OnClickListener {
 		case R.id.ReasonRB2:
 			exitFlag=false;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
-			//Bundle cbBundle = new Bundle();
-			//location = et1.getText().toString();
-			//cbBundle.putString("StrLocation", location);
-			//i.putExtras(cbBundle);
-			//i.putExtra("BitmapImage", bmp);
 			startActivityForResult(i, iCheckBox);
+
 			break;
 		case R.id.ibReport:
 			exitFlag=false;
@@ -443,6 +440,7 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.etLocation:
+			exitFlag=false;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
@@ -558,15 +556,15 @@ public class Report extends Activity implements View.OnClickListener {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.imageplace);
 		iv.setImageBitmap(bmp);
-
-		rg = (RadioGroup) findViewById(R.id.ReasonSp);
+		
 		r1.setSelected(true);
-		r2.setSelected(false);
+		r2.setSelected(true);
 		et1.setText("<<< Choose place >>>");
 		comments.setText("");
 		c1.setSelected(true);
 		c3.setSelected(false);
 		c3.setVisibility(c3.INVISIBLE);
+		
 	}
 
 	private boolean haveNetworkConnection() {

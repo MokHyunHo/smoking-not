@@ -77,7 +77,6 @@ public class ExtendedCheckBoxList extends ListActivity implements
 					j++;
 				}
 			}
-			
 			Intent int_a = new Intent();
 			Log.i("ERIC", checked.toString());
 			int_a.putExtra("checkedOptions", checked);
