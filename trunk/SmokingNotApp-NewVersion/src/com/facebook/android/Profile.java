@@ -212,12 +212,13 @@ public class Profile extends Activity {
 	private void showQuestionDialog(View v) {
 		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
 				.create();
-		alertDialog.setTitle("Your Report Has Been Sent!");
-		String str = "By selecting the Profile option, you'll be able to see your reports' history and your number of points. you get points in following ways:\n"
-				+ "•	For every positive report, you'll get 2 points.\n"
-				+ "•	For every negative report, you'll get 1 point.\n"
-				+ "•	For every hazards report, you'll get 1 point.\n"
-				+ "The more points you'll get, the higher your level will be and the higher the value of your report will get. In other words, in the highest level, your report will have a bigger influence because we consider you as very credible.\n";
+		alertDialog.setTitle("Manage a personal profile.");
+		String str = "Here you can see your reports' history and your number of points.\n" 
+				+ "You get points this way:\n"
+				+ "•	Positive report - 2 points.\n"
+				+ "•	Negative report - 1 point.\n"
+				+ "•	Hazards report  - 1 point.\n"
+				+ "The more points you'll get, the higher your level will be and your report will have a bigger influence because we consider you as very credible.\n";
 		alertDialog.setMessage(str);
 
 		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {

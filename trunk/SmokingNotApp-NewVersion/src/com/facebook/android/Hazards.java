@@ -35,6 +35,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+
 public class Hazards extends Activity implements View.OnClickListener {
 
 	String location, points;
@@ -454,7 +455,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 				.create();
 		alertDialog.setTitle("Report safety hazards");
 		String str = "- By selecting the Hazards option, you can add a photo of the hazard, the location of the hazard and a free text describing it.\n"
-				+ "- The report will be sent to the municipal service center and will be taken care as soon as possible.\n";
+				   + "- The report will be sent to the municipal service center and will be taken care as soon as possible.\n";
 		alertDialog.setMessage(str);
 
 		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {

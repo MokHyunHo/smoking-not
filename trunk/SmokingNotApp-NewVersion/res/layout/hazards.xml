@@ -155,14 +155,12 @@
         android:background="@drawable/sbutton"
         android:text="Report" />
 
-
     <Button
         android:id="@+id/question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/ivReport"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/ivReport"
+        android:layout_alignParentTop="true"
         android:background="@drawable/qm" />
 
 </RelativeLayout>
