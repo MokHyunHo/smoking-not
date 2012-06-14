@@ -714,9 +714,9 @@ public class Report extends Activity implements View.OnClickListener {
 	//  added---------------------------------------------------------------------
 	private void showQuestionDialog(View v) {
 		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-		alertDialog.setTitle("Report places concerning smoking rules");
+		alertDialog.setTitle("Report places");
 		
-		String str= "You can choose the place you're at, you can choose Complaint or add Positive Report.\n"
+		String str= "You can choose the place you're at, you can choose Complaint or add Positive Report concerning smoking rules.\n"
 				+ "- Based on this report and previous reports the rating of the place will be determined.\n" 
 				+ "- Your facebook profile will be updated with an application status that confirms your actions.\n";
 

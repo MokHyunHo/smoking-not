@@ -56,7 +56,7 @@ public class FacebookMain extends Activity {
 	 * Your Facebook Application ID must be set before running this example See
 	 * http://www.facebook.com/developers/createapp.php
 	 */
-	public static final String APP_ID = "306456662758902";
+	public static final String APP_ID = "306456662758902"; 
 
 	private ImageView mUserPic;
 	private LoginButton mLoginButton;
@@ -406,7 +406,7 @@ public class FacebookMain extends Activity {
 		String str="The Reporter offers you the ultimate tool- a real time report. \n\n"
 				+ "The application allows you to:\n" 
 				+ " 1.	Report places that are/aren't enforcing the rules concerning smoking. \n"
-				+ " 2.	Watch a full list of places around a specific location. (Report)\n" 
+				+ " 2.	Watch a full list of places around a specific location. (Smoking)\n" 
 				+ " 3.	Report safety hazards.\n"
 				+ " 4.	Manage a personal profile.\n";
 		alertDialog.setMessage(str);
