@@ -94,7 +94,7 @@ public class Places extends Activity implements View.OnClickListener {
 		mAdapter = new NearbyAdapter(this);
 		mNearbyList = new ArrayList<GooglePlace>();
 		mProgress = new ProgressDialog(this);
-		mProgress.setCancelable(false);
+		//mProgress.setCancelable(false);
 		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
 		mRefreshButton = (ImageButton) findViewById(R.id.ib_Refresh);
 		etSearch = (AutoCompleteTextView) findViewById(R.id.et_Search);
@@ -208,7 +208,7 @@ public class Places extends Activity implements View.OnClickListener {
 	public void onPause()
 	{
 		super.onPause();
-		finish();
+		//finish();
 	}
 	
 	@Override

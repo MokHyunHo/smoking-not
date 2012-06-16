@@ -65,6 +65,12 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 			break;
 		}
 	}
+	
+	public void onBackPressed()
+	{
+		setResult(Activity.RESULT_CANCELED);
+		finish();
+	}
 
 	private boolean validity() {
 		boolean flag = false;
