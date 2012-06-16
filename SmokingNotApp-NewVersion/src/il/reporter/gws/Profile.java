@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Profile extends Activity {
 	/** Called when the activity is first created. */
@@ -75,12 +76,17 @@ public class Profile extends Activity {
 			// Log.w("str=", str);
 		}
 
+		try {
 		// user's progress
 		pb = (ProgressBar) findViewById(R.id.progressbar);
 		total_score = (TextView) findViewById(R.id.tv_score);
 
 		pb.setProgress(ur_updated.GetScore());
 		total_score.setText(ur_updated.GetScore() + "/100");
+		} catch (Exception e) {
+			Toast.makeText(context, "Error retrieving data...", Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
 
 		// added---------------------------------------------------------------------
 		mQuestionButton = (Button) findViewById(R.id.question);

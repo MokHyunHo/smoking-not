@@ -157,7 +157,7 @@ public class Report extends Activity implements View.OnClickListener {
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		mProgress = new ProgressDialog(this);
-		mProgress.setCancelable(false);
+		//mProgress.setCancelable(false);
 	}
 
 	@Override
@@ -548,6 +548,14 @@ public class Report extends Activity implements View.OnClickListener {
 					break;
 				}
 			} 
+			else if (resultCode == RESULT_CANCELED) {
+			switch (requestCode) {
+				case iEmail:
+					mHandler.sendMessage(mHandler.obtainMessage(1));
+					Toast.makeText(context, "Sending official report cancelled bu user", Toast.LENGTH_SHORT).show();
+					break;
+			}
+			}
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
 			mHandler.sendMessage(mHandler.obtainMessage(3));
