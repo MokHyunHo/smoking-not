@@ -17,6 +17,7 @@
 package il.reporter.gws;
 
 import il.reporter.gws.SessionEvents.AuthListener;
+
 import il.reporter.gws.SessionEvents.LogoutListener;
 
 import java.io.IOException;
@@ -59,7 +60,8 @@ public class FacebookMain extends Activity {
 	 * Your Facebook Application ID must be set before running this example See
 	 * http://www.facebook.com/developers/createapp.php
 	 */
-	public static final String APP_ID = "306456662758902"; 
+	public static final String APP_ID = "306456662758902";
+	public static int LAST_ALLOWED_RADIUS = GooglePlacesAPI.ALLOWED_RADIUS;
 
 	private ImageView mUserPic;
 	private LoginButton mLoginButton;
