@@ -1,6 +1,7 @@
 package il.reporter.gws;
 
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -110,9 +111,10 @@ public class GooglePlacesAPI {
 				+ "/search/json?key="
 				+ context.getString(R.string.GooglePlacesAPIKey) + "&location="
 				+ ll + "&sensor=" + String.valueOf(hasLocation) + "&keyword="
-				+ searchStr + "&radius=" + radius + getChosenCatsStr();
+				+ URLEncoder.encode(searchStr, "UTF-8") + "&radius=" + radius + getChosenCatsStr();
 
-		url_str = url_str.replace(" ", "%20");
+		//url_str = url_str.replace(" ", "%20");
+		
 		URL url = new URL(url_str);
 
 		// Log.d("ERIC", url.toURI().toString());
@@ -131,6 +133,7 @@ public class GooglePlacesAPI {
 
 			JSONObject jsonObj = req.readJsonFromUrl(url.toString());
 			JSONArray places = jsonObj.getJSONArray("results");
+			
 
 			int length = places.length();
 			Log.d("ERIC", "length: " + length);
