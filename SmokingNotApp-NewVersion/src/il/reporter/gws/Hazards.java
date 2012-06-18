@@ -74,6 +74,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 
 		report.setOnClickListener(this);
 		ib.setOnClickListener(this);
+		iv.setOnClickListener(this);
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
 		bmp = BitmapFactory.decodeStream(is);
 
@@ -107,7 +108,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	private void Init() {
 		report = (Button) findViewById(R.id.bhReport);
 		ib = (ImageButton) findViewById(R.id.ibhReport);
-		iv = (ImageView) findViewById(R.id.ivReport);
+		iv = (ImageView) findViewById(R.id.ivHazard);
 		et1 = (EditText) findViewById(R.id.etLocation);
 		comments = (EditText) findViewById(R.id.comments);
 		c1 = (CheckBox) findViewById(R.id.hCB);
@@ -123,7 +124,10 @@ public class Hazards extends Activity implements View.OnClickListener {
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
-
+		case R.id.ivHazard:
+			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(i, iData);
+			break;
 		case R.id.etLocation:
 			myIntent = new Intent(getApplicationContext(),
 					ChooseHazardLocation.class);

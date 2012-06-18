@@ -1,6 +1,7 @@
 package il.reporter.gws;
 
 import android.content.Context;
+
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -25,7 +26,7 @@ import java.util.Random;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.facebook.android.R;
+import il.reporter.gws.R;
 import com.google.gson.Gson;
 
 public class UserReportsAdapter extends BaseAdapter {

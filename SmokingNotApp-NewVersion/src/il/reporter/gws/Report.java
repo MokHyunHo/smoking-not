@@ -96,6 +96,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 		report.setOnClickListener(this);
 		ib.setOnClickListener(this);
+		iv.setOnClickListener(this);
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
 		bmp = BitmapFactory.decodeStream(is);
 
@@ -176,6 +177,11 @@ public class Report extends Activity implements View.OnClickListener {
 
 			break;
 		case R.id.ibReport:
+			exitFlag=false;
+			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(i, iData);
+			break;
+		case R.id.ivReport:
 			exitFlag=false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);

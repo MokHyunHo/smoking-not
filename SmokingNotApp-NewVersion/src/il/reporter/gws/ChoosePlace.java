@@ -162,8 +162,8 @@ public class ChoosePlace extends Activity {
 				int what = 0;
 				Looper.prepare();
 				try {
-					//int radius = GooglePlacesAPI.ALLOWED_RADIUS;
-					int radius = GooglePlacesAPI.ALLOWED_RADIUS; 
+					int radius = GooglePlacesAPI.ALLOWED_RADIUS;
+					//int radius = GooglePlacesAPI.MAX_RADIUS; 
 					if (!query)
 						mNearbyList = mGooglePlacesAPI.getNearby(mLocation, radius);
 					else
