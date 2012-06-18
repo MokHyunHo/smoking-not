@@ -1,7 +1,8 @@
 package il.reporter.gws;
 
-import com.facebook.android.R;
-import com.facebook.android.R.layout;
+import il.reporter.gws.R;
+
+import il.reporter.gws.R.layout;
 
 import android.app.ActivityGroup;
 import android.os.Bundle;
