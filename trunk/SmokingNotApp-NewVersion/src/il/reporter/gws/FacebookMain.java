@@ -134,8 +134,20 @@ public class FacebookMain extends Activity {
 				fetching=requestUserData();
 			}
 			fetching=requestUserData();  //delete after it
-			
+			////////////////
+			WebRequest req = new WebRequest();
+			String str = "";
+		
+			try {
+				 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
+			}
+			catch(Exception e) {
+				Log.w("Ortal", "can't send user email to database");
+			}
 		}
+								
+			
+		
 
 		mProfileButton.setOnClickListener(new OnClickListener() {
 			
@@ -349,6 +361,16 @@ public class FacebookMain extends Activity {
 				fetching= requestUserData();
 			}
 			fetching=requestUserData();  //delete after it
+			
+				WebRequest req2 = new WebRequest();
+			
+				try {
+					 req2.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
+				}
+				catch(Exception e) {
+					Log.w("Ortal", "can't send user email to database");
+				}
+									
 		}
 
 		@Override
