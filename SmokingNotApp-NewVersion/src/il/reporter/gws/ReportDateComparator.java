@@ -9,8 +9,6 @@ import java.util.Date;
 public class ReportDateComparator implements Comparator<ReportDetails> {
 
 	public int compare(ReportDetails report1, ReportDetails report2) {
-		//report1.getDate().
-		//Date d1 = new Date()
 		try {
 			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 			Date date1 = (Date)df.parse(report1.getDate());
