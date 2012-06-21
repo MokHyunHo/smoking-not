@@ -103,6 +103,11 @@ public class PlaceDetails extends Activity {
 		getPlaceReports();
 
 	}
+	
+	public void onPause() {
+		super.onPause();
+		finish();
+	}
 
 	void getPlaceReports() {
 

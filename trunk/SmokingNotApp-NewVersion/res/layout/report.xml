@@ -112,7 +112,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/grey"
-            android:baselineAligned="true" >
+            android:baselineAligned="true"
+            android:weightSum="3" >
 
             <TextView
                 android:id="@+id/tvRep"
@@ -136,6 +137,19 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTopTen"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Top 10"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
         </TableRow>
     </TableLayout>
 

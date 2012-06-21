@@ -86,8 +86,8 @@ public class GooglePlacesAPI {
 		}
 	}
 
-	public ArrayList<GooglePlace> getNearby(Location location, int radius)
-			throws Throwable {
+	public ArrayList<GooglePlace> getNearby(Location location, int radius,
+			boolean getDbDetails) throws Throwable {
 
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
@@ -98,11 +98,12 @@ public class GooglePlacesAPI {
 				+ ll + "&sensor=true" + "&radius=" + radius
 				+ getChosenCatsStr());
 
-		return getPlaces(url, true, location);
+		return getPlaces(url, true, location, getDbDetails);
 	}
 
 	public ArrayList<GooglePlace> searchPlaces(Location location,
-			boolean hasLocation, String searchStr, int radius) throws Throwable {
+			boolean hasLocation, String searchStr, int radius,
+			boolean getDbDetails) throws Throwable {
 
 		String ll = String.valueOf(location.getLatitude()) + ","
 				+ String.valueOf(location.getLongitude());
@@ -111,19 +112,20 @@ public class GooglePlacesAPI {
 				+ "/search/json?key="
 				+ context.getString(R.string.GooglePlacesAPIKey) + "&location="
 				+ ll + "&sensor=" + String.valueOf(hasLocation) + "&keyword="
-				+ URLEncoder.encode(searchStr, "UTF-8") + "&radius=" + radius + getChosenCatsStr();
+				+ URLEncoder.encode(searchStr, "UTF-8") + "&radius=" + radius
+				+ getChosenCatsStr();
 
-		//url_str = url_str.replace(" ", "%20");
-		
+		// url_str = url_str.replace(" ", "%20");
+
 		URL url = new URL(url_str);
 
 		// Log.d("ERIC", url.toURI().toString());
 
-		return getPlaces(url, hasLocation, location);
+		return getPlaces(url, hasLocation, location, getDbDetails);
 	}
 
 	public ArrayList<GooglePlace> getPlaces(URL url, boolean by_location,
-			Location my_loc) throws Throwable {
+			Location my_loc, boolean getDbDetails) throws Throwable {
 
 		ArrayList<GooglePlace> placesList = new ArrayList<GooglePlace>();
 
@@ -133,7 +135,6 @@ public class GooglePlacesAPI {
 
 			JSONObject jsonObj = req.readJsonFromUrl(url.toString());
 			JSONArray places = jsonObj.getJSONArray("results");
-			
 
 			int length = places.length();
 			Log.d("ERIC", "length: " + length);
@@ -167,36 +168,36 @@ public class GooglePlacesAPI {
 					else
 						place.distance = -1.0;
 
-					// get location's rating from server
+					if (getDbDetails == true) {
+						// get location's rating from server
 
-					Gson gson1 = new Gson();
-					WebRequest req = new WebRequest();
-					String str = null;
-					LocationRequest loc_updated = null;
-					try {
-						JSONObject json2 = req.readJsonFromUrl(context
-								.getString(R.string.DatabaseUrl)
-								+ "/GetLocation?locationid=" + place.id);
-						str = (String) json2.get("location_req");
-						Log.w("str=", str);
-						if (str.compareTo("NotinDataBase") != 0)
-							loc_updated = gson1.fromJson(str,
-									LocationRequest.class);
-					} catch (JSONException e) {
-						Log.e("NearbyAdapter error, can't get response from server, JSON exception",
-								e.toString());
-						Log.w("str=", str);
-					} catch (Exception e) {
-						Log.e("NearbyAdapter error, can't get response from server",
-								e.toString());
-						Log.w("str=", str);
-					}
-					if (loc_updated != null) {
-						place.goodRate = loc_updated.getGoodRate();
-						place.badRate = loc_updated.getBadRate();
-					} else {
-						place.goodRate = 0;
-						place.badRate = 0;
+						Gson gson1 = new Gson();
+						WebRequest req = new WebRequest();
+						String str = null;
+						LocationRequest loc_updated = null;
+						try {
+							JSONObject json2 = req.readJsonFromUrl(context
+									.getString(R.string.DatabaseUrl)
+									+ "/GetLocation?locationid=" + place.id);
+							str = (String) json2.get("location_req");
+							Log.w("str=", str);
+							if (str.compareTo("NotinDataBase") != 0)
+								loc_updated = gson1.fromJson(str,
+										LocationRequest.class);
+						} catch (JSONException e) {
+							Log.e("NearbyAdapter error, can't get response from server, JSON exception",
+									e.toString());
+						} catch (Exception e) {
+							Log.e("NearbyAdapter error, can't get response from server",
+									e.toString());
+						}
+						if (loc_updated != null) {
+							place.goodRate = loc_updated.getGoodRate();
+							place.badRate = loc_updated.getBadRate();
+						} else {
+							place.goodRate = 0;
+							place.badRate = 0;
+						}
 					}
 					placesList.add(place);
 					Log.i("ERIC", "printing place - " + place.toString());
@@ -227,10 +228,11 @@ public class GooglePlacesAPI {
 
 	private double calculateDistance(Location loc1, Location loc2) {
 		Log.i("ERIC", "loc1: " + loc1.toString() + "loc2: " + loc2.toString());
-		
-		if ((loc1.getLatitude() == loc2.getLatitude()) && (loc1.getLongitude() == loc2.getLongitude()))
+
+		if ((loc1.getLatitude() == loc2.getLatitude())
+				&& (loc1.getLongitude() == loc2.getLongitude()))
 			return 0;
-		
+
 		double theta = loc1.getLongitude() - loc2.getLongitude();
 		double dist = Math.sin(deg2rad(loc1.getLatitude()))
 				* Math.sin(deg2rad(loc2.getLatitude()))

@@ -49,7 +49,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	String[] checked;
 	String location, reason, points;
-	TextView tvReport, tvPlaces;
+	TextView tvReport, tvPlaces, tvTopTen;
 	Button report;
 	ImageButton ib;
 	ImageView iv;
@@ -71,13 +71,12 @@ public class Report extends Activity implements View.OnClickListener {
 	private ProgressDialog mProgress;
 	private View tmpView;
 
-//  added---------------------------------------------------------------------
+	// added---------------------------------------------------------------------
 	private Button mQuestionButton;
 	private Button mQuestionButton2;
-	//private View tmpView;
+	// private View tmpView;
 
 	private Context context;
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,10 +86,10 @@ public class Report extends Activity implements View.OnClickListener {
 		setContentView(R.layout.report);
 		Init();
 
-
 		// Top Menu and switching between activities
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
+		tvTopTen.setOnClickListener(this);
 		et1.setOnClickListener(this);
 		r1.setOnClickListener(this);
 		r2.setOnClickListener(this);
@@ -106,25 +105,23 @@ public class Report extends Activity implements View.OnClickListener {
 			r2.setChecked(true);
 		}
 
-		
-		//added---------------------------------------------------------------------
-				mQuestionButton= (Button) findViewById(R.id.question);
-				mQuestionButton.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						tmpView = v;
-						showQuestionDialog(tmpView);
-					}
-				});
+		// added---------------------------------------------------------------------
+		mQuestionButton = (Button) findViewById(R.id.question);
+		mQuestionButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				tmpView = v;
+				showQuestionDialog(tmpView);
+			}
+		});
 
-				mQuestionButton2= (Button) findViewById(R.id.question2);
-				mQuestionButton2.setOnClickListener(new OnClickListener() {
-					public void onClick(View v) {
-						tmpView = v;
-						showQuestionDialog2(tmpView);
-					}
-				});
-						
-		
+		mQuestionButton2 = (Button) findViewById(R.id.question2);
+		mQuestionButton2.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				tmpView = v;
+				showQuestionDialog2(tmpView);
+			}
+		});
+
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
@@ -151,6 +148,7 @@ public class Report extends Activity implements View.OnClickListener {
 		iv = (ImageView) findViewById(R.id.ivReport);
 		tvReport = (TextView) findViewById(R.id.tvRep);
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
+		tvTopTen = (TextView) findViewById(R.id.tvTopTen);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
 		r2 = (RadioButton) findViewById(R.id.ReasonRB2);
@@ -159,31 +157,36 @@ public class Report extends Activity implements View.OnClickListener {
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		mProgress = new ProgressDialog(this);
-		//mProgress.setCancelable(false);
+		// mProgress.setCancelable(false);
 	}
 
 	@Override
 	public void onClick(View v) {
 		Intent myIntent;
 		switch (v.getId()) {
+		case R.id.tvTopTen:
+			myIntent = new Intent(getApplicationContext(), TopPlaces.class);
+			startActivity(myIntent);
+			break;
+
 		case R.id.ReasonRB1:
 			c3.setVisibility(View.INVISIBLE);
 			c3.setChecked(false);
 			break;
 
 		case R.id.ReasonRB2:
-			exitFlag=false;
+			exitFlag = false;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			startActivityForResult(i, iCheckBox);
 
 			break;
 		case R.id.ibReport:
-			exitFlag=false;
+			exitFlag = false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
 		case R.id.ivReport:
-			exitFlag=false;
+			exitFlag = false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -202,13 +205,10 @@ public class Report extends Activity implements View.OnClickListener {
 				msgPoster.post(mChoosePlaceNotification);
 				break;
 			}
-			if (c3.isChecked())
-			{
-				exitFlag=false;
+			if (c3.isChecked()) {
+				exitFlag = false;
 				mProgress.setMessage("Please Wait...");
-			}
-			else
-			{
+			} else {
 				mProgress.setMessage("Sending report...");
 				exitFlag = true;
 			}
@@ -436,8 +436,7 @@ public class Report extends Activity implements View.OnClickListener {
 							mHandler.sendMessage(mHandler.obtainMessage(2));
 						else
 							mHandler.sendMessage(mHandler.obtainMessage(0));
-						if (conflict != 1)
-						{
+						if (conflict != 1) {
 							mHandler.sendMessage(mHandler.obtainMessage(1));
 						}
 					}
@@ -454,7 +453,7 @@ public class Report extends Activity implements View.OnClickListener {
 			}
 			break;
 		case R.id.etLocation:
-			exitFlag=false;
+			exitFlag = false;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
@@ -484,7 +483,7 @@ public class Report extends Activity implements View.OnClickListener {
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 					}
-					
+
 					break;
 				case iVenue:
 					Log.i("ERIC", "getting place");
@@ -508,7 +507,7 @@ public class Report extends Activity implements View.OnClickListener {
 					Log.i("Elad", "get result: " + orname + orphone + oradd
 							+ oremail);
 					String orloc = et1.getText().toString();
-					String checked_str = ""; 
+					String checked_str = "";
 					StringBuilder sb = new StringBuilder("");
 
 					for (int i = 0; i < checked.length; i++) {
@@ -560,14 +559,15 @@ public class Report extends Activity implements View.OnClickListener {
 					mHandler.sendMessage(mHandler.obtainMessage(1));
 					break;
 				}
-			} 
-			else if (resultCode == RESULT_CANCELED) {
-			switch (requestCode) {
+			} else if (resultCode == RESULT_CANCELED) {
+				switch (requestCode) {
 				case iEmail:
 					mHandler.sendMessage(mHandler.obtainMessage(1));
-					Toast.makeText(context, "Sending official report cancelled bu user", Toast.LENGTH_SHORT).show();
+					Toast.makeText(context,
+							"Sending official report cancelled bu user",
+							Toast.LENGTH_SHORT).show();
 					break;
-			}
+				}
 			}
 		} catch (Throwable Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
@@ -579,7 +579,7 @@ public class Report extends Activity implements View.OnClickListener {
 		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.imageplace);
 		iv.setImageBitmap(bmp);
-		
+
 		r1.setSelected(true);
 		r2.setSelected(true);
 		et1.setText("<<< Choose place >>>");
@@ -587,7 +587,7 @@ public class Report extends Activity implements View.OnClickListener {
 		c1.setSelected(true);
 		c3.setSelected(false);
 		c3.setVisibility(c3.INVISIBLE);
-		
+
 	}
 
 	private boolean haveNetworkConnection() {
@@ -614,7 +614,7 @@ public class Report extends Activity implements View.OnClickListener {
 		builder.setCancelable(true);
 
 		final AlertDialog dlg = builder.create();
-		
+
 		dlg.show();
 		final Timer t = new Timer();
 		t.schedule(new TimerTask() {
@@ -674,7 +674,6 @@ public class Report extends Activity implements View.OnClickListener {
 		try {
 			String response = Utility.mFacebook.request("me");
 			Bundle parameters = new Bundle();
-			
 
 			parameters.putString("name", "The Reporter!");
 			if (reason.compareTo("Positive Report") == 0) {
@@ -725,51 +724,53 @@ public class Report extends Activity implements View.OnClickListener {
 				break;
 			case 3:
 				Toast.makeText(context, "Error occured...", Toast.LENGTH_LONG);
-				
+
 			}
 
 		}
 
 	};
-	
-	//  added---------------------------------------------------------------------
+
+	// added---------------------------------------------------------------------
 	private void showQuestionDialog(View v) {
-		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+				.create();
 		alertDialog.setTitle("Report places");
-		
-		String str= "You can choose the place you're at, you can choose Complaint or add Positive Report concerning smoking rules.\n"
-				+ "- Based on this report and previous reports the rating of the place will be determined.\n" 
+
+		String str = "You can choose the place you're at, you can choose Complaint or add Positive Report concerning smoking rules.\n"
+				+ "- Based on this report and previous reports the rating of the place will be determined.\n"
 				+ "- Your facebook profile will be updated with an application status that confirms your actions.\n";
 
 		alertDialog.setMessage(str);
 
-		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int which) {
-		       // here you can add functions
-		    }
-		 });
-		 alertDialog.setIcon(R.drawable.qm);
-		 alertDialog.show();
-		 
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// here you can add functions
+			}
+		});
+		alertDialog.setIcon(R.drawable.qm);
+		alertDialog.show();
+
 	}
-	
+
 	private void showQuestionDialog2(View v) {
-		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+				.create();
 		alertDialog.setTitle("Official Report");
-		
-		String str= "If you choose Complaint option, you'll need to check the Official Report option in the publish via area.\n"
-				+ "- An official report is a report that sends to the municipal service center and this report might be a reason for the municipality to investigate the place and punish it accordingly.\n" 
+
+		String str = "If you choose Complaint option, you'll need to check the Official Report option in the publish via area.\n"
+				+ "- An official report is a report that sends to the municipal service center and this report might be a reason for the municipality to investigate the place and punish it accordingly.\n"
 				+ "- Plz fill correct details so the municipality will be able to contact you and send you an update SMS.\n";
 
 		alertDialog.setMessage(str);
 
-		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int which) {
-		       // here you can add functions
-		    }
-		 });
-		 alertDialog.setIcon(R.drawable.qm);
-		 alertDialog.show();
-		 
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// here you can add functions
+			}
+		});
+		alertDialog.setIcon(R.drawable.qm);
+		alertDialog.show();
+
 	}
 }

@@ -1,7 +1,5 @@
 package il.reporter.gws;
 
-import il.reporter.gws.FacebookMain;
-
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -24,8 +22,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -53,7 +49,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
 	private final int CYCLES_TO_WAIT = 5;
-	private TextView tvReport, tvPlaces, tvAddress;
+	private TextView tvReport, tvPlaces, tvTopTen, tvAddress;
 	private Button goBtn;
 	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
@@ -85,6 +81,7 @@ public class Places extends Activity implements View.OnClickListener {
 		context = this;
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
+		tvTopTen= (TextView) findViewById(R.id.tvTopTen);
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (ImageButton) findViewById(R.id.b_search);
@@ -174,6 +171,7 @@ public class Places extends Activity implements View.OnClickListener {
 		// first-up menu
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
+		tvTopTen.setOnClickListener(this);
 
 		
 		//added---------------------------------------------------------------------
@@ -225,6 +223,11 @@ public class Places extends Activity implements View.OnClickListener {
 			break;
 		case R.id.tvPlaPlaces:
 			break;
+		case R.id.tvTopTen:
+			myIntent = new Intent(getApplicationContext(), TopPlaces.class);
+			startActivity(myIntent);
+			break;
+			
 		}
 	}
 
@@ -395,7 +398,7 @@ public class Places extends Activity implements View.OnClickListener {
 								break;
 							sleep(1000);
 							counter++;
-							Log.i("ERIC", "counter=" + counter);
+							Log.i("ERIC", "counter=" + counter + "mloc ok: " + (mLocation != null));
 						}
 						if (mLocation == null) {
 							mLocation = mLocEng.getLastKnownLocation();
@@ -414,7 +417,7 @@ public class Places extends Activity implements View.OnClickListener {
 								break;
 							sleep(1000);
 							counter++;
-							Log.i("ERIC", "counter=" + counter);
+							Log.i("ERIC", "counter address=" + counter);
 						}
 					}
 				} catch (Exception e) {
@@ -441,10 +444,10 @@ public class Places extends Activity implements View.OnClickListener {
 					if (query == true) {
 						Log.i("ERIC", searchStr);
 						mNearbyList = mGooglePlacesAPI.searchPlaces(location,
-								mLocEng.isLocationEnabled(), searchStr, radius);
+								mLocEng.isLocationEnabled(), searchStr, radius, true);
 					} else
 						mNearbyList = mGooglePlacesAPI.getNearby(location,
-								radius);
+								radius, true);
 
 				} catch (Throwable e) {
 					what = M_GET_PLACES_ERR;
