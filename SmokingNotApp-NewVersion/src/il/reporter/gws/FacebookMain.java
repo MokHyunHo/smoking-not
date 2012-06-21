@@ -352,7 +352,6 @@ public class FacebookMain extends Activity {
 							
 							try {
 								 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
-								mText.setText(email);   //test to show email
 							}
 							catch(Exception e) {
 								Log.w("Ortal", "can't send user email to database");
