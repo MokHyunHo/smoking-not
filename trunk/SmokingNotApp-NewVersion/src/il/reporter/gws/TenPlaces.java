@@ -1,23 +1,27 @@
 package il.reporter.gws;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class TenPlaces {
-	public static final int num_places=10;
-	private LocationRequest places[];
-	int count;
+	
+	
+	private List<LocationRequest> places;
+	int count=0;
+
 
 	public TenPlaces() {
-		this.places = new LocationRequest[num_places];
+		this.places = new ArrayList<LocationRequest>();
 		count=0;
 	}
 
-	public LocationRequest[] getTenPlaces() {
+	public List<LocationRequest>  getTenPlaces() {
 		return places;
 	}
 	
-	public void AddLocation( LocationRequest lr) {
-		places[count]=lr;
-		count++;
+	public  void AddLocation (LocationRequest lr) {
+		places.add(lr);
 	}
+	
+	
 
 }
