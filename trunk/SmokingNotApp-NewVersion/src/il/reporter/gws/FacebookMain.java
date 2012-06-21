@@ -134,15 +134,16 @@ public class FacebookMain extends Activity {
 				fetching=requestUserData();
 			}
 			fetching=requestUserData();  //delete after it
-			////////////////
+			
+			if (fetching==1) {
 			WebRequest req = new WebRequest();
-			String str = "";
-		
+			
 			try {
 				 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
 			}
 			catch(Exception e) {
 				Log.w("Ortal", "can't send user email to database");
+			}
 			}
 		}
 								
@@ -158,10 +159,11 @@ public class FacebookMain extends Activity {
 							Profile.class);
 					if (!Utility.mFacebook.isSessionValid()) {
 						mText.setText("Please login first!");
-						mText.setTextColor(Color.BLUE);
+						mText.setTextColor(Color.YELLOW);
 
 					}
 					if (Utility.mFacebook.isSessionValid()) {
+						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -179,9 +181,10 @@ public class FacebookMain extends Activity {
 							Report.class);
 					if (!Utility.mFacebook.isSessionValid()) {
 						mText.setText("Please login first!");
-						mText.setTextColor(Color.BLUE);
+						mText.setTextColor(Color.YELLOW);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
+						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -198,9 +201,10 @@ public class FacebookMain extends Activity {
 							Hazards.class);
 					if (!Utility.mFacebook.isSessionValid()) {
 						mText.setText("Please login first!");
-						mText.setTextColor(Color.BLUE);
+						mText.setTextColor(Color.YELLOW);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
+						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -361,15 +365,16 @@ public class FacebookMain extends Activity {
 				fetching= requestUserData();
 			}
 			fetching=requestUserData();  //delete after it
-			
+			if (fetching==1) {
 				WebRequest req2 = new WebRequest();
-			
+				
 				try {
 					 req2.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
 				}
 				catch(Exception e) {
 					Log.w("Ortal", "can't send user email to database");
 				}
+			}
 									
 		}
 

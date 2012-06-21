@@ -65,6 +65,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	Bitmap bmp;
 	private boolean exitFlag = true;
+	private boolean takePicFlag = false;
 	private Button exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
@@ -195,6 +196,7 @@ public class Report extends Activity implements View.OnClickListener {
 			 * "You have no internet connection!", Toast.LENGTH_LONG).show(); }
 			 * }; msgPoster.post(mInternetNotification); break; }
 			 */
+			
 			// check that the location field is not empty
 			if (et1.getText().toString().compareTo("<<< Choose place >>>") == 0) {
 				msgPoster.post(mChoosePlaceNotification);
@@ -471,6 +473,7 @@ public class Report extends Activity implements View.OnClickListener {
 				case iData:
 					bmp = (Bitmap) extras.get("data");
 					iv.setImageBitmap(bmp);
+					takePicFlag=true;
 					break;
 				case iCheckBox:
 
@@ -519,7 +522,7 @@ public class Report extends Activity implements View.OnClickListener {
 					ed = new EmailDetails(orname, orphone, oradd, oremail,
 							checked_str, orloc, comment);
 
-					if (bmp != null) {
+					if (takePicFlag) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
 						bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
 						byte[] barr = bos.toByteArray();
