@@ -1,6 +1,7 @@
 package il.reporter.gws;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -38,9 +39,7 @@ public class GeocoderEngine {
 			String requestUrl = context.getString(R.string.AutocompleteApiUrl)
 					+ "json?sensor=false&key="
 					+ context.getString(R.string.GooglePlacesAPIKey)
-					+ "&input=" + request + "&types=geocode" + loc_str;
-
-			requestUrl = requestUrl.replace(" ", "+");
+					+ "&input=" +  URLEncoder.encode(request, "UTF-8") + "&types=geocode" + loc_str;
 
 			Log.i("ERIC", requestUrl);
 			JSONObject jsonResponse = getGeocoderResponse(requestUrl);
@@ -89,9 +88,8 @@ public class GeocoderEngine {
 		try {
 
 			String requestUrl = context.getString(R.string.GeocoderApiUrl)
-					+ "/json?sensor=true&address=" + str;
+					+ "/json?sensor=true&address=" + URLEncoder.encode(str, "UTF-8");
 
-			requestUrl = requestUrl.replace(" ", "%20");
 			Log.i("ERIC", requestUrl);
 			JSONObject geocoderResponse = getGeocoderResponse(requestUrl);
 			JSONObject json_loc = geocoderResponse.getJSONArray("results").getJSONObject(0)
@@ -116,7 +114,7 @@ public class GeocoderEngine {
 		try {
 
 			String requestUrl = context.getString(R.string.GeocoderApiUrl)
-					+ "/json?sensor=true&address=" + str;
+					+ "/json?sensor=true&address=" + URLEncoder.encode(str, "UTF-8");
 
 			requestUrl = requestUrl.replace(" ", "+");
 			Log.i("ERIC", requestUrl);

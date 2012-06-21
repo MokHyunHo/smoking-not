@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChoosePlace extends Activity {
@@ -35,10 +36,10 @@ public class ChoosePlace extends Activity {
 	private ArrayList<GooglePlace> mNearbyList;
 	private NearbyAdapter mAdapter;
 	private ProgressDialog mProgress;
-	private final int rad = 100;
 	private Location mLocation;
 	private EditText etSearch;
-	private ImageButton mSearch, mAdd;
+	private TextView tvAddress;
+	private ImageButton mSearch, mAdd, mRefreshButton, mShowMeOnMap;
 	
 	private String searchStr;
 	
@@ -53,6 +54,10 @@ public class ChoosePlace extends Activity {
 		mSearch = (ImageButton) findViewById(R.id.ib_Search);	
 		mAdd = (ImageButton) findViewById(R.id.ib_Add);
 		
+		tvAddress = (TextView) findViewById(R.id.tvAddress);
+		mShowMeOnMap = (ImageButton) findViewById(R.id.ib_ShowMeOnMap);
+		mRefreshButton = (ImageButton) findViewById(R.id.ib_Refresh);
+		
 		mGooglePlacesAPI = new GooglePlacesAPI(this);
 		mLocEng = new LocationEngine(this);
 		mAdapter = new NearbyAdapter(this, true);
@@ -60,6 +65,7 @@ public class ChoosePlace extends Activity {
 		//mProgress.setCancelable(false);
 		mListView = (ListView) findViewById(R.id.places_list);
 		mNearbyList = new ArrayList<GooglePlace>();
+		
 		if (mLocEng.isLocationEnabled())
 			mLocation = mLocEng.getCurrentLocation();
 		if (mLocation == null)
@@ -167,9 +173,9 @@ public class ChoosePlace extends Activity {
 					int radius = allowed_radius;
 					//int radius = GooglePlacesAPI.MAX_RADIUS; 
 					if (!query)
-						mNearbyList = mGooglePlacesAPI.getNearby(mLocation, radius);
+						mNearbyList = mGooglePlacesAPI.getNearby(mLocation, radius, false);
 					else
-						mNearbyList = mGooglePlacesAPI.searchPlaces(mLocation, (mLocation != null), searchStr, radius);
+						mNearbyList = mGooglePlacesAPI.searchPlaces(mLocation, (mLocation != null), searchStr, radius, false);
 					
 				} catch (Throwable e) {
 					what = 1;

@@ -17,6 +17,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,13 +40,20 @@ public class Profile extends Activity {
 	private TextView rank;
 	private ImageView mUserPic;
 	private ProgressBar pb, pbLoading;
-	private TextView total_score, tvNoReports;
-	private ListView lvUserReports;
-	private UserReportsAdapter mAdapter;
-	private LastUserReports lst;
+	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards;
+	private ListView lvLastList;
+	private UserReportsAdapter mReportsAdapter;
+	private UserHazardsAdapter mHazardsAdapter;
+	private LastUserReports lstReports;
+	private LastUserHazards lstHazards;
+
+	private UserRequest ur_updated = null;
+
 	// added---------------------------------------------------------------------
 	private Button mQuestionButton;
 	private View tmpView;
+
+	private String userId = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,39 +62,10 @@ public class Profile extends Activity {
 		setContentView(R.layout.profile);
 		init();
 
+		if (FacebookMain.email != null)
+			userId = FacebookMain.email;
+
 		new GooglePlacesAPI(this);
-		// get user info from server
-		Gson gson2 = new Gson();
-		WebRequest req = new WebRequest();
-		String str = "";
-		UserRequest ur_updated = null;
-		try {
-			JSONObject json2 = req
-					.readJsonFromUrl(getString(R.string.DatabaseUrl)
-							+ "/GetUser?mail=" + FacebookMain.email);
-			str = (String) json2.get("user_req");
-			Log.w("str=", str);
-			ur_updated = gson2.fromJson(str, UserRequest.class);
-		} catch (JSONException e) {
-			Log.e("Profile error, can't get response from server, JSON exception",
-					e.toString());
-			// Log.w("str=", str);
-		} catch (Exception e) {
-			Log.e("Profile error, can't get response from server", e.toString());
-			// Log.w("str=", str);
-		}
-
-		try {
-		// user's progress
-		pb = (ProgressBar) findViewById(R.id.progressbar);
-		total_score = (TextView) findViewById(R.id.tv_score);
-
-		pb.setProgress(ur_updated.GetScore());
-		total_score.setText(ur_updated.GetScore() + "/100");
-		} catch (Exception e) {
-			Toast.makeText(context, "Error retrieving data...", Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-		}
 
 		// added---------------------------------------------------------------------
 		mQuestionButton = (Button) findViewById(R.id.question);
@@ -101,28 +80,66 @@ public class Profile extends Activity {
 			}
 		});
 
-		// display current stage
-		if ((ur_updated.GetScore() >= 0) && (ur_updated.GetScore() < 45))
-			rank.setText("Beginner");
-		if ((ur_updated.GetScore() >= 45) && (ur_updated.GetScore() < 135))
-			rank.setText("Active");
-		if ((ur_updated.GetScore() >= 135) && (ur_updated.GetScore() < 270))
-			rank.setText("Advanced");
-		if ((ur_updated.GetScore() >= 270) && (ur_updated.GetScore() < 405))
-			rank.setText("Expert");
-		if (ur_updated.GetScore() >= 405)
-			rank.setText("Supervisor");
+		getUserDetails();
+		tvLastReports.performClick();
 
-		// PROFILE INFORMATION
-		mText.setText("Welcome " + FacebookMain.name);
-		mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
-		Log.i("ERIC", FacebookMain.email);
-		try {
-			if (FacebookMain.email.compareTo("") != 0) {
-				getUserReports(FacebookMain.email);
+	}
 
+	public void getUserDetails() {
+
+		new Thread() {
+			public void run() {
+
+				// get user info from server
+				Gson gson2 = new Gson();
+				WebRequest req = new WebRequest();
+				String str = "";
+
+				try {
+					JSONObject json2 = req
+							.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ "/GetUser?mail=" + userId);
+					str = (String) json2.get("user_req");
+					Log.w("str=", str);
+					ur_updated = gson2.fromJson(str, UserRequest.class);
+				} catch (JSONException e) {
+					Log.e("Profile error, can't get response from server, JSON exception",
+							e.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				mHandler.sendMessage(mHandler.obtainMessage(2));
 			}
+		}.start();
+
+	}
+
+	private void fillUserDetails() {
+		try {
+			// user's progress
+			pb.setProgress(ur_updated.GetScore());
+			total_score.setText(ur_updated.GetScore() + "/100");
+
+			// display current stage
+			if ((ur_updated.GetScore() >= 0) && (ur_updated.GetScore() < 45))
+				rank.setText("Beginner");
+			if ((ur_updated.GetScore() >= 45) && (ur_updated.GetScore() < 135))
+				rank.setText("Active");
+			if ((ur_updated.GetScore() >= 135) && (ur_updated.GetScore() < 270))
+				rank.setText("Advanced");
+			if ((ur_updated.GetScore() >= 270) && (ur_updated.GetScore() < 405))
+				rank.setText("Expert");
+			if (ur_updated.GetScore() >= 405)
+				rank.setText("Supervisor");
+
+			// PROFILE INFORMATION
+			mText.setText("Welcome " + FacebookMain.name);
+			mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
+
 		} catch (Exception e) {
+			Toast.makeText(context, "Error retrieving data...",
+					Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
 
@@ -133,11 +150,54 @@ public class Profile extends Activity {
 		finish();
 	}
 
+	private void swapButtons(int now_clicked) {
+
+		int color1 = (now_clicked == 1 ? Color.BLACK : Color.GRAY);
+		int color2 = (now_clicked == 1 ? Color.GRAY : Color.BLACK);
+
+		tvLastHazards.setBackgroundColor(color1);
+		tvLastReports.setBackgroundColor(color2);
+
+	}
+
+	private class onLastReportsClick implements OnClickListener {
+
+		public void onClick(View v) {
+
+			swapButtons(0);
+			lvLastList.setAdapter(null);
+			tvNoReports.setVisibility(View.INVISIBLE);
+			mReportsAdapter = new UserReportsAdapter(context);
+			pbLoading.setVisibility(View.VISIBLE);
+			getUserReports(userId);
+		}
+
+	}
+
+	private class onLastHazardsClick implements OnClickListener {
+
+		public void onClick(View v) {
+			swapButtons(1);
+			lvLastList.setAdapter(null);
+			tvNoReports.setVisibility(View.INVISIBLE);
+			mReportsAdapter = new UserReportsAdapter(context);
+			pbLoading.setVisibility(View.VISIBLE);
+			getUserHazards(userId);
+		}
+
+	}
+
 	private void init() {
 		mText = (TextView) findViewById(R.id.txt);
 		tvNoReports = (TextView) findViewById(R.id.tvNoReports);
 		rank = (TextView) findViewById(R.id.rank);
 		mUserPic = (ImageView) findViewById(R.id.user_pic);
+
+		tvLastReports = (TextView) findViewById(R.id.tvLastReports);
+		tvLastHazards = (TextView) findViewById(R.id.tvLastHazards);
+
+		pb = (ProgressBar) findViewById(R.id.progressbar);
+		total_score = (TextView) findViewById(R.id.tv_score);
 
 		// START MENU BUTTON
 		exitButton = (Button) findViewById(R.id.exitButton);
@@ -152,13 +212,14 @@ public class Profile extends Activity {
 			}
 		});
 
-		lvUserReports = (ListView) findViewById(R.id.lvLastReports);
-		mAdapter = new UserReportsAdapter(context);
-
+		lvLastList = (ListView) findViewById(R.id.lvLastReports);
 		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
+
+		tvLastReports.setOnClickListener(new onLastReportsClick());
+		tvLastHazards.setOnClickListener(new onLastHazardsClick());
 	}
 
-	private void getUserReports(String userId) {
+	private void getUserReports(final String userId) {
 
 		new Thread() {
 			public void run() {
@@ -170,24 +231,49 @@ public class Profile extends Activity {
 				try {
 					JSONObject json2 = req
 							.readJsonFromUrl(getString(R.string.DatabaseUrl)
-									+ "/GetLastPlaces?mail="
-									+ FacebookMain.email);
+									+ "/GetLastPlaces" + "?mail=" + userId);
 					str = (String) json2.get("report_request");
 					Log.w("str=", str);
-					lst = gson2.fromJson(str, LastUserReports.class);
+					lstReports = gson2.fromJson(str, LastUserReports.class);
 
-				} catch (JSONException e) {
-					Log.e("Profile error, can't get response from server, JSON exception",
-							e.toString());
+					Collections.sort(lstReports.getLst(),
+							new ReportDateComparator());
 
 				} catch (Exception e) {
-					Log.e("Profile error, can't get response from server",
-							e.toString());
+					e.printStackTrace();
 				}
 
-				Collections.sort(lst.getLst(), new ReportDateComparator());
-
 				mHandler.sendMessage(mHandler.obtainMessage(0));
+
+			}
+		}.start();
+	}
+
+	private void getUserHazards(final String userId) {
+
+		new Thread() {
+			public void run() {
+
+				Gson gson2 = new Gson();
+				WebRequest req = new WebRequest();
+				String str = null;
+
+				try {
+					JSONObject json2 = req
+							.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ "/GetLastHazards" + "?mail=" + userId);
+					str = (String) json2.get("hazard_request");
+					Log.w("str=", str);
+					lstHazards = gson2.fromJson(str, LastUserHazards.class);
+
+					Collections.sort(lstHazards.getLst(),
+							new HazardDateComparator());
+
+					mHandler.sendMessage(mHandler.obtainMessage(1));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 			}
 		}.start();
@@ -196,19 +282,38 @@ public class Profile extends Activity {
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 0:
-				pbLoading.setVisibility(View.INVISIBLE);
-				Log.i("Eric lst", "size: " + lst.getLst().size());
-				if (lst.getLst().size() > 0) {
-					mAdapter.setData(lst);
-					lvUserReports.setAdapter(mAdapter);
-					lvUserReports.setVisibility(View.VISIBLE);
-				} else {
-					tvNoReports.setVisibility(View.VISIBLE);
-				}
-				break;
+			try {
+				switch (msg.what) {
+				case 0:
+					pbLoading.setVisibility(View.INVISIBLE);
 
+					if (lstReports.getLst().size() > 0) {
+						mReportsAdapter.setData(lstReports);
+						lvLastList.setAdapter(mReportsAdapter);
+						lvLastList.setVisibility(View.VISIBLE);
+					} else {
+						tvNoReports.setVisibility(View.VISIBLE);
+					}
+					break;
+
+				case 1:
+					pbLoading.setVisibility(View.INVISIBLE);
+
+					if (lstHazards.getLst().size() > 0) {
+						mHazardsAdapter.setData(lstHazards);
+						lvLastList.setAdapter(mHazardsAdapter);
+						lvLastList.setVisibility(View.VISIBLE);
+					} else {
+						tvNoReports.setVisibility(View.VISIBLE);
+					}
+					break;
+				case 2:
+					fillUserDetails();
+					break;
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 
 		}
@@ -220,7 +325,7 @@ public class Profile extends Activity {
 		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
 				.create();
 		alertDialog.setTitle("Manage a personal profile.");
-		String str = "Here you can see your reports' history and your number of points.\n" 
+		String str = "Here you can see your reports' history and your number of points.\n"
 				+ "You get points this way:\n"
 				+ "•	Positive report - 2 points.\n"
 				+ "•	Negative report - 1 point.\n"

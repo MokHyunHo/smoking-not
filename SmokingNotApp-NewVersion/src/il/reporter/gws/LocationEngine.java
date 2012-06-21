@@ -4,7 +4,12 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.facebook.android.R;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -28,24 +33,40 @@ public class LocationEngine implements LocationListener {
 
 	private Context context;
 
-	public LocationEngine(Context context) {
+	public LocationEngine(final Context context) {
 		this.context = context;
 		lm = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
 
 		if (!lm.isProviderEnabled(provider)) {
+/*			AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+			
+			alertDialog.setTitle("Location service");
 
+			String str = "Network location service is disabled. Settings dialog will open - please enable it.";
+			
+			alertDialog.setMessage(str);
+
+			alertDialog.setButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					context.startActivity(intent);
+					return;
+				}
+			});
+
+			alertDialog.show();
+			*/
 			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 			context.startActivity(intent);
 			return;
+			
 		} else
 			serviceEnabled = true;
 
 		setLocationSent(false);
 
 		lm.requestLocationUpdates(provider, 0, 0, this);
-
-		locationEnabled = (mLocation != null);
 
 	}
 
@@ -54,6 +75,7 @@ public class LocationEngine implements LocationListener {
 		Log.i("ERIC", "loc changed: " + location.toString());
 		setLocationSent(false);
 		mLocation = location;
+		locationEnabled = (mLocation != null);
 	}
 
 	@Override
@@ -87,8 +109,6 @@ public class LocationEngine implements LocationListener {
 		return mLocation;
 	}
 
-
-
 	public boolean isLocationSent() {
 		return locationSent;
 	}
@@ -108,8 +128,9 @@ public class LocationEngine implements LocationListener {
 				"Location is unavailable. Placing you somewhere is Tel Aviv... (debug)",
 				Toast.LENGTH_LONG);
 	}
+
 	public Location getLastKnownLocation() {
-		mLocation =  lm.getLastKnownLocation(provider);
+		mLocation = lm.getLastKnownLocation(provider);
 		locationEnabled = (mLocation != null);
 		return getCurrentLocation();
 	}
