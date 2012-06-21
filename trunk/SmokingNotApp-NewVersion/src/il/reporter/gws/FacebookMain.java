@@ -129,12 +129,15 @@ public class FacebookMain extends Activity {
 
 		if (Utility.mFacebook.isSessionValid()) {
 			
+			/**
 			if (fetching==0)
 			{
 				fetching=requestUserData();
 			}
+			**/
 			fetching=requestUserData();  //delete after it
 			
+			/**
 			if (fetching==1) {
 			WebRequest req = new WebRequest();
 			
@@ -145,6 +148,7 @@ public class FacebookMain extends Activity {
 				Log.w("Ortal", "can't send user email to database");
 			}
 			}
+			**/
 		}
 								
 			
@@ -335,11 +339,25 @@ public class FacebookMain extends Activity {
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
+						
+						
 						mText.setText("Welcome " + name + "!");
+						//mText.setText(email);   //test to show email
+						
 						picURL = "https://graph.facebook.com/"
 								+ Utility.userUID + "/picture?type=normal";
 						mUserPic.setImageBitmap(Utility.getBitmap(picURL));
-
+/////////////////////////////////////////////////////////////
+						  WebRequest req = new WebRequest();
+							
+							try {
+								 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
+								mText.setText(email);   //test to show email
+							}
+							catch(Exception e) {
+								Log.w("Ortal", "can't send user email to database");
+							}
+/////////////////////////////////////////////////////////////////////////////////
 					}
 				});
 
@@ -347,6 +365,10 @@ public class FacebookMain extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			
+			
+			
 		}
 
 	}
@@ -360,11 +382,17 @@ public class FacebookMain extends Activity {
 
 		@Override
 		public void onAuthSucceed() {
+			/**
 			if(fetching==0)
 			{
 				fetching= requestUserData();
 			}
+			**/
+			
 			fetching=requestUserData();  //delete after it
+			
+			
+			/**
 			if (fetching==1) {
 				WebRequest req2 = new WebRequest();
 				
@@ -375,7 +403,7 @@ public class FacebookMain extends Activity {
 					Log.w("Ortal", "can't send user email to database");
 				}
 			}
-									
+			**/							
 		}
 
 		@Override
