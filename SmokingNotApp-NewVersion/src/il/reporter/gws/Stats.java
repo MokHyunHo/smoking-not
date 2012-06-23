@@ -19,26 +19,27 @@ import android.widget.Toast;
 import com.facebook.android.R;
 import com.google.gson.Gson;
 
-public class TopPlaces extends Activity implements View.OnClickListener {
+public class Stats extends Activity implements View.OnClickListener {
 
-	private TextView tvReport, tvPlaces, tvTopTen, tvCaption;
+	private TextView tvReport, tvPlaces, tvStats, tvCaption;
 
 	//Elad - to replace textviews with whatever you wanted
-	private TextView tvBest, tvWorst;
+	private TextView tvBest, tvWorst, tvLast;
 	
 	
 	private ListView lvPlaces;
 	private ProgressBar pbLoading;
 	private TenPlaces mTenPlaces;
-	private List<LocationRequest> lstPlaces;
-	private TopPlacesAdapter mAdapter;
+	private LastReports mLastReports;
+	private TopListAdapter mTopAdapter;
+	private LastReportsAdapter mReportsAdapter;
 
 	private class onBestClick implements OnClickListener {
 		public void onClick(View v) {
 			tvCaption.setText("Best 10 Places");			
 			lvPlaces.setAdapter(null);
 			pbLoading.setVisibility(View.VISIBLE);
-			loadList("/GetTenTopPlaces?action=top_ten");
+			loadTopList("/GetTenTopPlaces?action=top_ten");
 		}
 
 	}
@@ -47,7 +48,17 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 			tvCaption.setText("Worst 10 Places");
 			lvPlaces.setAdapter(null);
 			pbLoading.setVisibility(View.VISIBLE);
-			loadList("/GetTenTopPlaces?action=bad_top_ten");
+			loadTopList("/GetTenTopPlaces?action=bad_top_ten");
+		}
+
+	}
+	
+	private class onLastClick implements OnClickListener {
+		public void onClick(View v) {
+			tvCaption.setText("Last 10 reports");
+			lvPlaces.setAdapter(null);
+			pbLoading.setVisibility(View.VISIBLE);
+			loadLastList("/GetLastReports");
 		}
 
 	}
@@ -55,12 +66,13 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 	private void init() {
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
-		tvTopTen = (TextView) findViewById(R.id.tvTopTen);
+		tvStats = (TextView) findViewById(R.id.tvStats);
 		tvCaption = (TextView) findViewById(R.id.tvCaption);
 		
 		//Elad - to replace textviews with whatever you wanted
 		tvBest = (TextView) findViewById(R.id.tvBest);
 		tvWorst = (TextView) findViewById(R.id.tvWorst);
+		tvLast = (TextView) findViewById(R.id.tvLast);
 				
 
 		lvPlaces = (ListView) findViewById(R.id.lstTopPlaces);
@@ -68,11 +80,12 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
-		tvTopTen.setOnClickListener(this);
+		tvStats.setOnClickListener(this);
 		
 		tvBest.setOnClickListener(new onBestClick());
 		tvWorst.setOnClickListener(new onWorstClick());
-		
+		tvLast.setOnClickListener(new onLastClick());
+	
 		
 		
 	}
@@ -81,11 +94,12 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.top_places);
+		setContentView(R.layout.stats);
 
 		init();
 
-		mAdapter = new TopPlacesAdapter(this);
+		mTopAdapter = new TopListAdapter(this);
+		mReportsAdapter = new LastReportsAdapter(this);
 		
 		
 		tvBest.performClick();
@@ -95,14 +109,13 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 
 	@Override
 	public void onBackPressed() {
-		// TODO Auto-generated method stub
 		super.onBackPressed();
 		finish();
 	}
 	
 		
 
-	private void loadList(final String db_request) {
+	private void loadTopList(final String db_request) {
 		new Thread() {
 			public void run() {
 
@@ -117,13 +130,37 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 					str = (String) json2.get("Top_Ten");
 					mTenPlaces = gson2.fromJson(str, TenPlaces.class);
 
-					lstPlaces = mTenPlaces.getTenPlaces();
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
 				mHandler.sendMessage(mHandler.obtainMessage(0));
+
+			}
+
+		}.start();
+	}
+	
+	private void loadLastList(final String db_request) {
+		new Thread() {
+			public void run() {
+
+				Gson gson2 = new Gson();
+				WebRequest req = new WebRequest();
+				String str = null;
+
+				try {
+					JSONObject json2 = req
+							.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ db_request);
+					str = (String) json2.get("report_request");
+					mLastReports = gson2.fromJson(str, LastReports.class);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				mHandler.sendMessage(mHandler.obtainMessage(1));
 
 			}
 
@@ -137,9 +174,15 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 			try {
 				switch (msg.what) {
 				case 0:
-					if (lstPlaces.size() > 0) {
-						mAdapter.setData(lstPlaces);
-						lvPlaces.setAdapter(mAdapter);
+					if (mTenPlaces.getTenPlaces().size() > 0) {
+						mTopAdapter.setData(mTenPlaces);
+						lvPlaces.setAdapter(mTopAdapter);
+					}
+					break;
+				case 1:
+					if (mLastReports.getLst().size() > 0) {
+						mReportsAdapter.setData(mLastReports);
+						lvPlaces.setAdapter(mReportsAdapter);
 					}
 					break;
 
@@ -173,7 +216,7 @@ public class TopPlaces extends Activity implements View.OnClickListener {
 				startActivity(myIntent);
 			}
 			break;
-		case R.id.tvTopTen:
+		case R.id.tvStats:
 			break;
 
 		}

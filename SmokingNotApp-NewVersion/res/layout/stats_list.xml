@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:paddingBottom="10dp" >
-
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="fill_parent"
@@ -12,6 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/ib_Info"
         android:text="Name"
         android:textColor="@color/black"
         android:textSize="14sp"

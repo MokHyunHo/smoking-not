@@ -33,7 +33,7 @@ public class PlaceDetails extends Activity {
 	private ReportsListAdapter mAdapter;
 	private int num_raitings;
 
-	private LastUserReports mPlaceReports;
+	private LastReports mPlaceReports;
 	private String PlaceID;
 	private String reasons_str[];
 	private int reasons[];
@@ -122,7 +122,7 @@ public class PlaceDetails extends Activity {
 									+ "/GetHistoryPlaces?locationid=" + PlaceID);
 					str = (String) json2.get("report_request");
 					Log.w("str=", str);
-					mPlaceReports = gson2.fromJson(str, LastUserReports.class);
+					mPlaceReports = gson2.fromJson(str, LastReports.class);
 
 					for (ReportDetails r : mPlaceReports.getLst()) {
 						Log.i("Reasons", "num reasons: "

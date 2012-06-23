@@ -147,7 +147,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="il.reporter.gws.TopPlaces"
+            android:name=".Stats"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

@@ -29,8 +29,8 @@ import org.json.JSONObject;
 import il.reporter.gws.R;
 import com.google.gson.Gson;
 
-public class UserReportsAdapter extends BaseAdapter {
-	private LastUserReports mLst;
+public class LastReportsAdapter extends BaseAdapter {
+	private LastReports mLst;
 	private LayoutInflater mInflater;
 	private Context caller;
 
@@ -39,11 +39,11 @@ public class UserReportsAdapter extends BaseAdapter {
 		caller = c;
 	}
 
-	public UserReportsAdapter(Context c) {
+	public LastReportsAdapter(Context c) {
 		init(c);
 	}
 
-	public void setData(LastUserReports poolList) {
+	public void setData(LastReports poolList) {
 		mLst = poolList;
 	}
 
@@ -70,7 +70,7 @@ public class UserReportsAdapter extends BaseAdapter {
 		Log.i("ERIC",
 				"position: " + position + "string[]: " + report.toString());
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.user_reports_list, null);
+			convertView = mInflater.inflate(R.layout.last_reports_list, null);
 
 			holder = new ViewHolder();
 
