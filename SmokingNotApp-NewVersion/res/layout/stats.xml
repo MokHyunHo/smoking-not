@@ -50,7 +50,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
+
             <TextView
                 android:id="@+id/tvStats"
                 android:layout_width="match_parent"
@@ -61,11 +61,9 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
         </TableRow>
-
     </TableLayout>
-
+
     <TextView
         android:id="@+id/tvCaption"
         android:layout_width="wrap_content"
@@ -76,7 +74,7 @@
         android:gravity="center"
         android:text="Best 10 places"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
     <ListView
         android:id="@+id/lstTopPlaces"
         android:layout_width="match_parent"
@@ -85,9 +83,8 @@
         android:layout_below="@+id/tvCaption"
         android:background="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent" >
-
     </ListView>
-
+
     <TableLayout
         android:id="@+id/TableLayout2"
         android:layout_width="wrap_content"
@@ -96,21 +93,20 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/TableLayout"
         android:weightSum="3" >
-
+
         <TableRow
             android:id="@+id/TableRow02"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#336633"
             android:baselineAligned="true"
             android:weightSum="3" >
-
+
             <TextView
                 android:id="@+id/tvWorst"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#FF4848"
+                android:background="#f12323"
                 android:gravity="center"
                 android:text="Worst 10"
                 android:textColor="#ffffff"
@@ -122,24 +118,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="#94bc25"
                 android:gravity="center"
                 android:text="Best 10"
                 android:textColor="#ffffff"
                 android:textSize="12dp"
                 android:textStyle="bold" />
-
+
             <TextView
                 android:id="@+id/tvLast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/orange"
+                android:background="#f14e23"
                 android:gravity="center"
                 android:text="Last reports"
                 android:textColor="#ffffff"
                 android:textSize="12dp"
                 android:textStyle="bold" />
-
         </TableRow>
     </TableLayout>
 
