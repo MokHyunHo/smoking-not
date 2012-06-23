@@ -117,9 +117,7 @@ public class Profile extends Activity {
 
 					String message = ur_updated.GetMessage();
 
-					if ((message.compareTo("empty") != 0)
-							&& (message.compareTo("Report Exsits") != 0))
-
+					if (message.compareTo("empty") != 0)
 						buildNotifications(message);
 
 				} catch (Exception e) {
@@ -463,49 +461,7 @@ public class Profile extends Activity {
 
 	}
 
-	private void showNotification(View v, String reports_id[]) {
-		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
-				.create();
-		alertDialog.setTitle("New Notification");
-		String str = "You've got " + reports_id.length + "points.\n"
-				+ "By reporting:\n";
-		for (String s : reports_id) {
-			str = str + "•	" + s + ".\n";
-		}
 
-		alertDialog.setMessage(str);
-
-		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				// here you can add functions
-			}
-		});
-		alertDialog.setIcon(R.drawable.qm);
-		alertDialog.show();
-
-	}
-
-	private void showDialog(View v, String places[]) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-		builder.setTitle("You've got new points!");
-		builder.setMessage("BY reporting " + places[0]
-				+ " you got 1 new point!");
-		builder.setCancelable(true);
-
-		final AlertDialog dlg = builder.create();
-
-		dlg.show();
-		final Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			public void run() {
-				dlg.dismiss(); // when the task active then close the dialog
-				t.cancel(); // also just top the timer thread, otherwise, you
-							// may receive a crash report
-			}
-		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
-					// active
-
-	}
 
 	/*
 	 * public View makeView() { TextView t = new TextView(this);

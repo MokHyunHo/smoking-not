@@ -318,7 +318,7 @@ public class Report extends Activity implements View.OnClickListener {
 								e.toString());
 						Log.w("str=", str);
 					}
-					if (ur_check.GetMessage().compareTo("Report Exsits") == 0) {
+					if (ur_check.GetLastPlace().compareTo("Report Exsits")==0) {
 						Log.e("ortal", "report already exsits in database");
 						conflict = 1;
 					}
