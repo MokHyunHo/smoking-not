@@ -33,14 +33,16 @@ public class LastReportsAdapter extends BaseAdapter {
 	private LastReports mLst;
 	private LayoutInflater mInflater;
 	private Context caller;
+	private boolean showRank;
 
 	private void init(Context c) {
 		mInflater = LayoutInflater.from(c);
 		caller = c;
 	}
 
-	public LastReportsAdapter(Context c) {
+	public LastReportsAdapter(Context c, boolean showRank) {
 		init(c);
+		this.showRank = showRank;
 	}
 
 	public void setData(LastReports poolList) {
@@ -85,6 +87,9 @@ public class LastReportsAdapter extends BaseAdapter {
 			holder.ibDetails = (ImageButton) convertView
 					.findViewById(R.id.ib_Info);
 
+			holder.mUserRankTxt = (TextView) convertView
+					.findViewById(R.id.tvUserRank);
+
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
@@ -96,7 +101,15 @@ public class LastReportsAdapter extends BaseAdapter {
 			holder.mNameTxt.setText(report.getPlaceName());
 			holder.mTypeTxt.setText(report.getReportKind());
 			holder.mDateTxt.setText(report.getDate());
-			holder.mCommentTxt.setText(report.getComment());
+			holder.mCommentTxt
+					.setText(report.getComment().compareTo("") == 0 ? "No comment"
+							: report.getComment());
+
+			if (showRank)
+				holder.mUserRankTxt.setText(" - by " + report.getUserRank()
+						+ " user");
+			else
+				holder.mUserRankTxt.setHeight(0);
 
 			holder.ibDetails.setOnClickListener(new OnClickListener() {
 
@@ -109,7 +122,8 @@ public class LastReportsAdapter extends BaseAdapter {
 					try {
 						JSONObject json2 = req.readJsonFromUrl(caller
 								.getString(R.string.DatabaseUrl)
-								+ "/GetLocation?locationid=" + report.getLocationId());
+								+ "/GetLocation?locationid="
+								+ report.getLocationId());
 						str = (String) json2.get("location_req");
 						Log.w("str=", str);
 						if (str.compareTo("NotinDataBase") != 0)
@@ -123,7 +137,6 @@ public class LastReportsAdapter extends BaseAdapter {
 								e.toString());
 					}
 
-
 					Intent intent = new Intent(caller, PlaceDetails.class);
 					Bundle bundle = new Bundle();
 					bundle.putString("PlaceID", loc_updated.getId());
@@ -131,7 +144,8 @@ public class LastReportsAdapter extends BaseAdapter {
 					bundle.putString("PlaceAddress", loc_updated.getAddress());
 					bundle.putInt("GoogRate", loc_updated.getGoodRate());
 					bundle.putInt("BadRate", loc_updated.getBadRate());
-					Location loc = new Location(LocationManager.PASSIVE_PROVIDER);
+					Location loc = new Location(
+							LocationManager.PASSIVE_PROVIDER);
 					loc.setLatitude(loc_updated.getLatitude());
 					loc.setLongitude(loc_updated.getLongitude());
 					bundle.putParcelable("PlaceLocation", loc);
@@ -153,6 +167,7 @@ public class LastReportsAdapter extends BaseAdapter {
 		TextView mTypeTxt;
 		TextView mDateTxt;
 		TextView mCommentTxt;
+		TextView mUserRankTxt;
 		ImageButton ibDetails;
 
 	}

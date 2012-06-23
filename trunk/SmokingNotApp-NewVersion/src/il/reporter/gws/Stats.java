@@ -99,7 +99,7 @@ public class Stats extends Activity implements View.OnClickListener {
 		init();
 
 		mTopAdapter = new TopListAdapter(this);
-		mReportsAdapter = new LastReportsAdapter(this);
+		mReportsAdapter = new LastReportsAdapter(this, true);
 		
 		
 		tvBest.performClick();

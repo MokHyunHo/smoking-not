@@ -8,10 +8,7 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
-
 import com.facebook.android.R;
 import com.google.gson.Gson;
 
@@ -19,7 +16,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,22 +24,26 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Profile extends Activity {
+public class Profile extends Activity  {
 	/** Called when the activity is first created. */
 
 	private Context context;
-	private Button exitButton;
+	private ImageButton exitButton;
 	private TextView mText;
 	private TextView rank;
 	private ImageView mUserPic;
 	private ProgressBar pb, pbLoading;
-	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards;
+	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards, tvNotification;
+	private Button btnNext, btnPrev, btnDelete;
+	private TextSwitcher mSwitcher;
 	private ListView lvLastList;
 	private LastReportsAdapter mReportsAdapter;
 	private UserHazardsAdapter mHazardsAdapter;
@@ -51,15 +51,17 @@ public class Profile extends Activity {
 	private LastUserHazards lstHazards;
 
 	private UserRequest ur_updated = null;
+	
+	private int mPosition = 0;
 
 	// added---------------------------------------------------------------------
 	private Button mQuestionButton;
 	private View tmpView;
 
-
 	@SuppressWarnings("null")
 	private String userId = "";
-
+	
+	private String notifications[];
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -71,9 +73,8 @@ public class Profile extends Activity {
 		if (FacebookMain.email != null)
 			userId = FacebookMain.email;
 
-		new GooglePlacesAPI(this);
-		
-		
+		//new GooglePlacesAPI(this);
+
 		// added---------------------------------------------------------------------
 		mQuestionButton = (Button) findViewById(R.id.question);
 
@@ -87,7 +88,6 @@ public class Profile extends Activity {
 			}
 		});
 
-
 		getUserDetails();
 		tvLastReports.performClick();
 
@@ -97,22 +97,28 @@ public class Profile extends Activity {
 
 		new Thread() {
 			public void run() {
-
-				// get user info from server
-				Gson gson2 = new Gson();
-				WebRequest req = new WebRequest();
-				String str = "";
-
 				try {
+					// get user info from server
+					Gson gson2 = new Gson();
+					WebRequest req = new WebRequest();
+					String str = "";
+
 					JSONObject json2 = req
 							.readJsonFromUrl(getString(R.string.DatabaseUrl)
 									+ "/GetUser?mail=" + userId);
+
 					str = (String) json2.get("user_req");
 					Log.w("str=", str);
+
 					ur_updated = gson2.fromJson(str, UserRequest.class);
-				} catch (JSONException e) {
-					Log.e("Profile error, can't get response from server, JSON exception",
-							e.toString());
+
+					String message = ur_updated.GetMessage();
+
+					if ((message.compareTo("empty") != 0)
+							&& (message.compareTo("Report Exsits") != 0))
+
+						buildNotifications(message);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -120,51 +126,25 @@ public class Profile extends Activity {
 				mHandler.sendMessage(mHandler.obtainMessage(2));
 			}
 		}.start();
-		//user has a notification
-				if ((ur_updated.GetMessage().compareTo("empty")!=0) || (ur_updated.GetMessage().compareTo("Report Exsits")!=0)) 
-				{
-					String delimiter="#";
-					String ids=ur_updated.GetMessage();
-					String reports_id[]=null;
-					//if (ids.indexOf(delimiter)!=-1) 
-						//reports_id=ids.split(delimiter);
-					//else
-						//reports_id[0]=ids;
-					
-					//showDialog(tmpView,reports_id);
-					
-					//showNotification(tmpView,reports_id);	
-					
-					
-					
-					// convert report request to gson string
-					Gson gson5 = new Gson();
-					String UserStr = gson5.toJson(ur_updated);
-					JSONStringer json5 = null;
-					WebRequest req2 = new WebRequest();
+		// user has a notification
 
-					// prepare Json
-					try {
-						json5 = new JSONStringer().object().key("action")
-								.value("clear")
-								.key("user_request").value(UserStr)
-								.endObject();
-
-					} catch (JSONException e) {
-						Log.e("json exeption-can't create jsonstringer with report",
-								e.toString());
-					}
-
-					// send json to web server
-					try {
-						req2.getInternetData(json5,
-								getString(R.string.DatabaseUrl)
-										+ "/UpdateScoring");
-					} catch (Exception e) {
-						Log.w("couldn't send user to servlet UpdateScoring",
-								e.toString());
-					}
-				}
+	}
+	
+	private void buildNotifications(String message) {
+		
+		
+			Log.i("ERIC", "has notifications");
+			String delimiter = "#";
+			String reports_id[] = null;
+			reports_id =  message.split(delimiter);
+			notifications = new String[reports_id.length];
+			
+			for (int i = 0; i < reports_id.length; i++) {
+				
+				notifications[i] =  "Some user reported same report as you on\n\"" + reports_id[i] +"\"\nYou got 1 point for this!";
+			}
+			
+					
 	}
 
 	private void fillUserDetails() {
@@ -179,6 +159,14 @@ public class Profile extends Activity {
 			// PROFILE INFORMATION
 			mText.setText("Welcome " + FacebookMain.name);
 			mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
+			
+			if (notifications.length > 0)
+			{
+				tvNotification.setText(notifications[0]);
+				btnDelete.setVisibility(View.VISIBLE);
+				if (notifications.length > 1)
+					btnNext.setEnabled(true);
+			}
 
 		} catch (Exception e) {
 			Toast.makeText(context, "Error retrieving data...",
@@ -210,7 +198,7 @@ public class Profile extends Activity {
 			swapButtons(0);
 			lvLastList.setAdapter(null);
 			tvNoReports.setVisibility(View.INVISIBLE);
-			mReportsAdapter = new LastReportsAdapter(context);
+			mReportsAdapter = new LastReportsAdapter(context, false);
 			pbLoading.setVisibility(View.VISIBLE);
 			getUserReports(userId);
 		}
@@ -223,11 +211,33 @@ public class Profile extends Activity {
 			swapButtons(1);
 			lvLastList.setAdapter(null);
 			tvNoReports.setVisibility(View.INVISIBLE);
-			mReportsAdapter = new LastReportsAdapter(context);
+			mHazardsAdapter = new UserHazardsAdapter(context);
 			pbLoading.setVisibility(View.VISIBLE);
 			getUserHazards(userId);
 		}
 
+	}
+	
+	private class onNextPrevClick implements OnClickListener {
+
+		private int direction;
+		public onNextPrevClick(int direction)
+		
+		{
+			this.direction = direction;
+		}
+		
+		public void onClick(View v) {
+			
+			mPosition += direction;
+			
+			btnNext.setEnabled(mPosition < notifications.length - 1);
+			btnPrev.setEnabled(mPosition > 0);
+			
+			tvNotification.setText(notifications[mPosition]);
+			
+		}
+		
 	}
 
 	private void init() {
@@ -235,15 +245,32 @@ public class Profile extends Activity {
 		tvNoReports = (TextView) findViewById(R.id.tvNoReports);
 		rank = (TextView) findViewById(R.id.rank);
 		mUserPic = (ImageView) findViewById(R.id.user_pic);
+		
+		tvNotification = (TextView) findViewById(R.id.tvNotification);
+		
+		btnNext = (Button) findViewById(R.id.btnNext);
+		btnPrev = (Button) findViewById(R.id.btnPrev);
+		btnDelete = (Button) findViewById(R.id.btnDelete);
+		
+		btnNext.setOnClickListener(new onNextPrevClick(1));
+		btnPrev.setOnClickListener(new onNextPrevClick(-1));
+        
 
 		tvLastReports = (TextView) findViewById(R.id.tvLastReports);
 		tvLastHazards = (TextView) findViewById(R.id.tvLastHazards);
 
 		pb = (ProgressBar) findViewById(R.id.progressbar);
 		total_score = (TextView) findViewById(R.id.tv_score);
+		
+		rank.setText("");
+		mUserPic.setImageBitmap(null);
+		total_score.setText("");
+		
+		btnDelete.setVisibility(View.INVISIBLE);
+
 
 		// START MENU BUTTON
-		exitButton = (Button) findViewById(R.id.exitButton);
+		exitButton = (ImageButton) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -385,18 +412,17 @@ public class Profile extends Activity {
 		alertDialog.show();
 
 	}
-	
+
 	private void showNotification(View v, String reports_id[]) {
 		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
 				.create();
 		alertDialog.setTitle("New Notification");
-		String str = "You've got "+ reports_id.length + "points.\n" 
+		String str = "You've got " + reports_id.length + "points.\n"
 				+ "By reporting:\n";
-				for (String s: reports_id) {
-					str=str+
-							"•	"+s+".\n";
-				}
-						
+		for (String s : reports_id) {
+			str = str + "•	" + s + ".\n";
+		}
+
 		alertDialog.setMessage(str);
 
 		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
@@ -408,15 +434,16 @@ public class Profile extends Activity {
 		alertDialog.show();
 
 	}
-	
-	private void showDialog(View v,String places[]) {
+
+	private void showDialog(View v, String places[]) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 		builder.setTitle("You've got new points!");
-		builder.setMessage("BY reporting "+places[0]+" you got 1 new point!");
+		builder.setMessage("BY reporting " + places[0]
+				+ " you got 1 new point!");
 		builder.setCancelable(true);
 
 		final AlertDialog dlg = builder.create();
-		
+
 		dlg.show();
 		final Timer t = new Timer();
 		t.schedule(new TimerTask() {
@@ -429,4 +456,17 @@ public class Profile extends Activity {
 					// active
 
 	}
+
+
+ 
+
+ 
+/*    public View makeView() {
+        TextView t = new TextView(this);
+        t.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL);
+        t.setTextSize(70);
+        t.setTextColor(Color.RED);
+        return t;
+    }
+    */
 }

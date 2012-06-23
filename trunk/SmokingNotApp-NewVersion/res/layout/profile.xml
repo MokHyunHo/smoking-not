@@ -10,22 +10,14 @@
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/TableLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="@string/profile"
         android:textColor="#ffffff"
         android:textSize="30dp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/exit"
-        android:visibility="invisible" />
-
     <TextView
         android:id="@+id/txt"
         android:layout_width="wrap_content"
@@ -33,7 +25,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView1"
-        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Welcome"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -44,63 +35,40 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/txt"
-        android:layout_marginTop="22dp" />
-
+        android:src="@drawable/icon_hack" />
+
     <TextView
         android:id="@+id/rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/user_pic"
-        android:layout_marginLeft="26dp"
         android:layout_toRightOf="@+id/user_pic"
         android:gravity="center"
+        android:text="#rank#"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TableLayout
-        android:id="@+id/TableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/grey"
-            android:baselineAligned="true"
-            android:weightSum="3" >
-        </TableRow>
-    </TableLayout>
-
     <TextView
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/exitButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/rank"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/rank"
+        android:gravity="center"
+        android:text="#score#" />
 
     <ProgressBar
         android:id="@+id/progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="198dp"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_score"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_score"
-        android:layout_centerHorizontal="true"
-        android:max="100" />
-
-    <ListView
-        android:id="@+id/lvLastReports"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/TableRow02"
-        android:background="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
-        android:visibility="invisible" >
-
-    </ListView>
+        android:max="100"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" />
 
     <TextView
         android:id="@+id/tvLastReportsCaption"
@@ -108,18 +76,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/exitButton"
+        android:layout_below="@+id/RelativeLayout2"
         android:gravity="center"
         android:text="Last reports:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/qm" />
-
     <TableRow
         android:id="@+id/TableRow02"
         android:layout_width="match_parent"
@@ -128,7 +89,7 @@
         android:layout_below="@+id/tvLastReportsCaption"
         android:background="@color/black"
         android:baselineAligned="true" >
-
+
         <TextView
             android:id="@+id/tvLastReports"
             android:layout_width="match_parent"
@@ -139,7 +100,7 @@
             android:textColor="#ffffff"
             android:textSize="15dp"
             android:textStyle="bold" />
-
+
         <TextView
             android:id="@+id/tvLastHazards"
             android:layout_width="match_parent"
@@ -151,9 +112,38 @@
             android:textColor="#ffffff"
             android:textSize="15dp"
             android:textStyle="bold" />
-
     </TableRow>
-
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TableRow02"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp" />
+
+    <ListView
+        android:id="@+id/lvLastReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TableRow02"
+        android:background="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
+        android:visibility="invisible" >
+    </ListView>
+
+    <ImageButton
+        android:id="@+id/exitButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/home" />
+
     <TextView
         android:id="@+id/tvNoReports"
         android:layout_width="wrap_content"
@@ -168,12 +158,80 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="invisible" />
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        style="?android:attr/progressBarStyleLarge"
+    <Button
+        android:id="@+id/question"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/exitButton"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="@drawable/qm" />
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tvNoReports"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/progressbar"
+        android:layout_marginTop="30dp" >
+
+        <Button
+            android:id="@+id/btnNext"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnPrev"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:enabled="false"
+            android:text="Next" />
+
+        <TextView
+            android:id="@+id/tvNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:singleLine="false"
+            android:text="Notifications:"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvNotifications"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvNotifications"
+            android:text="No notifications"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnPrev"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvNotification"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btnNext"
+            android:enabled="false"
+            android:text="Prev" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvNotification"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/btnPrev"
+            android:text="Delete this"
+            android:textSize="10dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

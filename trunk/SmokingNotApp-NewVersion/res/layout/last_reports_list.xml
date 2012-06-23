@@ -62,5 +62,17 @@
         android:layout_alignParentTop="true"
         android:background="@android:color/transparent"
         android:src="@drawable/info" />
+
+    <TextView
+        android:id="@+id/tvUserRank"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvReportComment"
+        android:layout_below="@+id/tvReportComment"
+        android:gravity="right"
+        android:text="By &lt;rank> user"
+        android:textColor="@color/black"
+        android:textSize="10sp" />
 
 </RelativeLayout>
