@@ -365,7 +365,8 @@ public class Report extends Activity implements View.OnClickListener {
 
 					/* Send location to Database */
 
-					if (conflict == 0) {
+					if (conflict == 0) 
+					{
 						// convert location request to gson string
 						Gson gson1 = new Gson();
 						String LocationStr = gson1.toJson(loc);
@@ -422,8 +423,45 @@ public class Report extends Activity implements View.OnClickListener {
 									e.toString());
 						}
 
+					
+						// update scoring to other users
+						// convert report request to gson string
+						Gson gson5 = new Gson();
+						String ReportStr1 = gson5.toJson(rr);
+						JSONStringer json5 = null;
+	
+						// prepare Json
+						try {
+							json5 = new JSONStringer().object().key("action")
+									.value("update_score")
+									.key("report_request").value(ReportStr1)
+									.endObject();
+	
+						} catch (JSONException e) {
+							Log.e("json exeption-can't create jsonstringer with report",
+									e.toString());
+						}
+	
+						// send json to web server
+						try {
+							req.getInternetData(json5,
+									getString(R.string.DatabaseUrl)
+											+ "/UpdateScoring");
+						} catch (Exception e) {
+							Log.w("couldn't send report to servlet",
+									e.toString());
+						}
+					
 					}
-
+					
+					
+					
+					
+					
+					
+					
+					
+					
 					// send email
 					if (c3.isChecked()) {
 						Intent repIntent = new Intent(Report.this,
@@ -715,7 +753,7 @@ public class Report extends Activity implements View.OnClickListener {
 				clearForm();
 				break;
 			case 1:
-				clearForm();
+				//clearForm();
 				showDialog(tmpView);
 				// send notification to user
 				break;

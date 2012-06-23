@@ -44,6 +44,8 @@ public class ReportRequest {
 	public String getReportkind(){
 		return reportkind;
 	}
+	
+
 
 
 

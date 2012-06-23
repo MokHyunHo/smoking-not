@@ -139,14 +139,14 @@ public class FacebookMain extends Activity {
 			
 			/**
 			if (fetching==1) {
-			WebRequest req = new WebRequest();
-			
-			try {
-				 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
-			}
-			catch(Exception e) {
-				Log.w("Ortal", "can't send user email to database");
-			}
+				WebRequest req = new WebRequest();
+				
+				try {
+					 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
+				}
+				catch(Exception e) {
+					Log.w("Ortal", "can't send user email to database");
+				}
 			}
 			**/
 		}
@@ -167,7 +167,6 @@ public class FacebookMain extends Activity {
 
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -188,7 +187,6 @@ public class FacebookMain extends Activity {
 						mText.setTextColor(Color.YELLOW);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -208,7 +206,6 @@ public class FacebookMain extends Activity {
 						mText.setTextColor(Color.YELLOW);
 					}
 					if (Utility.mFacebook.isSessionValid()) {
-						mText.setTextColor(Color.WHITE);
 						if (fetching==1)
 						{
 							Utility.objectID = "me";
@@ -339,8 +336,12 @@ public class FacebookMain extends Activity {
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
+
+						mText.setTextColor(Color.WHITE);
+
 						
 						
+
 						mText.setText("Welcome " + name + "!");
 						//mText.setText(email);   //test to show email
 						
