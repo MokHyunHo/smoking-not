@@ -146,8 +146,8 @@ public class Report extends Activity implements View.OnClickListener {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.ibReport);
 		iv = (ImageView) findViewById(R.id.ivReport);
-		tvReport = (TextView) findViewById(R.id.tvRep);
-		tvPlaces = (TextView) findViewById(R.id.tvPla);
+		tvReport = (TextView) findViewById(R.id.tvReport);
+		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
 		tvStats = (TextView) findViewById(R.id.tvStats);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
@@ -482,9 +482,9 @@ public class Report extends Activity implements View.OnClickListener {
 				}
 			}.start();
 			break;
-		case R.id.tvRep:
+		case R.id.tvReport:
 			break;
-		case R.id.tvPla:
+		case R.id.tvPlaces:
 			myIntent = new Intent(getApplicationContext(), Places.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";

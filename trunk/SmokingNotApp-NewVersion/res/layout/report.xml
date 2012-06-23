@@ -89,20 +89,19 @@
             android:layout_alignLeft="@+id/etLocation"
             android:layout_below="@+id/etLocation"
             android:orientation="horizontal" >
-
+
             <RadioButton
                 android:id="@+id/ReasonRB1"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:checked="true"
                 android:text="Positive Report" />
-
+
             <RadioButton
                 android:id="@+id/ReasonRB2"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:text="Complaint" />
-
         </RadioGroup>
     </RelativeLayout>
 
@@ -110,18 +109,19 @@
         android:id="@+id/TableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true"
+        android:weightSum="3" >
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/TableRow01"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/grey"
             android:baselineAligned="true"
             android:weightSum="3" >
-
+
             <TextView
-                android:id="@+id/tvRep"
+                android:id="@+id/tvReport"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
@@ -130,9 +130,9 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
+
             <TextView
-                android:id="@+id/tvPla"
+                android:id="@+id/tvPlaces"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
@@ -142,7 +142,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
+
             <TextView
                 android:id="@+id/tvStats"
                 android:layout_width="match_parent"
@@ -154,6 +154,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
+
         </TableRow>
     </TableLayout>
 
@@ -212,7 +213,7 @@
             android:background="@drawable/qm"
             android:visibility="invisible" />
     </RelativeLayout>
-
+
     <EditText
         android:id="@+id/comments"
         android:layout_width="wrap_content"
