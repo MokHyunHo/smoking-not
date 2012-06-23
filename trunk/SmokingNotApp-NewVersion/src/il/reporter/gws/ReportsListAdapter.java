@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class ReportsListAdapter extends BaseAdapter {
-	private LastUserReports mLst;
+	private LastReports mLst;
 	private LayoutInflater mInflater;
 	private Context caller;
 
@@ -25,7 +25,7 @@ public class ReportsListAdapter extends BaseAdapter {
 		init(c);
 	}
 
-	public void setData(LastUserReports poolList) {
+	public void setData(LastReports poolList) {
 		mLst = poolList;
 	}
 

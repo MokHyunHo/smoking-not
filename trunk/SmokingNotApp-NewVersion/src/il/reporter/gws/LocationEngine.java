@@ -69,9 +69,9 @@ public class LocationEngine implements LocationListener {
 		setLocationSent(false);
 
 		lm.requestLocationUpdates(provider, 0, 0, this);
-		Date d = new Date();
-		long x = d.getTime() - lm.getLastKnownLocation(provider).getTime();
-		Log.i("ERIC", "secs since loc: " + x/1000);
+		//Date d = new Date();
+		//long x = d.getTime() - lm.getLastKnownLocation(provider).getTime();
+		//Log.i("ERIC", "secs since loc: " + x/1000);
 		
 		lm.requestSingleUpdate(provider, this, null);
 

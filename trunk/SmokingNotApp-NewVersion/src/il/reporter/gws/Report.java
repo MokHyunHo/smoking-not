@@ -49,7 +49,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	String[] checked;
 	String location, reason, points;
-	TextView tvReport, tvPlaces, tvTopTen;
+	TextView tvReport, tvPlaces, tvStats;
 	Button report;
 	ImageButton ib;
 	ImageView iv;
@@ -89,7 +89,7 @@ public class Report extends Activity implements View.OnClickListener {
 		// Top Menu and switching between activities
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
-		tvTopTen.setOnClickListener(this);
+		tvStats.setOnClickListener(this);
 		et1.setOnClickListener(this);
 		r1.setOnClickListener(this);
 		r2.setOnClickListener(this);
@@ -148,7 +148,7 @@ public class Report extends Activity implements View.OnClickListener {
 		iv = (ImageView) findViewById(R.id.ivReport);
 		tvReport = (TextView) findViewById(R.id.tvRep);
 		tvPlaces = (TextView) findViewById(R.id.tvPla);
-		tvTopTen = (TextView) findViewById(R.id.tvTopTen);
+		tvStats = (TextView) findViewById(R.id.tvStats);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
 		r2 = (RadioButton) findViewById(R.id.ReasonRB2);
@@ -164,8 +164,8 @@ public class Report extends Activity implements View.OnClickListener {
 	public void onClick(View v) {
 		Intent myIntent;
 		switch (v.getId()) {
-		case R.id.tvTopTen:
-			myIntent = new Intent(getApplicationContext(), TopPlaces.class);
+		case R.id.tvStats:
+			myIntent = new Intent(getApplicationContext(), Stats.class);
 			startActivity(myIntent);
 			break;
 

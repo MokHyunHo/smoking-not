@@ -45,9 +45,9 @@ public class Profile extends Activity {
 	private ProgressBar pb, pbLoading;
 	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards;
 	private ListView lvLastList;
-	private UserReportsAdapter mReportsAdapter;
+	private LastReportsAdapter mReportsAdapter;
 	private UserHazardsAdapter mHazardsAdapter;
-	private LastUserReports lstReports;
+	private LastReports lstReports;
 	private LastUserHazards lstHazards;
 
 	private UserRequest ur_updated = null;
@@ -210,7 +210,7 @@ public class Profile extends Activity {
 			swapButtons(0);
 			lvLastList.setAdapter(null);
 			tvNoReports.setVisibility(View.INVISIBLE);
-			mReportsAdapter = new UserReportsAdapter(context);
+			mReportsAdapter = new LastReportsAdapter(context);
 			pbLoading.setVisibility(View.VISIBLE);
 			getUserReports(userId);
 		}
@@ -223,7 +223,7 @@ public class Profile extends Activity {
 			swapButtons(1);
 			lvLastList.setAdapter(null);
 			tvNoReports.setVisibility(View.INVISIBLE);
-			mReportsAdapter = new UserReportsAdapter(context);
+			mReportsAdapter = new LastReportsAdapter(context);
 			pbLoading.setVisibility(View.VISIBLE);
 			getUserHazards(userId);
 		}
@@ -277,7 +277,7 @@ public class Profile extends Activity {
 									+ "/GetLastPlaces" + "?mail=" + userId);
 					str = (String) json2.get("report_request");
 					Log.w("str=", str);
-					lstReports = gson2.fromJson(str, LastUserReports.class);
+					lstReports = gson2.fromJson(str, LastReports.class);
 
 					Collections.sort(lstReports.getLst(),
 							new ReportDateComparator());

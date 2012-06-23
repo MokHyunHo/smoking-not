@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.facebook.android.R;
 
-public class TopPlacesAdapter extends BaseAdapter {
-	private List<LocationRequest> mPlacesList;
+public class TopListAdapter extends BaseAdapter {
+	private TenPlaces mPlacesList;
 	private LayoutInflater mInflater;
 	private Context caller;
 
@@ -31,22 +31,22 @@ public class TopPlacesAdapter extends BaseAdapter {
 		caller = c;
 	}
 
-	public TopPlacesAdapter(Context c) {
+	public TopListAdapter(Context c) {
 		init(c);
 	}
 
-	public void setData(List<LocationRequest> poolList) {
+	public void setData(TenPlaces poolList) {
 		mPlacesList = poolList;
 	}
 
 	@Override
 	public int getCount() {
-		return mPlacesList.size();
+		return mPlacesList.getTenPlaces().size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return mPlacesList.get(position);
+		return mPlacesList.getTenPlaces().get(position);
 	}
 
 	@Override
@@ -58,10 +58,10 @@ public class TopPlacesAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 
-		final LocationRequest place = mPlacesList.get(position);
+		final LocationRequest place = mPlacesList.getTenPlaces().get(position);
 
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.top_places_list, null);
+			convertView = mInflater.inflate(R.layout.stats_list, null);
 
 			holder = new ViewHolder();
 

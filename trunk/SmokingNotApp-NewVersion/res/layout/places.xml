@@ -41,15 +41,15 @@
                 android:textSize="15dp"
                 android:textStyle="bold"
                 android:layout_weight="1" />
-
+
             <TextView
-                android:id="@+id/tvTopTen"
+                android:id="@+id/tvStats"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="#000000"
                 android:gravity="center"
-                android:text="Top 10"
+                android:text="Stats"
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />

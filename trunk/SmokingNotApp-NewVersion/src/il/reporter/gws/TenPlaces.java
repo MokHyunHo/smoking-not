@@ -6,7 +6,7 @@ public class TenPlaces {
 	
 	
 	private List<LocationRequest> places;
-	int count=0;
+	private int count=0;
 
 
 	public TenPlaces() {

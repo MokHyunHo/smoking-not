@@ -49,7 +49,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
 	private final int CYCLES_TO_WAIT = 5;
-	private TextView tvReport, tvPlaces, tvTopTen, tvAddress;
+	private TextView tvReport, tvPlaces, tvStats, tvAddress;
 	private Button goBtn;
 	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
@@ -81,7 +81,7 @@ public class Places extends Activity implements View.OnClickListener {
 		context = this;
 		tvReport = (TextView) findViewById(R.id.tvPlaReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
-		tvTopTen= (TextView) findViewById(R.id.tvTopTen);
+		tvStats= (TextView) findViewById(R.id.tvStats);
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (ImageButton) findViewById(R.id.b_search);
@@ -171,7 +171,7 @@ public class Places extends Activity implements View.OnClickListener {
 		// first-up menu
 		tvReport.setOnClickListener(this);
 		tvPlaces.setOnClickListener(this);
-		tvTopTen.setOnClickListener(this);
+		tvStats.setOnClickListener(this);
 
 		
 		//added---------------------------------------------------------------------
@@ -223,8 +223,8 @@ public class Places extends Activity implements View.OnClickListener {
 			break;
 		case R.id.tvPlaPlaces:
 			break;
-		case R.id.tvTopTen:
-			myIntent = new Intent(getApplicationContext(), TopPlaces.class);
+		case R.id.tvStats:
+			myIntent = new Intent(getApplicationContext(), Stats.class);
 			startActivity(myIntent);
 			break;
 			
