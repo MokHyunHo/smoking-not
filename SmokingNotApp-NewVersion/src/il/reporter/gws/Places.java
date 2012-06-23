@@ -48,7 +48,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_GET_SUGGESTIONS_ERR = 8;
 	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
-	private final int CYCLES_TO_WAIT = 5;
+	private final int CYCLES_TO_WAIT = 1;
 	private TextView tvReport, tvPlaces, tvStats, tvAddress;
 	private Button goBtn;
 	private GooglePlacesAPI mGooglePlacesAPI;
@@ -329,8 +329,8 @@ public class Places extends Activity implements View.OnClickListener {
 					mLocEng = null;
 					mLocEng = new LocationEngine(context);
 					updateLocation();
-				} catch (Throwable t) {
-					;
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
