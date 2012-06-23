@@ -79,8 +79,8 @@ public class Places extends Activity implements View.OnClickListener {
 
 	private void Init() {
 		context = this;
-		tvReport = (TextView) findViewById(R.id.tvPlaReport);
-		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
+		tvReport = (TextView) findViewById(R.id.tvReport);
+		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
 		tvStats= (TextView) findViewById(R.id.tvStats);
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
@@ -214,14 +214,14 @@ public class Places extends Activity implements View.OnClickListener {
 
 		Intent myIntent;
 		switch (v.getId()) {
-		case R.id.tvPlaReport:
+		case R.id.tvReport:
 			myIntent = new Intent(getApplicationContext(), Report.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
 				startActivity(myIntent);
 			}
 			break;
-		case R.id.tvPlaPlaces:
+		case R.id.tvPlaces:
 			break;
 		case R.id.tvStats:
 			myIntent = new Intent(getApplicationContext(), Stats.class);

@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,10 +25,10 @@ public class Stats extends Activity implements View.OnClickListener {
 
 	private TextView tvReport, tvPlaces, tvStats, tvCaption;
 
-	//Elad - to replace textviews with whatever you wanted
+	
 	private TextView tvBest, tvWorst, tvLast;
-	
-	
+	private Button btnBest, btnWorst, btnLast;
+	private ImageButton exitButton;
 	private ListView lvPlaces;
 	private ProgressBar pbLoading;
 	private TenPlaces mTenPlaces;
@@ -64,16 +66,19 @@ public class Stats extends Activity implements View.OnClickListener {
 	}
 
 	private void init() {
-		tvReport = (TextView) findViewById(R.id.tvPlaReport);
-		tvPlaces = (TextView) findViewById(R.id.tvPlaPlaces);
+		tvReport = (TextView) findViewById(R.id.tvReport);
+		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
 		tvStats = (TextView) findViewById(R.id.tvStats);
 		tvCaption = (TextView) findViewById(R.id.tvCaption);
 		
-		//Elad - to replace textviews with whatever you wanted
+		
 		tvBest = (TextView) findViewById(R.id.tvBest);
 		tvWorst = (TextView) findViewById(R.id.tvWorst);
 		tvLast = (TextView) findViewById(R.id.tvLast);
-				
+		
+		btnBest = (Button) findViewById(R.id.btnBest);
+		btnWorst = (Button) findViewById(R.id.btnWorst);
+		btnLast = (Button) findViewById(R.id.btnLast);
 
 		lvPlaces = (ListView) findViewById(R.id.lstTopPlaces);
 		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
@@ -82,13 +87,30 @@ public class Stats extends Activity implements View.OnClickListener {
 		tvPlaces.setOnClickListener(this);
 		tvStats.setOnClickListener(this);
 		
+		
 		tvBest.setOnClickListener(new onBestClick());
 		tvWorst.setOnClickListener(new onWorstClick());
 		tvLast.setOnClickListener(new onLastClick());
+		
+		btnBest.setOnClickListener(new onBestClick());
+		btnWorst.setOnClickListener(new onWorstClick());
+		btnLast.setOnClickListener(new onLastClick());
+		
+		// START MENU BUTTON
+		exitButton = (ImageButton) findViewById(R.id.exitButton);
+		exitButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				if (Utility.mFacebook.isSessionValid()) {
+					Utility.objectID = "me";
+				}
+				finish();
+			}
+		});
+	}
 	
 		
 		
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -202,14 +224,14 @@ public class Stats extends Activity implements View.OnClickListener {
 
 		Intent myIntent;
 		switch (v.getId()) {
-		case R.id.tvPlaReport:
+		case R.id.tvReport:
 			myIntent = new Intent(getApplicationContext(), Report.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";
 				startActivity(myIntent);
 			}
 			break;
-		case R.id.tvPlaPlaces:
+		case R.id.tvPlaces:
 			myIntent = new Intent(getApplicationContext(), Places.class);
 			if (Utility.mFacebook.isSessionValid()) {
 				Utility.objectID = "me";

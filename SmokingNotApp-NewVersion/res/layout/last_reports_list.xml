@@ -17,7 +17,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold" />
-
+
     <TextView
         android:id="@+id/tvReportType"
         android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
         android:text="Report Type"
         android:textColor="@color/black"
         android:textSize="14sp" />
-
+
     <TextView
         android:id="@+id/tvReportComment"
         android:layout_width="fill_parent"
@@ -43,15 +43,16 @@
         android:textSize="10sp" />
 
     <TextView
-        android:id="@+id/tvReportDate"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvUserRank"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tvPlaceName"
-        android:layout_marginTop="10dp"
-        android:text="12/12/12"
+        android:layout_alignLeft="@+id/tvReportComment"
+        android:layout_alignRight="@+id/tvReportComment"
+        android:layout_below="@+id/tvReportComment"
+        android:gravity="right"
+        android:text="By &lt;rank> user"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="10sp" />
 
     <ImageButton
         android:id="@+id/ib_Info"
@@ -59,20 +60,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/tvPlaceName"
         android:background="@android:color/transparent"
         android:src="@drawable/info" />
-
+
     <TextView
-        android:id="@+id/tvUserRank"
-        android:layout_width="fill_parent"
+        android:id="@+id/tvReportDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/tvReportComment"
-        android:layout_below="@+id/tvReportComment"
-        android:gravity="right"
-        android:text="By &lt;rank> user"
+        android:layout_alignBaseline="@+id/tvReportType"
+        android:layout_alignBottom="@+id/tvReportType"
+        android:layout_alignRight="@+id/tvPlaceName"
+        android:text="12/12/12"
         android:textColor="@color/black"
-        android:textSize="10sp" />
+        android:textSize="14sp" />
 
 </RelativeLayout>

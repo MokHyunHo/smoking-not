@@ -59,6 +59,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/refresh_yellow" />
+        android:src="@drawable/refresh" />
 
 </RelativeLayout>

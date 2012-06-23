@@ -72,7 +72,7 @@
         android:layout_alignBottom="@+id/tvAddress"
         android:layout_toRightOf="@+id/et_Search"
         android:background="@android:color/transparent"
-        android:src="@drawable/refresh_yellow" />
+        android:src="@drawable/refresh" />
 
     <ImageButton
         android:id="@+id/ib_ShowMeOnMap"
