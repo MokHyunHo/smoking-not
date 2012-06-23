@@ -41,5 +41,17 @@
         android:text="Report Date"
         android:textColor="@color/white"
         android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvUserRank"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tvReportComment"
+        android:layout_alignRight="@+id/tvReportComment"
+        android:layout_below="@+id/tvReportComment"
+        android:gravity="right"
+        android:text="By &lt;rank> user"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
 
 </RelativeLayout>

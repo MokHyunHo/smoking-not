@@ -71,8 +71,11 @@ public class ReportsListAdapter extends BaseAdapter {
 		try {
 			holder.mTypeTxt.setText(report.getReportKind());
 			holder.mDateTxt.setText(report.getDate());
-			holder.mCommentTxt.setText(report.getComment());
-
+			holder.mCommentTxt
+					.setText(report.getComment().compareTo("") == 0 ? "No comment"
+							: report.getComment());
+			holder.mUserRankTxt.setText(" - by " + report.getUserRank()
+					+ " user");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,6 +88,7 @@ public class ReportsListAdapter extends BaseAdapter {
 		TextView mTypeTxt;
 		TextView mDateTxt;
 		TextView mCommentTxt;
+		TextView mUserRankTxt;
 
 	}
 }

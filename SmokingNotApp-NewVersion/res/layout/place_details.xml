@@ -19,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvPlaceName"
         android:layout_below="@+id/tvPlaceName"
         android:text="Place address"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -28,9 +29,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/pb_Raiting"
         android:layout_below="@+id/tvPlaceAddress"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
         android:text="Number of raitings"
         android:textColor="@color/white"
@@ -49,7 +50,7 @@
         android:max="100"
         android:progress="0"
         android:visibility="invisible" />
-
+
     <ListView
         android:id="@+id/lstReports"
         android:layout_width="match_parent"
@@ -57,19 +58,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvReasons"
         android:visibility="invisible" >
-
     </ListView>
 
-    <ImageButton
-        android:id="@+id/ib_ShowOnMap"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/pb_Raiting"
-        android:layout_alignRight="@+id/tv_raitings"
-        android:background="@android:color/transparent"
-        android:src="@drawable/show_on_map" />
-
     <TextView
         android:id="@+id/tvReportsLbl"
         android:layout_width="wrap_content"
@@ -78,7 +68,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/pb_Raiting"
         android:text="Reports:" />
-
+
     <TextView
         android:id="@+id/tvReasons"
         android:layout_width="match_parent"
@@ -88,7 +78,7 @@
         android:text=""
         android:textColor="@color/orange"
         android:textSize="14sp" />
-
+
     <ProgressBar
         android:id="@+id/pbLoading"
         style="?android:attr/progressBarStyleLarge"
@@ -96,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvReasons"
         android:layout_centerHorizontal="true" />
-
+
     <TextView
         android:id="@+id/tvNoReports"
         android:layout_width="wrap_content"
@@ -109,5 +99,15 @@
         android:text="No reports for this place yes."
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/ib_ShowOnMap"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvPlaceAddress"
+        android:background="@android:color/transparent"
+        android:src="@drawable/show_on_map" />
 
 </RelativeLayout>
