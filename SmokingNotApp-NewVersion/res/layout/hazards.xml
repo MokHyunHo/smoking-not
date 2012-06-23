@@ -99,7 +99,7 @@
             android:layout_marginTop="20dp"
             android:src="@drawable/facebook" />
     </RelativeLayout>
-
+
     <EditText
         android:id="@+id/comments"
         android:layout_width="wrap_content"
@@ -109,9 +109,9 @@
         android:layout_below="@+id/hazardsThirdRL"
         android:layout_marginTop="5dp"
         android:ems="10"
+        android:gravity="center"
         android:hint="Add Comment"
         android:inputType="textMultiLine"
-        android:lines="1"
         android:singleLine="false" />
 
     <ImageButton
@@ -135,32 +135,31 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#000000" />
 
-    <Button
+    <ImageButton
         android:id="@+id/exitButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etLocation"
-        android:layout_below="@+id/comments"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/sbutton"
-        android:text="@string/exit" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/home" />
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="@drawable/qm" />
 
     <Button
         android:id="@+id/bhReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/exitButton"
-        android:layout_alignBottom="@+id/exitButton"
-        android:layout_alignLeft="@+id/etLocation"
+        android:layout_below="@+id/comments"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/sbutton"
         android:text="Report" />
-
-    <Button
-        android:id="@+id/question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/qm" />
 
 </RelativeLayout>
