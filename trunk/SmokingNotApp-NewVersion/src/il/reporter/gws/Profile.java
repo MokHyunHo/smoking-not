@@ -5,9 +5,12 @@ package il.reporter.gws;
 import il.reporter.gws.FacebookMain;
 
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import com.facebook.android.R;
 import com.google.gson.Gson;
@@ -53,7 +56,10 @@ public class Profile extends Activity {
 	private Button mQuestionButton;
 	private View tmpView;
 
+
+	@SuppressWarnings("null")
 	private String userId = "";
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,8 @@ public class Profile extends Activity {
 			userId = FacebookMain.email;
 
 		new GooglePlacesAPI(this);
-
+		
+		
 		// added---------------------------------------------------------------------
 		mQuestionButton = (Button) findViewById(R.id.question);
 
@@ -79,6 +86,7 @@ public class Profile extends Activity {
 
 			}
 		});
+
 
 		getUserDetails();
 		tvLastReports.performClick();
@@ -112,7 +120,51 @@ public class Profile extends Activity {
 				mHandler.sendMessage(mHandler.obtainMessage(2));
 			}
 		}.start();
+		//user has a notification
+				if ((ur_updated.GetMessage().compareTo("empty")!=0) || (ur_updated.GetMessage().compareTo("Report Exsits")!=0)) 
+				{
+					String delimiter="#";
+					String ids=ur_updated.GetMessage();
+					String reports_id[]=null;
+					//if (ids.indexOf(delimiter)!=-1) 
+						//reports_id=ids.split(delimiter);
+					//else
+						//reports_id[0]=ids;
+					
+					//showDialog(tmpView,reports_id);
+					
+					//showNotification(tmpView,reports_id);	
+					
+					
+					
+					// convert report request to gson string
+					Gson gson5 = new Gson();
+					String UserStr = gson5.toJson(ur_updated);
+					JSONStringer json5 = null;
+					WebRequest req2 = new WebRequest();
 
+					// prepare Json
+					try {
+						json5 = new JSONStringer().object().key("action")
+								.value("clear")
+								.key("user_request").value(UserStr)
+								.endObject();
+
+					} catch (JSONException e) {
+						Log.e("json exeption-can't create jsonstringer with report",
+								e.toString());
+					}
+
+					// send json to web server
+					try {
+						req2.getInternetData(json5,
+								getString(R.string.DatabaseUrl)
+										+ "/UpdateScoring");
+					} catch (Exception e) {
+						Log.w("couldn't send user to servlet UpdateScoring",
+								e.toString());
+					}
+				}
 	}
 
 	private void fillUserDetails() {
@@ -122,16 +174,7 @@ public class Profile extends Activity {
 			total_score.setText(ur_updated.GetScore() + "/100");
 
 			// display current stage
-			if ((ur_updated.GetScore() >= 0) && (ur_updated.GetScore() < 45))
-				rank.setText("Beginner");
-			if ((ur_updated.GetScore() >= 45) && (ur_updated.GetScore() < 135))
-				rank.setText("Active");
-			if ((ur_updated.GetScore() >= 135) && (ur_updated.GetScore() < 270))
-				rank.setText("Advanced");
-			if ((ur_updated.GetScore() >= 270) && (ur_updated.GetScore() < 405))
-				rank.setText("Expert");
-			if (ur_updated.GetScore() >= 405)
-				rank.setText("Supervisor");
+			rank.setText(ur_updated.GetRank());
 
 			// PROFILE INFORMATION
 			mText.setText("Welcome " + FacebookMain.name);
@@ -340,6 +383,50 @@ public class Profile extends Activity {
 		});
 		alertDialog.setIcon(R.drawable.qm);
 		alertDialog.show();
+
+	}
+	
+	private void showNotification(View v, String reports_id[]) {
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+				.create();
+		alertDialog.setTitle("New Notification");
+		String str = "You've got "+ reports_id.length + "points.\n" 
+				+ "By reporting:\n";
+				for (String s: reports_id) {
+					str=str+
+							"•	"+s+".\n";
+				}
+						
+		alertDialog.setMessage(str);
+
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// here you can add functions
+			}
+		});
+		alertDialog.setIcon(R.drawable.qm);
+		alertDialog.show();
+
+	}
+	
+	private void showDialog(View v,String places[]) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+		builder.setTitle("You've got new points!");
+		builder.setMessage("BY reporting "+places[0]+" you got 1 new point!");
+		builder.setCancelable(true);
+
+		final AlertDialog dlg = builder.create();
+		
+		dlg.show();
+		final Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			public void run() {
+				dlg.dismiss(); // when the task active then close the dialog
+				t.cancel(); // also just top the timer thread, otherwise, you
+							// may receive a crash report
+			}
+		}, 2000); // after 2 second (or 2000 miliseconds), the task will be
+					// active
 
 	}
 }

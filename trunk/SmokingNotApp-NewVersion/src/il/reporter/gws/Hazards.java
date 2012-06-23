@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 public class Hazards extends Activity implements View.OnClickListener {
 
+	private boolean takePicFlag=false;
 	String location, points;
 	Button report;
 	ImageButton ib;
@@ -263,6 +264,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 				case iData:
 					bmp = (Bitmap) extras.get("data");
 					iv.setImageBitmap(bmp);
+					takePicFlag=true;
 					break;
 				case iLocation:
 					chosenLocation = extras.getParcelable("location");
@@ -280,7 +282,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 					EmailDetails ed = new EmailDetails(orname, orphone, oradd,
 							oremail, null, loc, comment);
 
-					if (bmp != null) {
+					if (takePicFlag) {
 						ByteArrayOutputStream bos = new ByteArrayOutputStream();
 						bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
 						byte[] barr = bos.toByteArray();

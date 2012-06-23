@@ -3,6 +3,7 @@ package il.reporter.gws;
 public class ReportDetails {
 	
 	private String name;
+	private String user_rank;
 	private String address;
 	private String reportkind;
 	private String date;
@@ -49,7 +50,17 @@ public class ReportDetails {
 		return reasons;
 	}
 	
-
+	public void setUserRank(String r)
+	{
+		user_rank=r;
+	}
+	
+	public String getUserRank() 
+	{
+		return user_rank;
+	}
+	
+	
 	
 
 }
