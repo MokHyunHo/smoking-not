@@ -36,17 +36,18 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/txt"
         android:src="@drawable/icon_hack" />
-
+
     <TextView
         android:id="@+id/rank"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/user_pic"
+        android:layout_toLeftOf="@+id/exitButton"
         android:layout_toRightOf="@+id/user_pic"
-        android:gravity="center"
-        android:text="#rank#"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:gravity="center|right"
+        android:text="Your rank is: #rank#"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/tv_score"
@@ -54,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/rank"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/rank"
+        android:layout_below="@+id/tvNextRank"
         android:gravity="center"
         android:text="#score#" />
 
@@ -166,7 +167,7 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/exitButton"
         android:background="@drawable/qm" />
-
+
     <RelativeLayout
         android:id="@+id/RelativeLayout2"
         android:layout_width="wrap_content"
@@ -174,19 +175,23 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/progressbar"
-        android:layout_marginTop="30dp" >
-
+        android:layout_marginTop="30dp"
+        android:background="@drawable/border" >
+
         <Button
             android:id="@+id/btnNext"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnPrev"
+            android:layout_above="@+id/tvNotification"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:enabled="false"
-            android:text="Next" />
-
+            android:text="Next"
+            android:textSize="10dp" />
+
         <TextView
             android:id="@+id/tvNotifications"
             android:layout_width="wrap_content"
@@ -199,39 +204,52 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="13dp"
             android:textStyle="bold" />
-
+
         <TextView
             android:id="@+id/tvNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvNotifications"
-            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/btnNext"
             android:layout_below="@+id/tvNotifications"
             android:text="No notifications"
             android:textColor="@color/white" />
-
+
         <Button
             android:id="@+id/btnPrev"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tvNotification"
-            android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/btnNext"
+            android:layout_alignTop="@+id/btnNext"
             android:layout_toLeftOf="@+id/btnNext"
             android:enabled="false"
-            android:text="Prev" />
-
+            android:text="Prev"
+            android:textSize="10dp" />
+
         <Button
-            android:id="@+id/btnDelete"
+            android:id="@+id/btnClear"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvNotification"
-            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/btnPrev"
             android:layout_toLeftOf="@+id/btnPrev"
-            android:text="Delete this"
+            android:enabled="false"
+            android:text="Clear"
             android:textSize="10dp" />
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvNextRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rank"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:gravity="center|right"
+        android:text="Next rank: #rank#"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12dp" />
 
 </RelativeLayout>

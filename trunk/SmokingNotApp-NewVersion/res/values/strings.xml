@@ -179,4 +179,20 @@
 	   <item>There is not a \"No smoking\" sign</item>
 	</string-array> 
 	
+	<string-array name="user_ranks">
+	    <item>Beginner</item>
+	    <item>Active user</item>
+	    <item>Advanced user</item>
+	    <item>Expert</item>
+	    <item>Supervisor</item>
+	</string-array>
+	
+	<integer-array name="user_ranks_scores">
+	    <item>45</item>
+	    <item>135</item>
+	    <item>270</item>
+	    <item>405</item>
+	    <item>405</item>
+	</integer-array>
+	
 </resources>

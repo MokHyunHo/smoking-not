@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONObject;
+import org.json.JSONStringer;
+
 import com.facebook.android.R;
 import com.google.gson.Gson;
 
@@ -32,17 +34,18 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Profile extends Activity  {
+public class Profile extends Activity {
 	/** Called when the activity is first created. */
 
 	private Context context;
 	private ImageButton exitButton;
 	private TextView mText;
-	private TextView rank;
+	private TextView rank, tvNextRank;
 	private ImageView mUserPic;
 	private ProgressBar pb, pbLoading;
-	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards, tvNotification;
-	private Button btnNext, btnPrev, btnDelete;
+	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards,
+			tvNotification;
+	private Button btnNext, btnPrev, btnClear;
 	private TextSwitcher mSwitcher;
 	private ListView lvLastList;
 	private LastReportsAdapter mReportsAdapter;
@@ -51,7 +54,7 @@ public class Profile extends Activity  {
 	private LastUserHazards lstHazards;
 
 	private UserRequest ur_updated = null;
-	
+
 	private int mPosition = 0;
 
 	// added---------------------------------------------------------------------
@@ -60,7 +63,7 @@ public class Profile extends Activity  {
 
 	@SuppressWarnings("null")
 	private String userId = "";
-	
+
 	private String notifications[];
 
 	@Override
@@ -73,7 +76,7 @@ public class Profile extends Activity  {
 		if (FacebookMain.email != null)
 			userId = FacebookMain.email;
 
-		//new GooglePlacesAPI(this);
+		// new GooglePlacesAPI(this);
 
 		// added---------------------------------------------------------------------
 		mQuestionButton = (Button) findViewById(R.id.question);
@@ -129,43 +132,54 @@ public class Profile extends Activity  {
 		// user has a notification
 
 	}
-	
+
 	private void buildNotifications(String message) {
-		
-		
-			Log.i("ERIC", "has notifications");
-			String delimiter = "#";
-			String reports_id[] = null;
-			reports_id =  message.split(delimiter);
-			notifications = new String[reports_id.length];
-			
-			for (int i = 0; i < reports_id.length; i++) {
-				
-				notifications[i] =  "Some user reported same report as you on\n\"" + reports_id[i] +"\"\nYou got 1 point for this!";
-			}
-			
-					
+
+		Log.i("ERIC", "has notifications");
+		String delimiter = "#";
+		String reports_id[] = null;
+		reports_id = message.split(delimiter);
+		notifications = new String[reports_id.length];
+		mPosition = 0;
+
+		for (int i = 0; i < reports_id.length; i++) {
+
+			notifications[i] = "Some user reported same report as you on\n\""
+					+ reports_id[i] + "\"\nYou got 1 point for this!";
+		}
+
 	}
 
 	private void fillUserDetails() {
 		try {
-			// user's progress
-			pb.setProgress(ur_updated.GetScore());
-			total_score.setText(ur_updated.GetScore() + "/100");
 
 			// display current stage
-			rank.setText(ur_updated.GetRank());
+			ur_updated.handleRanks(this);
+			rank.setText("Your rank is: " + ur_updated.GetRank());
+			
+			if (ur_updated.GetNextRank().compareTo("") != 0)
+				tvNextRank.setText("Next rank: " + ur_updated.GetNextRank());
+			else
+				tvNextRank.setText("You reached the highest rank!");
+			
+			// user's progress
+			pb.setMax(ur_updated.GetNextRankScore());
+			pb.setProgress(ur_updated.GetScore());
+			total_score.setText(ur_updated.GetScore() + "/" + ur_updated.GetNextRankScore());
 
 			// PROFILE INFORMATION
 			mText.setText("Welcome " + FacebookMain.name);
 			mUserPic.setImageBitmap(Utility.getBitmap(FacebookMain.picURL));
-			
-			if (notifications.length > 0)
-			{
-				tvNotification.setText(notifications[0]);
-				btnDelete.setVisibility(View.VISIBLE);
-				if (notifications.length > 1)
-					btnNext.setEnabled(true);
+
+			if (notifications != null) {
+
+				if (notifications.length > 0) {
+					tvNotification.setText(notifications[0]);
+					btnClear.setEnabled(true);
+
+					if (notifications.length > 1)
+						btnNext.setEnabled(true);
+				}
 			}
 
 		} catch (Exception e) {
@@ -217,57 +231,93 @@ public class Profile extends Activity  {
 		}
 
 	}
-	
+
 	private class onNextPrevClick implements OnClickListener {
 
 		private int direction;
+
 		public onNextPrevClick(int direction)
-		
+
 		{
 			this.direction = direction;
 		}
-		
+
 		public void onClick(View v) {
-			
+
 			mPosition += direction;
-			
+
 			btnNext.setEnabled(mPosition < notifications.length - 1);
 			btnPrev.setEnabled(mPosition > 0);
-			
+
 			tvNotification.setText(notifications[mPosition]);
-			
+
 		}
-		
+
+	}
+
+	private class onClearClick implements OnClickListener {
+
+		public void onClick(View v) {
+
+			btnPrev.setEnabled(false);
+			btnNext.setEnabled(false);
+			btnClear.setEnabled(false);
+
+			tvNotification.setText("No notifications");
+			notifications = null;
+
+			// convert report request to gson string
+			Gson gson5 = new Gson();
+			String UserStr = gson5.toJson(ur_updated);
+			JSONStringer json5 = null;
+			WebRequest req2 = new WebRequest();
+
+			// prepare Json
+			try {
+				json5 = new JSONStringer().object().key("action")
+						.value("clear").key("user_request").value(UserStr)
+						.endObject();
+
+				// send json to web server
+				req2.getInternetData(json5, getString(R.string.DatabaseUrl)
+						+ "/UpdateScoring");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			getUserDetails();
+
+		}
+
 	}
 
 	private void init() {
 		mText = (TextView) findViewById(R.id.txt);
 		tvNoReports = (TextView) findViewById(R.id.tvNoReports);
 		rank = (TextView) findViewById(R.id.rank);
+		tvNextRank = (TextView) findViewById(R.id.tvNextRank);
 		mUserPic = (ImageView) findViewById(R.id.user_pic);
-		
+
 		tvNotification = (TextView) findViewById(R.id.tvNotification);
-		
+
 		btnNext = (Button) findViewById(R.id.btnNext);
 		btnPrev = (Button) findViewById(R.id.btnPrev);
-		btnDelete = (Button) findViewById(R.id.btnDelete);
-		
+		btnClear = (Button) findViewById(R.id.btnClear);
+
 		btnNext.setOnClickListener(new onNextPrevClick(1));
 		btnPrev.setOnClickListener(new onNextPrevClick(-1));
-        
+		btnClear.setOnClickListener(new onClearClick());
 
 		tvLastReports = (TextView) findViewById(R.id.tvLastReports);
 		tvLastHazards = (TextView) findViewById(R.id.tvLastHazards);
 
 		pb = (ProgressBar) findViewById(R.id.progressbar);
 		total_score = (TextView) findViewById(R.id.tv_score);
-		
+
 		rank.setText("");
+		tvNextRank.setText("");
 		mUserPic.setImageBitmap(null);
 		total_score.setText("");
-		
-		btnDelete.setVisibility(View.INVISIBLE);
-
 
 		// START MENU BUTTON
 		exitButton = (ImageButton) findViewById(R.id.exitButton);
@@ -457,16 +507,9 @@ public class Profile extends Activity  {
 
 	}
 
-
- 
-
- 
-/*    public View makeView() {
-        TextView t = new TextView(this);
-        t.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL);
-        t.setTextSize(70);
-        t.setTextColor(Color.RED);
-        return t;
-    }
-    */
+	/*
+	 * public View makeView() { TextView t = new TextView(this);
+	 * t.setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL);
+	 * t.setTextSize(70); t.setTextColor(Color.RED); return t; }
+	 */
 }
