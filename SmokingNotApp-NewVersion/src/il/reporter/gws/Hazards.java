@@ -52,7 +52,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 	final static int iLocation = 1;
 	final static int iEmail = 2;
 	Bitmap bmp;
-	private Button exitButton;
+	private ImageButton exitButton;
 	private ProgressDialog mProgress;
 	private View tmpView;
 //  added---------------------------------------------------------------------
@@ -93,7 +93,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 		});
 
 		// START MENU BUTTON
-		exitButton = (Button) findViewById(R.id.exitButton);
+		exitButton = (ImageButton) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {

@@ -66,7 +66,7 @@ public class Report extends Activity implements View.OnClickListener {
 	Bitmap bmp;
 	private boolean exitFlag = true;
 	private boolean takePicFlag = false;
-	private Button exitButton;
+	private ImageButton exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
 	private ProgressDialog mProgress;
 	private View tmpView;
@@ -123,7 +123,7 @@ public class Report extends Activity implements View.OnClickListener {
 		});
 
 		// START MENU BUTTON
-		exitButton = (Button) findViewById(R.id.exitButton);
+		exitButton = (ImageButton) findViewById(R.id.exitButton);
 		exitButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -172,6 +172,7 @@ public class Report extends Activity implements View.OnClickListener {
 		case R.id.ReasonRB1:
 			c3.setVisibility(View.INVISIBLE);
 			c3.setChecked(false);
+			mQuestionButton2.setVisibility(View.INVISIBLE);
 			break;
 
 		case R.id.ReasonRB2:
@@ -517,7 +518,10 @@ public class Report extends Activity implements View.OnClickListener {
 					try {
 						checked = data.getStringArrayExtra("checkedOptions");
 						if (checked.length > 0)
+						{
 							c3.setVisibility(View.VISIBLE);
+							mQuestionButton2.setVisibility(View.VISIBLE);
+						}
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 					}
@@ -625,6 +629,7 @@ public class Report extends Activity implements View.OnClickListener {
 		c1.setSelected(true);
 		c3.setSelected(false);
 		c3.setVisibility(c3.INVISIBLE);
+		mQuestionButton2.setVisibility(View.INVISIBLE);
 
 	}
 
