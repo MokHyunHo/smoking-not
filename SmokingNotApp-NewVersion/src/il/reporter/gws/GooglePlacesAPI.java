@@ -209,6 +209,7 @@ public class GooglePlacesAPI {
 		}
 
 		Collections.sort(placesList, new distanceComparator());
+		Collections.sort(placesList, new PlacesRatingComparator());
 		return placesList;
 	}
 

@@ -1,6 +1,8 @@
 package il.reporter.gws;
 
 import java.io.IOException;
+import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,6 +69,11 @@ public class LocationEngine implements LocationListener {
 		setLocationSent(false);
 
 		lm.requestLocationUpdates(provider, 0, 0, this);
+		Date d = new Date();
+		long x = d.getTime() - lm.getLastKnownLocation(provider).getTime();
+		Log.i("ERIC", "secs since loc: " + x/1000);
+		
+		lm.requestSingleUpdate(provider, this, null);
 
 	}
 
@@ -130,6 +137,7 @@ public class LocationEngine implements LocationListener {
 	}
 
 	public Location getLastKnownLocation() {
+		Log.i("ERIC", "Sending last known location...");
 		mLocation = lm.getLastKnownLocation(provider);
 		locationEnabled = (mLocation != null);
 		return getCurrentLocation();
