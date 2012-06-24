@@ -1,0 +1,4 @@
+Link to market (install app, description and installation instructions)
+https://play.google.com/store/apps/details?id=il.reporter.gws
+
+Usage instructions (also appear in app itself in help buttons)
