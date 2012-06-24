@@ -2,3 +2,50 @@ Link to market (install app, description and installation instructions)
 https://play.google.com/store/apps/details?id=il.reporter.gws
 
 Usage instructions (also appear in app itself in help buttons)
+
+Instructions:
+"The Reporter" offers you the ultimate tool- a real time report.
+The application allows you to:
+1. Report places that aren't enforcing the rules concerning smoking.
+By pressing the "Smoking" button in the main menu, you can choose the place
+you're at, you can choose "Complaint" if you want to report a place negatively and
+after that you'll have to choose your reasons to the report. You can also add a photo
+as a proof to the place activity (*).
+Based on this report and previous reports the rating of the place will be determined.
+Furthermore, your facebook profile will be updated with an application status that
+confirms your actions.
+2. Report places that are enforcing the rules concerning smoking.
+By choosing the place you're at and choosing the "Positive Report" option you can
+submit a positive report. You can add free text to describe the place activity and
+even to add a photo(*).
+You're facebook profile will be updated with an application status and the place
+rating will be changed according to the report.
+3. Watch a full list of places around a specific location.
+By choosing the "Places" category, you can get a list of pubs, bars, restaurants and
+etc., and every place will be presented with its current rating.
+4. Report places that aren't enforcing the rules concerning smoking officially.
+An official report is a report that sends to the municipal service center and this
+report might be a reason for the municipality to investigate the place and punish it
+accordingly.
+After you choose the "Complaint" option in the report section, you'll need to check
+the "Official Report" option in the "publish ways" area. After that you'll get a new
+screen where you'll have to fill in tour details.
+It's important to fill in the correct details so the municipality will be able to contact
+you in order to get more information or in order to send you an update SMS.
+5. Report safety hazards.
+By selecting the "Hazards" option, you can add a photo of the hazard, the location of
+the hazard and a free text describing it.
+The report will be sent to the municipal service center and will be taken care as soon
+as possible.
+6. Manage a personal profile.
+By selecting the "Profile" option, you'll be able to see your reports' history and your
+number of points.
+you get points in following ways:
+• For every positive report, you'll get 2 points.
+• For every negative report, you'll get 1 point.
+• For every hazards report, you'll get 1 point.
+The more points you'll get, the higher your level will be and the higher the value
+of your report will get. In other words, in the highest level, your report will have a
+bigger influence because we consider you as very credible
+
+* adding a photo is optional.
