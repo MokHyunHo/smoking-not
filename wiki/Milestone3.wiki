@@ -3,3 +3,6 @@ https://play.google.com/store/apps/details?id=il.reporter.gws
 
 Video:
 http://www.youtube.com/watch?v=F80cBMqJ9Is
+
+Usage instructions:
+http://code.google.com/p/smoking-not/downloads/detail?name=Instructions.docx
