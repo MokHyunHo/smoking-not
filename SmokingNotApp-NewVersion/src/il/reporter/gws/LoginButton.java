@@ -87,9 +87,9 @@ public class LoginButton extends ImageButton {
                 AsyncFacebookRunner asyncRunner = new AsyncFacebookRunner(mFb);
                 asyncRunner.logout(getContext(), new LogoutRequestListener());
             } else {
-                mFb.authorize(mActivity, mPermissions, mActivityCode, new LoginDialogListener());
+                //mFb.authorize(mActivity, mPermissions, mActivityCode, new LoginDialogListener());
                 //change AFTER
-                 //mFb.authorize(mActivity, mPermissions, mFb.FORCE_DIALOG_AUTH,  new LoginDialogListener());
+                 mFb.authorize(mActivity, mPermissions, mFb.FORCE_DIALOG_AUTH,  new LoginDialogListener());
             }
         }
     }
