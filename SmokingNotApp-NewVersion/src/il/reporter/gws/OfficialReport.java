@@ -38,10 +38,12 @@ public class OfficialReport extends Activity implements View.OnClickListener {
 		mail = (EditText) findViewById(R.id.etOREmail);
 		add = (EditText) findViewById(R.id.etORAdd);
 		sh_pref = this.getSharedPreferences("OfficialReport", 0);
-		name.setText(sh_pref.getString("first_last_name", ""));
+		//name.setText(sh_pref.getString("first_last_name", ""));
+		name.setText(FacebookMain.name);
+		mail.setText(FacebookMain.email);
 		add.setText(sh_pref.getString("address", ""));
 		phone.setText(sh_pref.getString("phone", ""));
-		mail.setText(sh_pref.getString("mail", ""));
+		//mail.setText(sh_pref.getString("mail", ""));
 	}
 
 	@Override
