@@ -3,12 +3,7 @@ package il.reporter.gws;
 import android.content.Context;
 
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.opengl.Visibility;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,18 +11,9 @@ import android.view.ViewGroup;
 
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import il.reporter.gws.R;
-import com.google.gson.Gson;
 
 public class UserHazardsAdapter extends BaseAdapter {
 	private LastUserHazards mLst;

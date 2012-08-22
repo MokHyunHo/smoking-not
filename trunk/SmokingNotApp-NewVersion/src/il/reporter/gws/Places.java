@@ -6,7 +6,6 @@ import java.util.concurrent.CountDownLatch;
 import com.facebook.android.R;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -50,7 +49,7 @@ public class Places extends Activity implements View.OnClickListener {
 	private final int M_LOC_NA = 9;
 	private final int AUTOCOMPLETE_MINIMUM_INTERVAL = 1000000000;
 	private final int CYCLES_TO_WAIT = 1;
-	private TextView tvReport, tvPlaces, tvStats, tvAddress;
+	private TextView tvAddress;
 	private Button goBtn;
 	private GooglePlacesAPI mGooglePlacesAPI;
 	private LocationEngine mLocEng;
@@ -80,9 +79,6 @@ public class Places extends Activity implements View.OnClickListener {
 
 	private void Init() {
 		context = this;
-		tvReport = (TextView) findViewById(R.id.tvReport);
-		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
-		tvStats= (TextView) findViewById(R.id.tvStats);
 		tvAddress = (TextView) findViewById(R.id.tvAddress);
 		goBtn = (Button) findViewById(R.id.b_go);
 		searchBtn = (ImageButton) findViewById(R.id.b_search);
@@ -169,11 +165,6 @@ public class Places extends Activity implements View.OnClickListener {
 
 		// connection between XML & JAVA
 
-		// first-up menu
-		tvReport.setOnClickListener(this);
-		tvPlaces.setOnClickListener(this);
-		tvStats.setOnClickListener(this);
-
 		
 		//added---------------------------------------------------------------------
 		mQuestionButton= (Button) findViewById(R.id.question);
@@ -204,33 +195,11 @@ public class Places extends Activity implements View.OnClickListener {
 	}
 
 	
-	public void onPause()
+	/*public void onPause()
 	{
 		super.onPause();
 		//finish();
-	}
-	
-	@Override
-	public void onClick(View v) {
-
-		Intent myIntent;
-		switch (v.getId()) {
-		case R.id.tvReport:
-			myIntent = new Intent(getApplicationContext(), Report.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvPlaces:
-			break;
-		case R.id.tvStats:
-			myIntent = new Intent(getApplicationContext(), Stats.class);
-			startActivity(myIntent);
-			break;
-			
-		}
-	}
+	}*/
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -558,5 +527,12 @@ public class Places extends Activity implements View.OnClickListener {
 		 alertDialog.setIcon(R.drawable.qm);
 		 alertDialog.show();
 		 
+	}
+
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
 	} 
 }

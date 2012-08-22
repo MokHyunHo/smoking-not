@@ -42,58 +42,6 @@
             android:background="@drawable/qm" />
     </RelativeLayout>
 
-    <TableLayout
-        android:id="@+id/TableLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:weightSum="3" >
-
-        <TableRow
-            android:id="@+id/TableRow01"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/grey"
-            android:baselineAligned="true"
-            android:weightSum="3" >
-
-            <TextView
-                android:id="@+id/tvReport"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/report"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvPlaces"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="@string/places"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvStats"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:background="#000000"
-                android:gravity="center"
-                android:text="Stats"
-                android:textColor="#ffffff"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-        </TableRow>
-    </TableLayout>
-
     <RelativeLayout
         android:id="@+id/reportSixthRL"
         android:layout_width="wrap_content"

@@ -21,9 +21,6 @@ import il.reporter.gws.SessionEvents.AuthListener;
 import il.reporter.gws.SessionEvents.LogoutListener;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -184,7 +181,7 @@ public class FacebookMain extends Activity {
 			public void onClick(View v) {
 
 				Intent myIntent = new Intent(getApplicationContext(),
-						Report.class);
+						MainSmoking.class);
 				if (!Utility.mFacebook.isSessionValid()) {
 					mText.setText("Please login first!");
 					mText.setTextColor(Color.YELLOW);
@@ -290,6 +287,7 @@ public class FacebookMain extends Activity {
 	}
 
 	public void onBackPressed() {
+		super.finish();
 		finish();
 	}
 

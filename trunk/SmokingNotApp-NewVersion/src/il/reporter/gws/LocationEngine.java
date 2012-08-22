@@ -1,17 +1,6 @@
 package il.reporter.gws;
 
-import java.io.IOException;
-import java.util.Date;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.facebook.android.R;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;

@@ -2,8 +2,6 @@ package il.reporter.gws;
 
 import il.reporter.gws.R;
 
-import il.reporter.gws.R.layout;
-
 import android.app.ActivityGroup;
 import android.os.Bundle;
 

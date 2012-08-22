@@ -42,14 +42,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Report extends Activity implements View.OnClickListener {
 
 	String[] checked;
 	String location, reason, points;
-	TextView tvReport, tvPlaces, tvStats;
 	Button report;
 	ImageButton ib;
 	ImageView iv;
@@ -64,7 +62,6 @@ public class Report extends Activity implements View.OnClickListener {
 	final static int iCheckBox = 3;
 
 	Bitmap bmp;
-	private boolean exitFlag = true;
 	private boolean takePicFlag = false;
 	private ImageButton exitButton;
 	private static GooglePlace mGooglePlace = new GooglePlace();
@@ -87,9 +84,6 @@ public class Report extends Activity implements View.OnClickListener {
 		Init();
 
 		// Top Menu and switching between activities
-		tvReport.setOnClickListener(this);
-		tvPlaces.setOnClickListener(this);
-		tvStats.setOnClickListener(this);
 		et1.setOnClickListener(this);
 		r1.setOnClickListener(this);
 		r2.setOnClickListener(this);
@@ -136,19 +130,16 @@ public class Report extends Activity implements View.OnClickListener {
 
 	}
 
-	public void onPause() {
+	/*public void onPause() {
 		super.onPause();
 		if (exitFlag)
 			finish();
-	}
+	}*/
 
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.reportIB3);
 		//iv = (ImageView) findViewById(R.id.ivReport);
-		tvReport = (TextView) findViewById(R.id.tvReport);
-		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
-		tvStats = (TextView) findViewById(R.id.tvStats);
 		rg = (RadioGroup) findViewById(R.id.ReasonSp);
 		r1 = (RadioButton) findViewById(R.id.ReasonRB1);
 		r2 = (RadioButton) findViewById(R.id.ReasonRB2);
@@ -164,11 +155,6 @@ public class Report extends Activity implements View.OnClickListener {
 	public void onClick(View v) {
 		Intent myIntent;
 		switch (v.getId()) {
-		case R.id.tvStats:
-			myIntent = new Intent(getApplicationContext(), Stats.class);
-			startActivity(myIntent);
-			break;
-
 		case R.id.ReasonRB1:
 			c3.setVisibility(View.INVISIBLE);
 			c3.setChecked(false);
@@ -176,13 +162,11 @@ public class Report extends Activity implements View.OnClickListener {
 			break;
 
 		case R.id.ReasonRB2:
-			exitFlag = false;
 			i = new Intent(Report.this, ExtendedCheckBoxList.class);
 			startActivityForResult(i, iCheckBox);
 
 			break;
 		case R.id.reportIB3:
-			exitFlag = false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
@@ -207,11 +191,9 @@ public class Report extends Activity implements View.OnClickListener {
 				break;
 			}
 			if (c3.isChecked()) {
-				exitFlag = false;
 				mProgress.setMessage("Please Wait...");
 			} else {
 				mProgress.setMessage("Sending report...");
-				exitFlag = true;
 			}
 			mProgress.show();
 			report.setEnabled(false);
@@ -455,14 +437,6 @@ public class Report extends Activity implements View.OnClickListener {
 					
 					}
 					
-					
-					
-					
-					
-					
-					
-					
-					
 					// send email
 					if (c3.isChecked()) {
 						Intent repIntent = new Intent(Report.this,
@@ -482,17 +456,7 @@ public class Report extends Activity implements View.OnClickListener {
 				}
 			}.start();
 			break;
-		case R.id.tvReport:
-			break;
-		case R.id.tvPlaces:
-			myIntent = new Intent(getApplicationContext(), Places.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
 		case R.id.etLocation:
-			exitFlag = false;
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
 			startActivityForResult(myIntent, iVenue);
 			Log.i("ERIC", "Should show ChooseVenue");
@@ -503,7 +467,6 @@ public class Report extends Activity implements View.OnClickListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		exitFlag=true;
 		try {
 			super.onActivityResult(requestCode, resultCode, data);
 			if (resultCode == RESULT_OK) {

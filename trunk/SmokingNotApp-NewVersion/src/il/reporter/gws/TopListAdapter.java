@@ -16,9 +16,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.facebook.android.R;
 
 public class TopListAdapter extends BaseAdapter {
