@@ -99,13 +99,12 @@
         android:layout_below="@+id/progressbar"
         android:layout_marginTop="30dp"
         android:background="@drawable/border" >
-
+
         <Button
             android:id="@+id/btnNext"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tvNotification"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
@@ -126,42 +125,41 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="13dp"
             android:textStyle="bold" />
-
+
         <TextView
             android:id="@+id/tvNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvNotifications"
             android:layout_alignRight="@+id/btnNext"
-            android:layout_below="@+id/tvNotifications"
+            android:layout_below="@+id/btnNext"
             android:layout_marginBottom="10dp"
             android:paddingBottom="10dp"
             android:text="No notifications"
             android:textColor="@color/white" />
-
+
         <Button
             android:id="@+id/btnPrev"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btnNext"
             android:layout_alignTop="@+id/btnNext"
             android:layout_toLeftOf="@+id/btnNext"
             android:enabled="false"
             android:text="Prev"
             android:textSize="8dp" />
-
+
         <Button
             android:id="@+id/btnClear"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/tvNotification"
             android:layout_alignTop="@+id/btnPrev"
             android:layout_toLeftOf="@+id/btnPrev"
             android:enabled="false"
             android:text="Clear"
             android:textSize="8dp" />
+
     </RelativeLayout>
 
     <TextView
