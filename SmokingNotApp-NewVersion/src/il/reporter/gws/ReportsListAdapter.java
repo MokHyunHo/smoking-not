@@ -60,6 +60,8 @@ public class ReportsListAdapter extends BaseAdapter {
 					.findViewById(R.id.tvReportDate);
 			holder.mCommentTxt = (TextView) convertView
 					.findViewById(R.id.tvReportComment);
+			holder.mUserRankTxt = (TextView) convertView
+					.findViewById(R.id.tvUserRank);
 
 		} else {
 			holder = (ViewHolder) convertView.getTag();
