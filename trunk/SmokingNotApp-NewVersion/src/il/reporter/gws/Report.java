@@ -96,7 +96,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 		report.setOnClickListener(this);
 		ib.setOnClickListener(this);
-		iv.setOnClickListener(this);
+		//iv.setOnClickListener(this);
 		InputStream is = getResources().openRawResource(R.drawable.imageplace);
 		bmp = BitmapFactory.decodeStream(is);
 
@@ -144,8 +144,8 @@ public class Report extends Activity implements View.OnClickListener {
 
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
-		ib = (ImageButton) findViewById(R.id.ibReport);
-		iv = (ImageView) findViewById(R.id.ivReport);
+		ib = (ImageButton) findViewById(R.id.reportIB3);
+		//iv = (ImageView) findViewById(R.id.ivReport);
 		tvReport = (TextView) findViewById(R.id.tvReport);
 		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
 		tvStats = (TextView) findViewById(R.id.tvStats);
@@ -181,16 +181,16 @@ public class Report extends Activity implements View.OnClickListener {
 			startActivityForResult(i, iCheckBox);
 
 			break;
-		case R.id.ibReport:
+		case R.id.reportIB3:
 			exitFlag = false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
 			break;
-		case R.id.ivReport:
+		/*case R.id.ivReport:
 			exitFlag = false;
 			i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(i, iData);
-			break;
+			break;*/
 		case R.id.bReport:
 			// check
 			/*
@@ -503,6 +503,7 @@ public class Report extends Activity implements View.OnClickListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		exitFlag=true;
 		try {
 			super.onActivityResult(requestCode, resultCode, data);
 			if (resultCode == RESULT_OK) {

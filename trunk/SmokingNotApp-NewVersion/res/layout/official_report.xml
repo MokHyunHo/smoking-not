@@ -25,14 +25,14 @@
     </EditText>
 
     <EditText
-        android:id="@+id/etORAdd"
+        android:id="@+id/etOREmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/etORName"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Address" >
+        android:hint="Email address" >
     </EditText>
 
     <EditText
@@ -40,28 +40,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/etORAdd"
+        android:layout_below="@+id/etOREmail"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Phone Number" >
     </EditText>
 
     <EditText
-        android:id="@+id/etOREmail"
+        android:id="@+id/etORAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/etORPhone"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Email address" >
+        android:hint="Address" >
     </EditText>
-
+
     <Button
         android:id="@+id/bReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etOREmail"
+        android:layout_below="@+id/etORAdd"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:background="@drawable/sbutton"

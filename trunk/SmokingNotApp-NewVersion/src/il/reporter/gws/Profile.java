@@ -195,8 +195,8 @@ public class Profile extends Activity {
 
 	private void swapButtons(int now_clicked) {
 
-		String color1 = (now_clicked == 1 ? "#1F3452" : "#8496B0");
-		String color2 = (now_clicked == 1 ? "#8496B0" : "#1F3452");
+		String color1 = (now_clicked == 1 ? "#8496B0" : "#1F3452");
+		String color2 = (now_clicked == 1 ? "#1F3452" : "#8496B0");
 
 		tvLastHazards.setBackgroundColor(Color.parseColor(color1));
 		tvLastReports.setBackgroundColor(Color.parseColor(color2));
