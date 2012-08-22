@@ -6,6 +6,7 @@ import java.util.concurrent.CountDownLatch;
 import com.facebook.android.R;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;

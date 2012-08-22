@@ -45,6 +45,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +68,10 @@ public class FacebookMain extends Activity {
 	private ImageView mUserPic;
 	private LoginButton mLoginButton;
 	private TextView mText;
+	private TextView mText2;
+	private ProgressBar mPb;
 	private Handler mHandler;
+	private RelativeLayout mRL;
 	ProgressDialog dialog;
 
 	final static int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
@@ -75,12 +80,12 @@ public class FacebookMain extends Activity {
 	public static String picURL;
 	public static String name;
 	public static String email;
-	public static  int   fetching=0;
+	public static int fetching = 0;
 
 	private Button mProfileButton;
 	private Button mReportButton;
 	private Button mHazardsButton;
-//  added---------------------------------------------------------------------
+	// added---------------------------------------------------------------------
 	private ImageButton mQuestionButton;
 	private View tmpView;
 	Intent i;
@@ -94,6 +99,8 @@ public class FacebookMain extends Activity {
 
 		setContentView(R.layout.main);
 
+		LAST_ALLOWED_RADIUS = GooglePlacesAPI.ALLOWED_RADIUS;
+
 		if (APP_ID == null) {
 			Util.showAlert(this, "Warning", "Facebook Applicaton ID must be "
 					+ "specified before running this example: see FbAPIs.java");
@@ -102,10 +109,14 @@ public class FacebookMain extends Activity {
 		mHandler = new Handler();
 
 		mText = (TextView) FacebookMain.this.findViewById(R.id.txt);
+		mText2 = (TextView) FacebookMain.this.findViewById(R.id.txt2);
 		mUserPic = (ImageView) FacebookMain.this.findViewById(R.id.user_pic);
+		mPb = (ProgressBar) FacebookMain.this.findViewById(R.id.progressBar1);
+		mRL = (RelativeLayout) FacebookMain.this
+				.findViewById(R.id.MainSecondRL);
 
 		// Create the Facebook Object using the app id.
-		Utility.mFacebook = new Facebook(APP_ID); 
+		Utility.mFacebook = new Facebook(APP_ID);
 		// Instantiate the asynrunner object for asynchronous api calls.
 		Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
@@ -113,8 +124,8 @@ public class FacebookMain extends Activity {
 		mProfileButton = (Button) findViewById(R.id.profileButton);
 		mReportButton = (Button) findViewById(R.id.reportButton);
 		mHazardsButton = (Button) findViewById(R.id.hazardsButton);
-//added---------------------------------------------------------------------
-		mQuestionButton= (ImageButton) findViewById(R.id.question);
+		// added---------------------------------------------------------------------
+		mQuestionButton = (ImageButton) findViewById(R.id.question);
 
 		// restore session if one exists
 		SessionStore.restore(Utility.mFacebook, this);
@@ -126,106 +137,96 @@ public class FacebookMain extends Activity {
 		 */
 		mLoginButton.init(this, AUTHORIZE_ACTIVITY_RESULT_CODE,
 				Utility.mFacebook, permissions);
+		if (Utility.mFacebook.isSessionValid())
+			;
+			//SwitchVisibility(true, false);
+		else
+			SwitchVisibility(false, false);
 
 		if (Utility.mFacebook.isSessionValid()) {
-			
+
 			/**
-			if (fetching==0)
-			{
-				fetching=requestUserData();
-			}
-			**/
-			fetching=requestUserData();  //delete after it
-			
+			 * if (fetching==0) { fetching=requestUserData(); }
+			 **/
+			fetching = requestUserData(); // delete after it
+
 			/**
-			if (fetching==1) {
-				WebRequest req = new WebRequest();
-				
-				try {
-					 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
-				}
-				catch(Exception e) {
-					Log.w("Ortal", "can't send user email to database");
-				}
-			}
-			**/
+			 * if (fetching==1) { WebRequest req = new WebRequest();
+			 * 
+			 * try { req.readJsonFromUrl(getString(R.string.DatabaseUrl)+
+			 * "/CreateNewUser?mail=" + email); } catch(Exception e) {
+			 * Log.w("Ortal", "can't send user email to database"); } }
+			 **/
 		}
-								
-			
-		
 
 		mProfileButton.setOnClickListener(new OnClickListener() {
-			
-			
-			public void onClick(View v) {
-				
-					Intent myIntent = new Intent(getApplicationContext(),
-							Profile.class);
-					if (!Utility.mFacebook.isSessionValid()) {
-						mText.setText("Please login first!");
-						mText.setTextColor(Color.YELLOW);
 
+			public void onClick(View v) {
+
+				Intent myIntent = new Intent(getApplicationContext(),
+						Profile.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first!");
+					mText.setTextColor(Color.YELLOW);
+
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					if (fetching == 1) {
+						Utility.objectID = "me";
+						startActivity(myIntent);
 					}
-					if (Utility.mFacebook.isSessionValid()) {
-						if (fetching==1)
-						{
-							Utility.objectID = "me";
-							startActivity(myIntent);
-						}
-			}}
+				}
+			}
 		});
-		
 
 		mReportButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
-					Intent myIntent = new Intent(getApplicationContext(),
-							Report.class);
-					if (!Utility.mFacebook.isSessionValid()) {
-						mText.setText("Please login first!");
-						mText.setTextColor(Color.YELLOW);
+
+				Intent myIntent = new Intent(getApplicationContext(),
+						Report.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first!");
+					mText.setTextColor(Color.YELLOW);
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					if (fetching == 1) {
+						Utility.objectID = "me";
+						startActivity(myIntent);
 					}
-					if (Utility.mFacebook.isSessionValid()) {
-						if (fetching==1)
-						{
-							Utility.objectID = "me";
-							startActivity(myIntent);
-						}
-			}}
+				}
+			}
 		});
 
 		mHazardsButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				
-					Intent myIntent = new Intent(getApplicationContext(),
-							Hazards.class);
-					if (!Utility.mFacebook.isSessionValid()) {
-						mText.setText("Please login first!");
-						mText.setTextColor(Color.YELLOW);
+
+				Intent myIntent = new Intent(getApplicationContext(),
+						Hazards.class);
+				if (!Utility.mFacebook.isSessionValid()) {
+					mText.setText("Please login first!");
+					mText.setTextColor(Color.YELLOW);
+				}
+				if (Utility.mFacebook.isSessionValid()) {
+					if (fetching == 1) {
+						Utility.objectID = "me";
+						startActivity(myIntent);
 					}
-					if (Utility.mFacebook.isSessionValid()) {
-						if (fetching==1)
-						{
-							Utility.objectID = "me";
-							startActivity(myIntent);
-						}
-			}}
+				}
+			}
 		});
 
-	
-		
-		//  added---------------------------------------------------------------------
-	mQuestionButton.setOnClickListener(new OnClickListener() {
+		// added---------------------------------------------------------------------
+		mQuestionButton.setOnClickListener(new OnClickListener() {
 
-		public void onClick(View v) {
-			
-			tmpView = v;
-			showQuestionDialog(tmpView);
-			
-		}
-	});
+			public void onClick(View v) {
+
+				tmpView = v;
+				showQuestionDialog(tmpView);
+
+			}
+		});
 
 	}
 
@@ -253,11 +254,11 @@ public class FacebookMain extends Activity {
 			Utility.mFacebook.authorizeCallback(requestCode, resultCode, data);
 			break;
 		}
-			/*
-			 * if this is the result for a photo picker from the gallery, upload
-			 * the image after scaling it. You can use the Utility.scaleImage()
-			 * function for scaling
-			 */
+		/*
+		 * if this is the result for a photo picker from the gallery, upload the
+		 * image after scaling it. You can use the Utility.scaleImage() function
+		 * for scaling
+		 */
 		case PICK_EXISTING_PHOTO_RESULT_CODE: {
 			if (resultCode == Activity.RESULT_OK) {
 				Uri photoUri = data.getData();
@@ -287,11 +288,11 @@ public class FacebookMain extends Activity {
 		}
 		}
 	}
-	
-	public void onBackPressed()
-	{
+
+	public void onBackPressed() {
 		finish();
 	}
+
 	/*
 	 * callback for the photo upload
 	 */
@@ -339,25 +340,24 @@ public class FacebookMain extends Activity {
 
 						mText.setTextColor(Color.WHITE);
 
-						
-						
-
 						mText.setText("Welcome " + name + "!");
-						//mText.setText(email);   //test to show email
-						
+						// mText.setText(email); //test to show email
+
 						picURL = "https://graph.facebook.com/"
 								+ Utility.userUID + "/picture?type=normal";
 						mUserPic.setImageBitmap(Utility.getBitmap(picURL));
-/////////////////////////////////////////////////////////////
-						  WebRequest req = new WebRequest();
-							
-							try {
-								 req.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
-							}
-							catch(Exception e) {
-								Log.w("Ortal", "can't send user email to database");
-							}
-/////////////////////////////////////////////////////////////////////////////////
+						// ///////////////////////////////////////////////////////////
+						WebRequest req = new WebRequest();
+
+						try {
+							req.readJsonFromUrl(getString(R.string.DatabaseUrl)
+									+ "/CreateNewUser?mail=" + email);
+						} catch (Exception e) {
+							Log.w("Ortal", "can't send user email to database");
+						}
+						
+						SwitchVisibility(true, false);
+						// ///////////////////////////////////////////////////////////////////////////////
 					}
 				});
 
@@ -365,10 +365,7 @@ public class FacebookMain extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
-			
+
 		}
 
 	}
@@ -383,27 +380,18 @@ public class FacebookMain extends Activity {
 		@Override
 		public void onAuthSucceed() {
 			/**
-			if(fetching==0)
-			{
-				fetching= requestUserData();
-			}
-			**/
-			
-			fetching=requestUserData();  //delete after it
-			
-			
+			 * if(fetching==0) { fetching= requestUserData(); }
+			 **/
+
+			fetching = requestUserData(); // delete after it
+
 			/**
-			if (fetching==1) {
-				WebRequest req2 = new WebRequest();
-				
-				try {
-					 req2.readJsonFromUrl(getString(R.string.DatabaseUrl)+ "/CreateNewUser?mail=" + email);
-				}
-				catch(Exception e) {
-					Log.w("Ortal", "can't send user email to database");
-				}
-			}
-			**/							
+			 * if (fetching==1) { WebRequest req2 = new WebRequest();
+			 * 
+			 * try { req2.readJsonFromUrl(getString(R.string.DatabaseUrl)+
+			 * "/CreateNewUser?mail=" + email); } catch(Exception e) {
+			 * Log.w("Ortal", "can't send user email to database"); } }
+			 **/
 		}
 
 		@Override
@@ -426,6 +414,7 @@ public class FacebookMain extends Activity {
 		public void onLogoutFinish() {
 			mText.setText("You have logged out! ");
 			mUserPic.setImageBitmap(null);
+			SwitchVisibility(false, false);
 
 		}
 	}
@@ -434,10 +423,13 @@ public class FacebookMain extends Activity {
 	 * Request user name, and picture to show on the main screen.
 	 */
 	public int requestUserData() {
-		mText.setText("Fetching user name, profile pic...");
+		SwitchVisibility(false, true);
+		// mText.setText("Fetching user name, profile pic...");
 		Bundle params = new Bundle();
 		params.putString("fields", "name, picture, email");
 		Utility.mAsyncRunner.request("me", params, new UserRequestListener());
+		
+
 		return 1;
 	}
 
@@ -457,42 +449,45 @@ public class FacebookMain extends Activity {
 		}
 		return haveConnectedWifi || haveConnectedMobile;
 	}
-	
-	
-	//  added---------------------------------------------------------------------
+
+	// added---------------------------------------------------------------------
 	private void showQuestionDialog(View v) {
-		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
+		AlertDialog alertDialog = new AlertDialog.Builder(v.getContext())
+				.create();
 		alertDialog.setTitle("The Report App!");
-		String str="The Reporter offers you the ultimate tool- a real time report. \n\n"
-				+ "The application allows you to:\n" 
+		String str = "The Reporter offers you the ultimate tool- a real time report. \n\n"
+				+ "The application allows you to:\n"
 				+ " 1.	Report places that are/aren't enforcing the rules concerning smoking. \n"
-				+ " 2.	Watch a full list of places around a specific location. (Smoking)\n" 
+				+ " 2.	Watch a full list of places around a specific location. (Smoking)\n"
 				+ " 3.	Report safety hazards.\n"
 				+ " 4.	Manage a personal profile.\n";
 		alertDialog.setMessage(str);
 
-		 alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int which)
-		    {
-		       // here you can add functions
-		    }
-		 });
-		 alertDialog.setIcon(R.drawable.qm);
-		 alertDialog.show(); 
-	} 
+		alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				// here you can add functions
+			}
+		});
+		alertDialog.setIcon(R.drawable.qm);
+		alertDialog.show();
+	}
+
+	public void SwitchVisibility(boolean buttonsVisible, boolean progressVisible) {
+
+		int mVis1, mVis2;
+		mVis1 = (buttonsVisible ? View.VISIBLE : View.INVISIBLE);
+		mVis2 = (progressVisible ? View.VISIBLE : View.INVISIBLE);
+
+		mRL.setVisibility(mVis1);
+		mText2.setVisibility(mVis2);
+		mPb.setVisibility(mVis2);
+	}
 }
 
-
-
 /**
-AlertDialog alertDialog = new AlertDialog.Builder(this).create();
- alertDialog.setTitle("Reset...");
- alertDialog.setMessage("Are you sure?");
- alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-    public void onClick(DialogInterface dialog, int which) {
-       // here you can add functions
-    }
- });
- alertDialog.setIcon(R.drawable.icon);
- alertDialog.show();
-**/
+ * AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+ * alertDialog.setTitle("Reset..."); alertDialog.setMessage("Are you sure?");
+ * alertDialog.setButton("OK", new DialogInterface.OnClickListener() { public
+ * void onClick(DialogInterface dialog, int which) { // here you can add
+ * functions } }); alertDialog.setIcon(R.drawable.icon); alertDialog.show();
+ **/
