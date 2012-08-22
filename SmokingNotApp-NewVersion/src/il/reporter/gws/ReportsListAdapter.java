@@ -3,7 +3,6 @@ package il.reporter.gws;
 import com.facebook.android.R;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

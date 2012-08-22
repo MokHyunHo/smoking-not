@@ -1,11 +1,8 @@
 package il.reporter.gws;
 
-import java.util.List;
-
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,9 +20,7 @@ import com.google.gson.Gson;
 
 public class Stats extends Activity implements View.OnClickListener {
 
-	private TextView tvReport, tvPlaces, tvStats, tvCaption;
-
-	
+	private TextView tvCaption;
 	private TextView tvBest, tvWorst, tvLast;
 	private Button btnBest, btnWorst, btnLast;
 	private ImageButton exitButton;
@@ -66,9 +61,6 @@ public class Stats extends Activity implements View.OnClickListener {
 	}
 
 	private void init() {
-		tvReport = (TextView) findViewById(R.id.tvReport);
-		tvPlaces = (TextView) findViewById(R.id.tvPlaces);
-		tvStats = (TextView) findViewById(R.id.tvStats);
 		tvCaption = (TextView) findViewById(R.id.tvCaption);
 		
 		
@@ -81,12 +73,7 @@ public class Stats extends Activity implements View.OnClickListener {
 		btnLast = (Button) findViewById(R.id.btnLast);
 
 		lvPlaces = (ListView) findViewById(R.id.lstTopPlaces);
-		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
-
-		tvReport.setOnClickListener(this);
-		tvPlaces.setOnClickListener(this);
-		tvStats.setOnClickListener(this);
-		
+		pbLoading = (ProgressBar) findViewById(R.id.pbLoading);		
 		
 		tvBest.setOnClickListener(new onBestClick());
 		tvWorst.setOnClickListener(new onWorstClick());
@@ -220,28 +207,9 @@ public class Stats extends Activity implements View.OnClickListener {
 	};
 
 	@Override
-	public void onClick(View v) {
-
-		Intent myIntent;
-		switch (v.getId()) {
-		case R.id.tvReport:
-			myIntent = new Intent(getApplicationContext(), Report.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvPlaces:
-			myIntent = new Intent(getApplicationContext(), Places.class);
-			if (Utility.mFacebook.isSessionValid()) {
-				Utility.objectID = "me";
-				startActivity(myIntent);
-			}
-			break;
-		case R.id.tvStats:
-			break;
-
-		}
+	public void onClick(View arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

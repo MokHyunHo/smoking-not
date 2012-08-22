@@ -5,7 +5,6 @@ import com.facebook.android.R;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

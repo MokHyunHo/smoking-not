@@ -5,15 +5,10 @@ package il.reporter.gws;
 import il.reporter.gws.FacebookMain;
 
 import java.util.Collections;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.json.JSONObject;
 import org.json.JSONStringer;
-
 import com.facebook.android.R;
 import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -30,7 +25,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +40,6 @@ public class Profile extends Activity {
 	private TextView total_score, tvNoReports, tvLastReports, tvLastHazards,
 			tvNotification;
 	private Button btnNext, btnPrev, btnClear;
-	private TextSwitcher mSwitcher;
 	private ListView lvLastList;
 	private LastReportsAdapter mReportsAdapter;
 	private UserHazardsAdapter mHazardsAdapter;
@@ -186,11 +179,6 @@ public class Profile extends Activity {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void onPause() {
-		super.onPause();
-		finish();
 	}
 
 	private void swapButtons(int now_clicked) {
