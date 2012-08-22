@@ -166,9 +166,9 @@
 	<string name="GeocoderApiUrl">https://maps.googleapis.com/maps/api/geocode</string>
 	<string name="GooglePlacesApiUrl">https://maps.googleapis.com/maps/api/place</string>
 	<string name="AutocompleteApiUrl">https://maps.googleapis.com/maps/api/place/autocomplete/</string>
-	
-	<string name="GoogleMapsAPIKeyRelease">0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ</string>
-	<string name="GoogleMapsAPIKeyDebug">0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q</string>
+	<!-- GoogleMapsAPIKeyRelease 0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ -->
+	<!-- GoogleMapsAPIKeyDebug	 0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q -->
+	<string name="GoogleMapsAPIKey">0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ</string>
 	<string name="GooglePlacesAPIKey">AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw</string>
 	
 	<string-array name="complaint_reasons">
