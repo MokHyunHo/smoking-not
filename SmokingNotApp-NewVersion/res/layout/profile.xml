@@ -112,7 +112,7 @@
             android:layout_marginTop="5dp"
             android:enabled="false"
             android:text="Next"
-            android:textSize="10dp" />
+            android:textSize="8dp" />
 
         <TextView
             android:id="@+id/tvNotifications"
@@ -149,7 +149,7 @@
             android:layout_toLeftOf="@+id/btnNext"
             android:enabled="false"
             android:text="Prev"
-            android:textSize="10dp" />
+            android:textSize="8dp" />
 
         <Button
             android:id="@+id/btnClear"
@@ -161,7 +161,7 @@
             android:layout_toLeftOf="@+id/btnPrev"
             android:enabled="false"
             android:text="Clear"
-            android:textSize="10dp" />
+            android:textSize="8dp" />
     </RelativeLayout>
 
     <TextView
@@ -225,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="22dp"
                 android:layout_weight="1"
-                android:background="#1F3452"
+                android:background="#8496B0"
                 android:gravity="center"
                 android:text="Smoking reports"
                 android:textColor="#ffffff"
@@ -236,7 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="22dp"
                 android:layout_weight="1"
-                android:background="#8496B0"
+                android:background="#1F3452"
                 android:gravity="center"
                 android:text="Hazard reports"
                 android:textColor="#ffffff"

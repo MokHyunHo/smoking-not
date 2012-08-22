@@ -47,38 +47,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reportFirstRL"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" >
 
-        <ImageView
-            android:id="@+id/ivReport"
+        <EditText
+            android:id="@+id/etLocation"
             android:layout_width="250dp"
-            android:layout_height="100dp"
-            android:layout_below="@+id/textView1"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/imageplace" />
-    </RelativeLayout>
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:cursorVisible="false"
+            android:editable="false"
+            android:ems="10"
+            android:gravity="center|center_horizontal"
+            android:lines="2"
+            android:text="&lt;&lt;&lt; Choose place >>>"
+            android:textSize="14dp"
+            android:layout_marginTop="10dp" />
 
-    <EditText
-        android:id="@+id/etLocation"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/reportSecondRL"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:cursorVisible="false"
-        android:editable="false"
-        android:ems="10"
-        android:gravity="center|center_horizontal"
-        android:lines="2"
-        android:text="&lt;&lt;&lt; Choose place >>>"
-        android:textSize="14dp" />
+        <ImageButton
+            android:id="@+id/reportIB3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/camera"
+            android:layout_marginRight="2dp"
+            android:background="@android:color/transparent"
+            ></ImageButton>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/reportThirdRL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLocation"
+        android:layout_below="@+id/reportSecondRL"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" >
 
@@ -86,8 +86,8 @@
             android:id="@+id/ReasonSp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/etLocation"
-            android:layout_below="@+id/etLocation"
+            android:layout_alignLeft="@+id/reportSecondRL"
+            android:layout_below="@+id/reportSecondRL"
             android:orientation="horizontal" >
 
             <RadioButton
@@ -95,13 +95,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:checked="true"
-                android:text="Positive Report" />
+                android:text="Positive Rate" />
 
             <RadioButton
                 android:id="@+id/ReasonRB2"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Complaint" />
+                android:text="Negative Rate" />
         </RadioGroup>
     </RelativeLayout>
 
@@ -119,7 +119,7 @@
             android:background="@color/grey"
             android:baselineAligned="true"
             android:weightSum="3" >
-
+
             <TextView
                 android:id="@+id/tvReport"
                 android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
+
             <TextView
                 android:id="@+id/tvPlaces"
                 android:layout_width="match_parent"
@@ -142,7 +142,7 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
+
             <TextView
                 android:id="@+id/tvStats"
                 android:layout_width="match_parent"
@@ -154,17 +154,16 @@
                 android:textColor="#ffffff"
                 android:textSize="15dp"
                 android:textStyle="bold" />
-
         </TableRow>
     </TableLayout>
 
     <RelativeLayout
         android:id="@+id/reportFourthRL"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reportThirdRL"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="10dp" >
 
         <ImageView
             android:id="@+id/imageView2"
@@ -190,7 +189,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignTop="@+id/imageView2"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
             android:checked="true" />
 
@@ -214,50 +213,44 @@
             android:visibility="invisible" />
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/comments"
+    <RelativeLayout
+        android:id="@+id/reportFifthRL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/reportFourthRL"
-        android:layout_alignRight="@+id/reportFourthRL"
         android:layout_below="@+id/reportFourthRL"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Add Comment"
-        android:inputType="textMultiLine"
-        android:lines="1"
-        android:maxLines="2"
-        android:singleLine="false" />
-
-    <ImageButton
-        android:id="@+id/ibReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/reportSecondRL"
-        android:layout_below="@+id/reportFirstRL"
-        android:layout_marginRight="34dp"
-        android:layout_marginTop="3dp"
-        android:background="@drawable/takeapic" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/ibReport"
-        android:layout_alignTop="@+id/reportSecondRL"
-        android:layout_marginRight="16dp"
-        android:text="take a pic!"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000" />
-
-    <Button
-        android:id="@+id/bReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/comments"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/sbutton"
-        android:text="Report" />
+        android:layout_marginTop="10dp" >
+
+        <EditText
+            android:id="@+id/comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:hint="Add Comment"
+            android:inputType="textMultiLine"
+            android:lines="1"
+            android:maxLines="2"
+            android:singleLine="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportSixthRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportFifthRL"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" >
+
+        <Button
+            android:id="@+id/bReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comments"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/sbutton"
+            android:text="Report" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/textView3"
