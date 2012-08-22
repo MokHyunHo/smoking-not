@@ -248,6 +248,13 @@ public class Places extends Activity implements View.OnClickListener {
 				try {
 					if (!near_me) {
 						input_str = addressInput.getText().toString();
+						if (input_str.compareTo("")==0) {
+							Toast.makeText(Places.this,
+									"Please enter an address first",
+									Toast.LENGTH_SHORT).show();
+						
+							return;
+						}
 						fixAddress();
 						userLocation = mGooglePlacesAPI.mGeoEng
 								.getLocationFromAddress(input_str);
@@ -291,6 +298,13 @@ public class Places extends Activity implements View.OnClickListener {
 					mProgress.setMessage("Searching for places...");
 					if (!near_me) {
 						input_str = addressInput.getText().toString();
+						if (input_str.compareTo("")==0) {
+							Toast.makeText(Places.this,
+									"Please enter an address first",
+									Toast.LENGTH_SHORT).show();
+						
+							return;
+						}
 						fixAddress();
 						userLocation = mGooglePlacesAPI.mGeoEng
 								.getLocationFromAddress(input_str);
