@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/brownlinesbg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/reportFirstRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TableLayout"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TableLayout"
+            android:gravity="center"
+            android:text="@string/report"
+            android:textColor="#ffffff"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/exitButton"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/home" />
+
+        <Button
+            android:id="@+id/question"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/exitButton"
+            android:background="@drawable/qm" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportSecondRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportFirstRL"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/ivReport"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/imageplace" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/reportSecondRL"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:cursorVisible="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="center|center_horizontal"
+        android:lines="2"
+        android:text="&lt;&lt;&lt; Choose place >>>"
+        android:textSize="14dp" />
+
+    <RelativeLayout
+        android:id="@+id/reportThirdRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" >
+
+        <RadioGroup
+            android:id="@+id/ReasonSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/etLocation"
+            android:layout_below="@+id/etLocation"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/ReasonRB1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:checked="true"
+                android:text="Positive Report" />
+
+            <RadioButton
+                android:id="@+id/ReasonRB2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Complaint" />
+        </RadioGroup>
+    </RelativeLayout>
+
+    <TableLayout
+        android:id="@+id/TableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:weightSum="3" >
+
+        <TableRow
+            android:id="@+id/TableRow01"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/grey"
+            android:baselineAligned="true"
+            android:weightSum="3" >
+
+            <TextView
+                android:id="@+id/tvReport"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/report"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvPlaces"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="@string/places"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStats"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#000000"
+                android:gravity="center"
+                android:text="Stats"
+                android:textColor="#ffffff"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportFourthRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportThirdRL"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ReasonSp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/border" />
+
+        <CheckBox
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/question2"
+            android:text="Official Report"
+            android:visibility="invisible" />
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/imageView2"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:checked="true" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="68dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/facebook" />
+
+        <Button
+            android:id="@+id/question2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignBaseline="@+id/checkBox1"
+            android:layout_alignBottom="@+id/checkBox1"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/qm"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/reportFourthRL"
+        android:layout_alignRight="@+id/reportFourthRL"
+        android:layout_below="@+id/reportFourthRL"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:hint="Add Comment"
+        android:inputType="textMultiLine"
+        android:lines="1"
+        android:maxLines="2"
+        android:singleLine="false" />
+
+    <ImageButton
+        android:id="@+id/ibReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/reportSecondRL"
+        android:layout_below="@+id/reportFirstRL"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/takeapic" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/ibReport"
+        android:layout_alignTop="@+id/reportSecondRL"
+        android:layout_marginRight="16dp"
+        android:text="take a pic!"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" />
+
+    <Button
+        android:id="@+id/bReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comments"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sbutton"
+        android:text="Report" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reportThirdRL"
+        android:layout_toLeftOf="@+id/bReport"
+        android:text="Publish via:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/places_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/et_Search" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Your address is:" />
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/TextView01"
+        android:layout_toLeftOf="@+id/ib_ShowMeOnMap"
+        android:gravity="center"
+        android:text="Retrieving your address..."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/et_Search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAddress"
+        android:layout_toLeftOf="@+id/ib_Add"
+        android:ems="10"
+        android:hint="Search..."
+        android:paddingRight="40dp" />
+
+    <ImageButton
+        android:id="@+id/ib_Add"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_Search"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/et_Search"
+        android:background="@android:color/transparent"
+        android:src="@drawable/add_place" />
+
+    <ImageButton
+        android:id="@+id/ib_Search"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_Search"
+        android:layout_alignRight="@+id/et_Search"
+        android:layout_alignTop="@+id/et_Search"
+        android:background="@android:color/transparent"
+        android:src="@drawable/search" />
+
+    <ImageButton
+        android:id="@+id/ib_Refresh"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvAddress"
+        android:layout_toRightOf="@+id/et_Search"
+        android:background="@android:color/transparent"
+        android:src="@drawable/refresh" />
+
+    <ImageButton
+        android:id="@+id/ib_ShowMeOnMap"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ib_Refresh"
+        android:layout_toLeftOf="@+id/ib_Refresh"
+        android:background="@android:color/transparent"
+        android:src="@drawable/show_on_map" />
+
+</RelativeLayout>

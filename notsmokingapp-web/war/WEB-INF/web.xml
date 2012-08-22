@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+ 
+  
+  <servlet>
+    <servlet-name>GetUser</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetUser</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetUser</servlet-name>
+    <url-pattern>/GetUser</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GetLocation</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetLocation</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetLocation</servlet-name>
+    <url-pattern>/GetLocation</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdateUser</servlet-name>
+    <servlet-class>com.notmokingappweb.server.UpdateUser</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>UpdateUser</servlet-name>
+    <url-pattern>/UpdateUser</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>GetLastPlaces</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetLastPlaces</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetLastPlaces</servlet-name>
+    <url-pattern>/GetLastPlaces</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GetLastHazards</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetLastHazards</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetLastHazards</servlet-name>
+    <url-pattern>/GetLastHazards</url-pattern>
+  </servlet-mapping>
+  
+      <servlet>
+    <servlet-name>UpdateHazard</servlet-name>
+    <servlet-class>com.notmokingappweb.server.UpdateHazard</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>UpdateHazard</servlet-name>
+    <url-pattern>/UpdateHazard</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>GetHistoryPlaces</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetHistoryPlaces</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetHistoryPlaces</servlet-name>
+    <url-pattern>/GetHistoryPlaces</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>EmailReport</servlet-name>
+    <servlet-class>com.notmokingappweb.server.EmailReport</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>EmailReport</servlet-name>
+    <url-pattern>/EmailReport</url-pattern>
+  </servlet-mapping>
+  
+     <servlet>
+    <servlet-name>GetTenTopPlaces</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetTenTopPlaces</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetTenTopPlaces</servlet-name>
+    <url-pattern>/GetTenTopPlaces</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>CreateNewUser</servlet-name>
+    <servlet-class>com.notmokingappweb.server.CreateNewUser</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>CreateNewUser</servlet-name>
+    <url-pattern>/CreateNewUser</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdateScoring</servlet-name>
+    <servlet-class>com.notmokingappweb.server.UpdateScoring</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>UpdateScoring</servlet-name>
+    <url-pattern>/UpdateScoring</url-pattern>
+  </servlet-mapping>
+  
+  
+   <servlet>
+    <servlet-name>GetLastReports</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetLastReports</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetLastReports</servlet-name>
+    <url-pattern>/GetLastReports</url-pattern>
+  </servlet-mapping>
+  
+  
+    <servlet>
+    <servlet-name>GetLastHazardReports</servlet-name>
+    <servlet-class>com.notmokingappweb.server.GetLastHazardReports</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>GetLastHazardReports</servlet-name>
+    <url-pattern>/GetLastHazardReports</url-pattern>
+  </servlet-mapping>
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>places_website.jsp</welcome-file>
+  </welcome-file-list>
+
+</web-app>

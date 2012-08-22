@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tvPlaceName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
+        android:text="Place Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/tvPlaceAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/tvPlaceName"
+        android:layout_below="@+id/tvPlaceName"
+        android:text="Place address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_raitings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/pb_Raiting"
+        android:layout_below="@+id/tvPlaceAddress"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="Number of raitings"
+        android:textColor="@color/white"
+        android:textSize="10sp" />
+
+    <ProgressBar
+        android:id="@+id/pb_Raiting"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_raitings"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="5dp"
+        android:max="100"
+        android:progress="0"
+        android:visibility="invisible" />
+
+    <ListView
+        android:id="@+id/lstReports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvReasons"
+        android:visibility="invisible" >
+    </ListView>
+
+    <TextView
+        android:id="@+id/tvReportsLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/pb_Raiting"
+        android:text="Reports:" />
+
+    <TextView
+        android:id="@+id/tvReasons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvReportsLbl"
+        android:text=""
+        android:textColor="@color/orange"
+        android:textSize="14sp" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvReasons"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tvNoReports"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/lstReports"
+        android:gravity="center"
+        android:lines="2"
+        android:text="No reports for this place yes."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/ib_ShowOnMap"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvPlaceAddress"
+        android:background="@android:color/transparent"
+        android:src="@drawable/show_on_map" />
+
+</RelativeLayout>

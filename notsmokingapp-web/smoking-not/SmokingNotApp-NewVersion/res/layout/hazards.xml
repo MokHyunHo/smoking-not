@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/brownlinesbg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/TableLayout"
+        android:gravity="center"
+        android:text="@string/hazards"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/hazardsSecondRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/ivHazard"
+            android:layout_width="250dp"
+            android:layout_height="100dp"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/imageplace" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/etLocation"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/hazardsSecondRL"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:cursorVisible="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="center|center_horizontal"
+        android:lines="2"
+        android:text="&lt;&lt;&lt; Choose place >>>"
+        android:textSize="14dp" />
+
+    <TableLayout
+        android:id="@+id/TableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/grey"
+            android:baselineAligned="true" >
+        </TableRow>
+    </TableLayout>
+
+    <RelativeLayout
+        android:id="@+id/hazardsThirdRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLocation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ReasonSp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:src="@drawable/border" />
+
+        <CheckBox
+            android:id="@+id/hCB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/imageView2"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:checked="true" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="68dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/facebook" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hazardsThirdRL"
+        android:layout_alignRight="@+id/hazardsThirdRL"
+        android:layout_below="@+id/hazardsThirdRL"
+        android:layout_marginTop="5dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Add Comment"
+        android:inputType="textMultiLine"
+        android:singleLine="false" />
+
+    <ImageButton
+        android:id="@+id/ibhReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/hazardsThirdRL"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/takeapic" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/ibhReport"
+        android:layout_alignTop="@+id/hazardsSecondRL"
+        android:layout_marginRight="14dp"
+        android:text="take a pic!"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#000000" />
+
+    <ImageButton
+        android:id="@+id/exitButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/home" />
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="@drawable/qm" />
+
+    <Button
+        android:id="@+id/bhReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/comments"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sbutton"
+        android:text="Report" />
+
+</RelativeLayout>

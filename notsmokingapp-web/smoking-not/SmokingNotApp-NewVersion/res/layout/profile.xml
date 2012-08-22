@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/brownlinesbg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/profile"
+        android:textColor="#ffffff"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
+        android:gravity="center"
+        android:text="Welcome"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/user_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/txt"
+        android:src="@drawable/icon_hack" />
+
+    <TextView
+        android:id="@+id/rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/user_pic"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:layout_toRightOf="@+id/user_pic"
+        android:gravity="center|right"
+        android:text="Your rank is: #rank#"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/tv_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/rank"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tvNextRank"
+        android:gravity="center"
+        android:text="#score#" />
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="198dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_score"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_score"
+        android:max="100"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp" />
+
+    <ImageButton
+        android:id="@+id/exitButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/home" />
+
+    <Button
+        android:id="@+id/question"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/exitButton"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:background="@drawable/qm" />
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/progressbar"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/border" >
+
+        <Button
+            android:id="@+id/btnNext"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvNotification"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:enabled="false"
+            android:text="Next"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/tvNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:singleLine="false"
+            android:text="Notifications:"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvNotifications"
+            android:layout_alignRight="@+id/btnNext"
+            android:layout_below="@+id/tvNotifications"
+            android:layout_marginBottom="10dp"
+            android:paddingBottom="10dp"
+            android:text="No notifications"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnPrev"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btnNext"
+            android:layout_alignTop="@+id/btnNext"
+            android:layout_toLeftOf="@+id/btnNext"
+            android:enabled="false"
+            android:text="Prev"
+            android:textSize="10dp" />
+
+        <Button
+            android:id="@+id/btnClear"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvNotification"
+            android:layout_alignTop="@+id/btnPrev"
+            android:layout_toLeftOf="@+id/btnPrev"
+            android:enabled="false"
+            android:text="Clear"
+            android:textSize="10dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvNextRank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rank"
+        android:layout_toLeftOf="@+id/exitButton"
+        android:gravity="center|right"
+        android:text="Next rank: #rank#"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12dp" />
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/RelativeLayout2"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/border" >
+
+        <ListView
+            android:id="@+id/lvLastReports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tvNoReports"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/tvNoReports"
+            android:layout_below="@+id/TableRow02"
+            android:layout_marginBottom="15dp"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent"
+            android:visibility="invisible" >
+        </ListView>
+
+        <TextView
+            android:id="@+id/tvLastReportsCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_alignLeft="@+id/TableRow02"
+            android:layout_alignRight="@+id/TableRow02"
+            android:layout_marginTop="20dp"
+            android:background="#1F3452"
+            android:gravity="center"
+            android:text="Last reports:"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TableRow
+            android:id="@+id/TableRow02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvLastReportsCaption"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="9dp"
+            android:baselineAligned="true" >
+
+            <TextView
+                android:id="@+id/tvLastReports"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_weight="1"
+                android:background="#1F3452"
+                android:gravity="center"
+                android:text="Smoking reports"
+                android:textColor="#ffffff"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/tvLastHazards"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_weight="1"
+                android:background="#8496B0"
+                android:gravity="center"
+                android:text="Hazard reports"
+                android:textColor="#ffffff"
+                android:textSize="15dp"/>
+        </TableRow>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/TableRow02"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="21dp" />
+
+        <TextView
+            android:id="@+id/tvNoReports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/TableRow02"
+            android:layout_alignRight="@+id/TableRow02"
+            android:layout_alignTop="@+id/pbLoading"
+            android:gravity="center"
+            android:lines="2"
+            android:text="No reports sent so far\nTry sending one :)"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</RelativeLayout>
