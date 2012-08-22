@@ -42,69 +42,6 @@
             android:background="@drawable/qm" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/reportSecondRL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reportFirstRL"
-        android:layout_marginTop="10dp" >
-
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
-            android:cursorVisible="false"
-            android:editable="false"
-            android:ems="10"
-            android:gravity="center|center_horizontal"
-            android:lines="2"
-            android:text="&lt;&lt;&lt; Choose place >>>"
-            android:textSize="14dp"
-            android:layout_marginTop="10dp" />
-
-        <ImageButton
-            android:id="@+id/reportIB3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/camera"
-            android:layout_marginRight="2dp"
-            android:background="@android:color/transparent"
-            ></ImageButton>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/reportThirdRL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reportSecondRL"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" >
-
-        <RadioGroup
-            android:id="@+id/ReasonSp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/reportSecondRL"
-            android:layout_below="@+id/reportSecondRL"
-            android:orientation="horizontal" >
-
-            <RadioButton
-                android:id="@+id/ReasonRB1"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:checked="true"
-                android:text="Positive Rate" />
-
-            <RadioButton
-                android:id="@+id/ReasonRB2"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="Negative Rate" />
-        </RadioGroup>
-    </RelativeLayout>
-
     <TableLayout
         android:id="@+id/TableLayout"
         android:layout_width="match_parent"
@@ -158,12 +95,53 @@
     </TableLayout>
 
     <RelativeLayout
+        android:id="@+id/reportSixthRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportFifthRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp" >
+
+        <EditText
+            android:id="@+id/comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Add Comment"
+            android:inputType="textMultiLine"
+            android:singleLine="false" />
+
+        <Button
+            android:id="@+id/bReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/comments"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/sbutton"
+            android:text="Report" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/reportFourthRL"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/reportThirdRL"
+        android:layout_above="@+id/reportFifthRL"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" >
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp" >
 
         <ImageView
             android:id="@+id/imageView2"
@@ -211,53 +189,86 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/qm"
             android:visibility="invisible" />
-    </RelativeLayout>
 
+    </RelativeLayout>
+
     <RelativeLayout
-        android:id="@+id/reportFifthRL"
+        android:id="@+id/reportThirdRL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/reportFourthRL"
+        android:layout_above="@+id/reportFourthRL"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" >
+        android:layout_marginBottom="30dp" >
 
+        <RadioGroup
+            android:id="@+id/ReasonSp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/reportSecondRL"
+            android:layout_below="@+id/reportSecondRL"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/ReasonRB1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:checked="true"
+                android:text="Positive Rate" />
+
+            <RadioButton
+                android:id="@+id/ReasonRB2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Negative Rate" />
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/reportSecondRL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/reportThirdRL"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/reportFirstRL"
+        android:layout_marginTop="12dp" >
+
         <EditText
-            android:id="@+id/comments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:id="@+id/etLocation"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/reportIB3"
+            android:cursorVisible="false"
+            android:editable="false"
             android:ems="10"
-            android:hint="Add Comment"
-            android:inputType="textMultiLine"
-            android:lines="1"
-            android:maxLines="2"
-            android:singleLine="false" />
-    </RelativeLayout>
+            android:gravity="center|center_horizontal"
+            android:lines="2"
+            android:text="&lt;&lt;&lt; Choose place >>>"
+            android:textSize="14dp" >
 
-    <RelativeLayout
-        android:id="@+id/reportSixthRL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/reportFifthRL"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp" >
+            <requestFocus />
+        </EditText>
 
-        <Button
-            android:id="@+id/bReport"
+        <ImageButton
+            android:id="@+id/reportIB3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/comments"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/sbutton"
-            android:text="Report" />
+            android:layout_alignBottom="@+id/etLocation"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/camera" />
     </RelativeLayout>
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/reportThirdRL"
-        android:layout_toLeftOf="@+id/bReport"
+        android:layout_above="@+id/reportFourthRL"
+        android:layout_centerHorizontal="true"
         android:text="Publish via:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 

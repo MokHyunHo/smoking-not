@@ -50,11 +50,12 @@
         android:id="@+id/MainSecondRL"
         android:layout_width="300dp"
         android:layout_height="144dp"
+        android:layout_above="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/MainFirstRL"
-		android:layout_marginRight="20dp"
-		android:layout_marginLeft="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="30dp" >
 
         <Button
@@ -69,9 +70,8 @@
             android:id="@+id/hazardsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_below="@+id/reportButton"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:text="@string/hazards"
             android:textStyle="bold" />
 
@@ -79,9 +79,8 @@
             android:id="@+id/profileButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_below="@+id/hazardsButton"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:text="@string/profile"
             android:textStyle="bold" />
 
