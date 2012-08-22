@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_desc">Checkout out Hackbook for Android to learn how you can make your android apps social using Facebook Platform.</string>
+    <string name="app_action">I am using the Hackbook for Android</string>
+    <string name="request_message">Learn how to make your android apps social.</string>
+    <string name="request">Request!</string>
+    <string name="upload">Upload Photo</string>
+    <string name="post">Wall Post!</string>
+    <string name="delete">Delete Post</string>
+    <string name="no_login">Graph API Explorer</string>
+    <string name="get_permissions">Get Permissions</string>
+    <string name="access_token">Access Token:</string>
+    <string name="graph_domain">https://graph.facebook.com/</string>
+    <string name="submit">Submit</string>
+    <string name="label_output">Output:</string>
+    <string name="show_metadata">Show metadata</string>
+    <string name="show_picture">Show picture</string>
+    <string name="view_url">URL</string>
+    <string name="target_url">Target URL:</string>
+    <string name="exception">Exception: </string>
+    <string name="tip_label">Tip:</string>
+    <string name="error">Error</string>
+    <string name="facebook_error">Facebook Error: </string>
+    <string name="api_response">Api Response:</string>
+    <string name="view_source">View Source</string>
+    <string name="view_post">View Post</string>
+    <string name="delete_post">Delete Post</string>
+    <string name="source_code">Source Code:</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="view_photo">View Photo</string>
+    <string name="hide_photo">Hide Photo</string>
+    <string name="tag_photo">Tag Photo</string>
+    <string name="graph_button">Graph API</string>
+    <string name="fql_button">FQL Query</string>
+    <string name="source_tag">Source tag:</string>
+    <string name="permission_source_tag">Source tag: \"perms_tag\"</string>
+    <string name="Graph_FQL_title">Graph API or FQL Query?</string>
+    <string name="Graph_FQL_msg">Get friends using Graph or FQL Query?\n\nWith FQL query you can sort the list by names, whereas with Graph list will be ordered by UID and can\'t be changed.</string>
+    <string name="can_post_on_wall_title">Post on friend\'s wall</string>
+    <string name="can_post_on_wall">Friends list fetched. You can post on friend\'s wall by clicking on the item.</string>
+    <string name="ok">OK</string>
+    <string name="post_on_wall_title">Post on Wall?</string>
+    <string name="post_on_wall">Would you like to post on %1$s\'s wall</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="reset">Reset</string>
+    <string name="get_fields">Get Fields</string>
+    <string name="fields">Fields</string>
+    <string name="connections">Connections</string>
+    <string name="checkin">Check-in</string>
+    <string name="cancel">Cancel</string>
+    <string name="user">User Data</string>
+    <string name="friend">Friends Data</string>
+    <string name="extended">Extended</string>
+    <string name="gallery_remote_title">Upload from gallery or remote?</string>
+    <string name="gallery_remote_msg">Upload picture from phone\' gallery or remote server?</string>
+    <string name="gallery_button">Gallery</string>
+    <string name="remote_button">Remote</string>
+    <string name="get_location">Get Location?</string>
+    <string name="get_default_or_new_location">Get current location or use Times Square as the location?</string>
+    <string name="current_location_button">Current Location</string>
+    <string name="fetching_current_permissions">Fetching current permissions...</string>
+    <string name="explorer_message">Also, checkout the web-version of the <a href="http://developers.facebook.com/tools/explorer">Graph API Explorer tool</a></string>
+    <string name="nearby_places">Fetching nearby places...</string>
+    <string name="times_square_button">Times Square</string>
+    <string name="check_in_title">Check-in?</string>
+    <string name="permissions">Permissions</string>
+    <string name="back_parent">Back to parent</string>
+    <string name="fields_and_connections">Fields \u0026 Connections</string>
+    <string name="permissions_request">Select Permissions:</string>
+    <string name="permission_detail">Checkout <a href="https://developers.facebook.com/docs/authentication/permissions/">permissions reference doc</a></string>
+    <string name="fetching_location">Fetching Location...</string>
+    <string name="check_in_at">Would you like to check-in at %1$s?</string>
+    <string name="post_tip">\'read_stream\' permission is required to view and delete the post.\n\nUse SDK dialogs to publish stories or post on friends wall. <a href="https://developers.facebook.com/docs/reference/dialogs">More info</a>\n\n<a href="https://developers.facebook.com/docs/reference/api/Comment">Like and Comment on a post</a></string>
+    <string name="photo_tip">Photos are by default uploaded to the app\'s album. Specify album_id to upload to specific album. E.g. https://graph.facebook.com/{album_id}/photos.\n\nMore Info: https://developers.facebook.com/docs/reference/api/photo</string>
+    <string name="fqlquery">Enter FQL Query:</string>
+    <string name="enable_gps_title">Enable GPS</string>
+    <string name="enable_gps">Please enable GPS to get nearby places and check-in</string>
+    <string name="gps_settings">GPS Settings</string>
+    <string name="refresh_token_title">Refresh Token</string>
+    <string name="refresh_button">Refresh</string>
+    <string name="refresh_button_pending">Refreshing…</string>
+    <string name="refresh_token_tip">In most cases the access token should be refreshed silently when the application is running (for example see Hackbook onResume method).</string>
+    <string name="refresh_token_binding_error">Binding to the Facebook Android Application failed (is it installed?).</string>
+    <string name="access_token_label">Current access token:</string>
+    <string name="access_token_expires_label">Token expires at:</string>
+    <string name="app_name">The Reporter</string>
+    <string name="profile">Profile</string>
+    <string name="places">Places</string>
+    <string name="hazards">Hazards</string>
+    <string name="report">Report</string>
+    <string name="exit">Main menu</string>
+    <string name="smoking">Smoking</string>
+    <string name="ReportWays">Choose the Publishing Ways</string>
+    <string name="ReportReason">Choose the Reason of the Report</string>
+    <string name="Thanks">Your Report has been accepted!</string>
+
+    <string name="Credits">All right reserved to The Reporter team.</string>
+
+    <string name="OfficialReport"> 3891-ג\"משתה ,ןושיעל הפישחהו םיירוביצ תומוקמב ןושיעה תעינמל קוחל דוגינב ירוביצ םוקמב ןושיע לע חוויד ספוט
+ ______________:ךיראת             _______________ :דובכל
+ 
+   :םיננולתמה יטרפ
+    _______________ :םש  .3
+    ______________________________________________ :תבותכ
+ _______________________________________________:ל\"אוד     _______________ :ןופלט
+ 
+    _______________ :םש  .2
+    ______________________________________________ :תבותכ
+ _______________________________________________:ל\"אוד     _______________ :ןופלט
+ 
+    _______________ :םש  .1
+    ______________________________________________ :תבותכ
+ _______________________________________________:ל\"אוד     _______________ :ןופלט
+ 
+    _______________ :םש  .4
+    ______________________________________________ :תבותכ
+ _______________________________________________:ל\"אוד     _______________ :ןופלט
+ 
+ )"\קוחה\" :ןלהל( 3891-ג\"משתה ןושיעל הפישחהו םיירוביצ תומוקמב ןושיעה תעינמ קוחה תרפה רבדב הנולת :ןודנה
+ 
+ _____________גוסמ ירוביצ םוקמב____________העשב____________   ךיראתב  יכ םכתעידיל  איבהל וננוצרב
+ _______________________________________תבותכב אצמנהו ____________________________םשב
+ :ןלהל תוטרופמו תונמוסמה קוחה לש הרואכל תורפה ופצנ ,םכטופיש חטשב רשא
+ 
+ :ןושיעה רוסיא תא ףכוא אל קסעה לעב
+ .רוסא םוקמב ןשיעש חוקל דגנכ ולעפ אל וידבוע וא קסעה לעב   
+ .___________________________________:ןכיה טוריפ .ןיטולחל דרפנ ןושיע רדחב אלש תורפאמ תובצומ   
+  ._____________________________________ :ןכיה טוריפ .ןשעל רוסיא לח וב רוזאב תוירגיס חיר שגרומ   
+ 
+ :תואבה תוביסהמ יקוח וניא ןושיעה רדח
+ .ןיטולחל דרפנ רדחב אצמנ וניא   
+ .רוביצל חותפה חטשהמ עברמ לודג ןשעל ןתינ וב רדחה   
+ ._________ :רחא םוקמל עיגהל  םיתורישל עיגהל  ירוביצה םוקמל סנכיהל  :תנמ לע וכרד רובעל שרדנ   
+ .)האיציו הסינכ ןמזב טעמל( רוגס רמשנ אל ןושיעה רדחל ליבומה חתפה   
+ )תויונח ,תואפרמ ,םילוח יתבב( רוסא רבדהש תורמל ןושיע רוזיא/רדח םייק   
+ 
+ :קוחב שרדנכ ,ןושיע רוסיא רבדב טוליש ןיא
+ :'\וכו רב ,באפ ,הפק תיב ,הדעסמ – יוליב םוקמב רבודמו הדימב
+ 
+ .ריק רטמ 31 לכ לע דחא \"רוסא ןושיעה\" טלש תוחפל - קוחב שרדנכ טוליש ןיא   
+ .מ"ס 21 X 11  -מ םינטק םיטלשה   
+ .רטמ 2–כ לש הבוגב םיבצומ אל םיטלשה   </string>
+
+    <string-array name="types_array">
+        <item>bar</item>
+        <item>cafe</item>
+        <item>food</item>
+        <item>night_club</item>
+        <item>restaurant</item>
+        <item>store</item>
+        <item>establishment</item>
+        <item>other</item>
+    </string-array>
+    
+    
+    <string-array name="places_spinner">
+        <item>Near my location</item>
+        <item>Near address...</item>
+    </string-array>
+    
+    
+    <string name="DatabaseUrl">http://www.smokingnot2012.appspot.com</string>
+	<string name="GeocoderApiUrl">https://maps.googleapis.com/maps/api/geocode</string>
+	<string name="GooglePlacesApiUrl">https://maps.googleapis.com/maps/api/place</string>
+	<string name="AutocompleteApiUrl">https://maps.googleapis.com/maps/api/place/autocomplete/</string>
+	
+	<string name="GoogleMapsAPIKeyRelease">0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ</string>
+	<string name="GoogleMapsAPIKeyDebug">0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q</string>
+	<string name="GooglePlacesAPIKey">AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw</string>
+	
+	<string-array name="complaint_reasons">
+	   <item>Place owner did not act against a client who was smoking in a forbidden place</item>
+	   <item>Ashtrays are placed in a not completely separated smoking room</item>
+	   <item>Noticeable smell of cigarettes in the area where smoking is prohibited</item>
+	   <item>Smoking room is not valid because it is not in a completely separate area</item>
+	   <item>There is not a \"No smoking\" sign</item>
+	</string-array> 
+	
+	<string-array name="user_ranks">
+	    <item>Beginner</item>
+	    <item>Active user</item>
+	    <item>Advanced user</item>
+	    <item>Expert</item>
+	    <item>Supervisor</item>
+	</string-array>
+	
+	<integer-array name="user_ranks_scores">
+	    <item>45</item>
+	    <item>135</item>
+	    <item>270</item>
+	    <item>405</item>
+	    <item>405</item>
+	</integer-array>
+	
+</resources>
