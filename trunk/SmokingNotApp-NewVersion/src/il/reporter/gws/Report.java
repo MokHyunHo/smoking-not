@@ -127,6 +127,7 @@ public class Report extends Activity implements View.OnClickListener {
 				finish();
 			}
 		});
+		
 
 	}
 
@@ -136,6 +137,8 @@ public class Report extends Activity implements View.OnClickListener {
 			finish();
 	}*/
 
+
+	
 	private void Init() {
 		report = (Button) findViewById(R.id.bReport);
 		ib = (ImageButton) findViewById(R.id.reportIB3);
@@ -148,11 +151,15 @@ public class Report extends Activity implements View.OnClickListener {
 		c1 = (CheckBox) findViewById(R.id.checkBox1);
 		c3 = (CheckBox) findViewById(R.id.checkBox3);
 		mProgress = new ProgressDialog(this);
-		// mProgress.setCancelable(false);
+
+
+
 	}
+
 
 	@Override
 	public void onClick(View v) {
+
 		Intent myIntent;
 		switch (v.getId()) {
 		case R.id.ReasonRB1:
@@ -469,13 +476,17 @@ public class Report extends Activity implements View.OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
 			super.onActivityResult(requestCode, resultCode, data);
+			Log.i("ERIC", "result code: " + resultCode);
 			if (resultCode == RESULT_OK) {
 				Bundle extras = data.getExtras();
+				Log.i("ERIC", "got bundle");
 				switch (requestCode) {
 				case iData:
 					bmp = (Bitmap) extras.get("data");
-					iv.setImageBitmap(bmp);
+					//iv.setImageBitmap(bmp);
 					takePicFlag=true;
+					ib.setImageResource(R.drawable.camera2);
+					Log.i("ERIC", "should replace image");
 					break;
 				case iCheckBox:
 
@@ -575,8 +586,9 @@ public class Report extends Activity implements View.OnClickListener {
 					break;
 				}
 			}
-		} catch (Throwable Ex) {
+		} catch (Exception Ex) {
 			Log.i("ERIC", "msg: " + Ex.toString());
+			Ex.printStackTrace();
 			mHandler.sendMessage(mHandler.obtainMessage(3));
 		}
 	}
