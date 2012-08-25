@@ -79,9 +79,9 @@ public class FacebookMain extends Activity {
 	public static String email;
 	public static int fetching = 0;
 
-	private Button mProfileButton;
-	private Button mReportButton;
-	private Button mHazardsButton;
+	private ImageButton mProfileButton;
+	private ImageButton mReportButton;
+	private ImageButton mHazardsButton;
 	// added---------------------------------------------------------------------
 	private ImageButton mQuestionButton;
 	private View tmpView;
@@ -118,9 +118,9 @@ public class FacebookMain extends Activity {
 		Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
 
 		mLoginButton = (LoginButton) findViewById(R.id.login);
-		mProfileButton = (Button) findViewById(R.id.profileButton);
-		mReportButton = (Button) findViewById(R.id.reportButton);
-		mHazardsButton = (Button) findViewById(R.id.hazardsButton);
+		mProfileButton = (ImageButton) findViewById(R.id.profileButton);
+		mReportButton = (ImageButton) findViewById(R.id.reportButton);
+		mHazardsButton = (ImageButton) findViewById(R.id.hazardsButton);
 		// added---------------------------------------------------------------------
 		mQuestionButton = (ImageButton) findViewById(R.id.question);
 

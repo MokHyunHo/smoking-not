@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/TableLayout"
         android:weightSum="3" >
 
         <TableRow
