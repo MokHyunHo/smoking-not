@@ -9,7 +9,6 @@
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/TableLayout"
         android:gravity="center"
         android:text="@string/hazards"
         android:textColor="#ffffff"
