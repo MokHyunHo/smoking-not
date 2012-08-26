@@ -449,6 +449,7 @@ public class Report extends Activity implements View.OnClickListener {
 					}
 				}
 			}.start();
+			clearForm();
 			break;
 		case R.id.etLocation:
 			myIntent = new Intent(getApplicationContext(), ChoosePlace.class);
