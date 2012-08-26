@@ -194,13 +194,6 @@ public class Places extends Activity implements View.OnClickListener {
 		});
 	}
 
-	
-	/*public void onPause()
-	{
-		super.onPause();
-		//finish();
-	}*/
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
