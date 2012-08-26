@@ -48,42 +48,47 @@
 
     <RelativeLayout
         android:id="@+id/MainSecondRL"
-        android:layout_width="300dp"
-        android:layout_height="144dp"
-        android:layout_above="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/MainFirstRL"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="30dp" >
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5dp" >
 
         <ImageButton
             android:id="@+id/reportButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:background="@drawable/rs"
+            android:src="@drawable/rs"
             android:text="@string/smoking"
-            android:textStyle="bold"
-            android:background="@drawable/rs" />
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/hazardsButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/reportButton"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/sh"
+            android:src="@drawable/sh"
             android:text="@string/hazards"
-            android:textStyle="bold"
-            android:background="@drawable/sh" />
+            android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/profileButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/hazardsButton"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/pr"
+            android:src="@drawable/pr"
             android:text="@string/profile"
-            android:textStyle="bold"
-            android:background="@drawable/pr" />
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
