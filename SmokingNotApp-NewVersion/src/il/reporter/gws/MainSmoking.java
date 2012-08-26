@@ -21,7 +21,7 @@ public class MainSmoking extends TabActivity {
 		/*TabHost tabHost = getTabHost();
 		
 		// Tab for Smoking Report
-        TextView tview1=new TextView(this); 
+        final TextView tview1=new TextView(this); 
         tview1.setText("Report"); 
         tview1.setHeight(60);
         tview1.setGravity(Gravity.CENTER);
@@ -96,4 +96,5 @@ public class MainSmoking extends TabActivity {
 		tv.setText(text);
 		return view;
 	}
+
 }

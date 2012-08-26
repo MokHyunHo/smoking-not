@@ -2,7 +2,6 @@ package il.reporter.gws;
 
 import com.facebook.android.R;
 import com.google.gson.Gson;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,21 +15,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 import il.reporter.gws.FacebookMain;
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.json.JSONObject;
 import org.json.JSONStringer;
 import org.json.JSONException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -39,7 +33,6 @@ import android.graphics.BitmapFactory;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -50,7 +43,7 @@ public class Report extends Activity implements View.OnClickListener {
 	String location, reason, points;
 	Button report;
 	ImageButton ib;
-	ImageView iv;
+	//ImageView iv;
 	EditText et1, comments;
 	RadioGroup rg;
 	RadioButton r1, r2;
@@ -130,12 +123,6 @@ public class Report extends Activity implements View.OnClickListener {
 		
 
 	}
-
-	/*public void onPause() {
-		super.onPause();
-		if (exitFlag)
-			finish();
-	}*/
 
 
 	
@@ -219,11 +206,11 @@ public class Report extends Activity implements View.OnClickListener {
 					String locid = null;
 					// calculate new score
 
-					if (reason.compareTo("Positive Report") == 0) {
+					if (reason.compareTo("Positive Rate") == 0) {
 						user_score = 2;
 						is_positive = true;
 					}
-					if (reason.compareTo("Complaint") == 0) {
+					if (reason.compareTo("Negative Rate") == 0) {
 						user_score = 1;
 						is_positive = false;
 					}
@@ -594,9 +581,9 @@ public class Report extends Activity implements View.OnClickListener {
 	}
 
 	private void clearForm() {
-		Bitmap bmp = BitmapFactory.decodeResource(getResources(),
+		/*Bitmap bmp = BitmapFactory.decodeResource(getResources(),
 				R.drawable.imageplace);
-		iv.setImageBitmap(bmp);
+		iv.setImageBitmap(bmp);*/
 
 		r1.setSelected(true);
 		r2.setSelected(true);
