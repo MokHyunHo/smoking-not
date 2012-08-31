@@ -168,7 +168,7 @@
 	<string name="AutocompleteApiUrl">https://maps.googleapis.com/maps/api/place/autocomplete/</string>
 	<!-- GoogleMapsAPIKeyRelease 0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ -->
 	<!-- GoogleMapsAPIKeyDebug	 0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q -->
-	<string name="GoogleMapsAPIKey">0NRiKcStnSAu3hutzUMSQdaEo7HSO4Z1zJOYhMQ</string>
+	<string name="GoogleMapsAPIKey">0NRiKcStnSAvvdHj-LyrWCytvWS5AkxfgPDGN_Q</string>
 	<string name="GooglePlacesAPIKey">AIzaSyD9T3UGo2qMo0Vena6fhLZg9QyX2ALSejw</string>
 	
 	<string-array name="complaint_reasons">
