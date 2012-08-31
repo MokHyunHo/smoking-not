@@ -41,7 +41,7 @@
         android:ems="10"
         android:hint="Search..."
         android:paddingRight="40dp" />
-
+
     <ImageButton
         android:id="@+id/ib_Add"
         style="?android:attr/buttonStyleSmall"
@@ -51,7 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/et_Search"
         android:background="@android:color/transparent"
-        android:src="@drawable/add_place" />
+        android:src="@drawable/new_place" />
 
     <ImageButton
         android:id="@+id/ib_Search"

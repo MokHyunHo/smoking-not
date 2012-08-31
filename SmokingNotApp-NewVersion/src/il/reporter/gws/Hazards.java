@@ -142,7 +142,7 @@ public class Hazards extends Activity implements View.OnClickListener {
 				break;
 			}
 
-			mProgress.setMessage("Sending report...");
+			mProgress.setMessage("Please wait...");
 			mProgress.show();
 			report.setEnabled(false);
 			tmpView = v;
