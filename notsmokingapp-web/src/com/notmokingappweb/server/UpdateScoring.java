@@ -40,7 +40,7 @@ public class UpdateScoring extends HttpServlet {
 		
 		resp.setContentType("application/json;charset=UTF-8");
 		log.warning("version 2545454");
-		UserRequest ur,user_found = null;
+		UserRequest user_found = null;
 		ReportRequest new_report=null;
 		LocationRequest loc_found=null;
 		String str;

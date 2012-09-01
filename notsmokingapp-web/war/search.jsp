@@ -14,22 +14,18 @@
 
 <table width="880" align="center"
 	style="font-family: Arial, Helvetica, sans-serif;">
-	<form action="places_website.jsp" method="post">
-		<tr>
-			<td>הכנס שם מקום:
-			<td>
-			<td><input type="text" name="search" /></td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="submit" value="חפש" /></td>
+	<form action="search.jsp" method="post">
+		<tr align="center">
+			<td colspan="4">הכנס שם מקום:
+			<input type="text" name="search" />
+			<input type="submit" value="חפש" /></td>
 		</tr>
 	</form>
-</table>
 
 <%
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	Logger log = Logger.getLogger(LocationRequest.class.getName());
-	log.warning("version 66666");
+	log.warning("version 66777266");
 	boolean flag = false;
 	request.setCharacterEncoding("UTF-8");
 	String place = request.getParameter("search");
@@ -40,8 +36,6 @@
 	List<LocationRequest> entries = (List<LocationRequest>) query
 			.execute();
 %>
-<table width="880" align="center"
-	style="font-family: Arial, Helvetica, sans-serif;">
 	<tr style="font-weight: bold; color: #06C;">
 		<td align="center">שם</td>
 		<td align="center">כתובת</td>
@@ -58,10 +52,10 @@
 					flag = true;
 	%>
 	<tr>
-		<td><%=lr.getName()%></td>
-		<td><%=lr.getAddress()%></td>
-		<td><%=lr.getGoodRate()%></td>
-		<td><%=lr.getBadRate()%></td>
+		<td align="center"><%=lr.getName()%></td>
+		<td align="center"><%=lr.getAddress()%></td>
+		<td align="center"><%=lr.getGoodRate()%></td>
+		<td align="center"><%=lr.getBadRate()%></td>
 	</tr>
 
 	<%
@@ -71,8 +65,8 @@
 
 		if (!flag && place != null) {
 	%>
-	<tr>
-		<td colspan=4>No Rating</td>
+	<tr align="center">
+		<td colspan=4>המקום לא נמצא</td>
 	</tr>
 	<%
 		}
