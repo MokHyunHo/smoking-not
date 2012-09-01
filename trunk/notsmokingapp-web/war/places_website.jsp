@@ -34,10 +34,10 @@
 							break;
 						%>
                         		<tr>
-			<td><%=pl.getName()%></td>
-			<td><%=pl.getAddress()%></td>
-			<td><%=pl.getGoodRate()%></td>
-			<td><%=pl.getBadRate()%></td>
+			<td align="center"><%=pl.getName()%></td>
+			<td align="center"><%=pl.getAddress()%></td>
+			<td align="center"><%=pl.getGoodRate()%></td>
+			<td align="center"><%=pl.getBadRate()%></td>
 		</tr>
                          <%
  						count++;

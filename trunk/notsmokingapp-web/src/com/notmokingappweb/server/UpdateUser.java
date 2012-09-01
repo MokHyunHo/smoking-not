@@ -38,7 +38,7 @@ public class UpdateUser extends HttpServlet {
 			throws ServletException, IOException {
 		
 		resp.setContentType("application/json;charset=UTF-8");
-		log.warning("version 5557888888777");
+		log.warning("version 99993");
 		int flag=0;
 		UserRequest ur = null,user_found = null;
 		ReportRequest rr=null;
@@ -101,6 +101,7 @@ public class UpdateUser extends HttpServlet {
 							}
 						}
 					}
+					
 					
 					} catch (Exception e) {
 						log.warning("exception was thrown because of a search"+e);

@@ -34,10 +34,10 @@
 				if (count2 == 5)
 					break;
 		%>                        		<tr>
-			<td><%=pla.getName()%></td>
-			<td><%=pla.getAddress()%></td>
-			<td><%=pla.getGoodRate()%></td>
-			<td><%=pla.getBadRate()%></td>
+			<td align="center"><%=pla.getName()%></td>
+			<td align="center"><%=pla.getAddress()%></td>
+			<td align="center"><%=pla.getGoodRate()%></td>
+			<td align="center"><%=pla.getBadRate()%></td>
 		</tr> <%
 				count2++;
 }
