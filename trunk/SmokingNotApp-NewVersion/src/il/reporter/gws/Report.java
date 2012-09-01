@@ -303,6 +303,7 @@ public class Report extends Activity implements View.OnClickListener {
 					/* update location score according to user's level */
 
 					// display current stage
+					/*
 					if ((ur_check.GetScore() >= 0)
 							&& (ur_check.GetScore() < 45))
 						if (is_positive)
@@ -332,6 +333,10 @@ public class Report extends Activity implements View.OnClickListener {
 							goodplace_rate = 3;
 						else
 							badplace_rate = 3;
+					*/
+					ur_check.handleRanks(context);
+					goodplace_rate = (is_positive ? ur_check.GetRankWeight() : 0);
+					badplace_rate = (!is_positive ? ur_check.GetRankWeight() : 0);
 
 					LocationRequest loc = new LocationRequest(locid,
 							mGooglePlace.refrence, mGooglePlace.name,

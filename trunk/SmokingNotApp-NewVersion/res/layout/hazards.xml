@@ -60,11 +60,11 @@
         android:layout_below="@+id/hazardsSecondRL"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" >
-
+
         <EditText
             android:id="@+id/etLocation"
             android:layout_width="250dp"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:cursorVisible="false"
             android:editable="false"
@@ -73,6 +73,7 @@
             android:lines="2"
             android:text="&lt;&lt;&lt; Choose place >>>"
             android:textSize="14dp" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -109,25 +110,39 @@
             android:layout_marginLeft="68dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/facebook" />
-    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_alignTop="@+id/imageView1"
+            android:layout_toRightOf="@+id/imageView1"
+            android:paddingLeft="5dp"
+            android:text="Publish via Facebook"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/hazardsFifthRL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/hazardsFourthRL"
+        android:layout_alignRight="@+id/hazardsFourthRL"
         android:layout_below="@+id/hazardsFourthRL"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" >
-
+
         <EditText
             android:id="@+id/comments"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
             android:hint="Add Comment"
             android:inputType="textMultiLine"
             android:singleLine="false" />
+
     </RelativeLayout>
 
     <RelativeLayout

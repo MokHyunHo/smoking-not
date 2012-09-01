@@ -11,6 +11,7 @@ public class UserRequest {
 	private String rank = "";
 	private String nextRank = "";
 	private int nextRankScore = 0;
+	private int rankWeight = 1;
 	private String message;
 
 	public UserRequest(String email, int score, String place, String date) {
@@ -64,6 +65,8 @@ public class UserRequest {
 				R.array.user_ranks);
 		int user_rank_scores[] = context.getResources().getIntArray(
 				R.array.user_ranks_scores);
+		int user_rank_weights[] = context.getResources().getIntArray(
+				R.array.user_ranks_weights);
 
 		int i;
 		for (i = 0; i < user_rank_scores.length; i++) {
@@ -74,6 +77,7 @@ public class UserRequest {
 		rank = user_ranks[i];
 		nextRankScore = user_rank_scores[i];
 		nextRank = (i < user_rank_scores.length - 1 ? user_ranks[i + 1] : "");
+		rankWeight = user_rank_weights[i];
 
 	}
 
@@ -90,6 +94,11 @@ public class UserRequest {
 	public int GetNextRankScore() {
 
 		return nextRankScore;
+	}
+	
+	public int GetRankWeight() {
+
+		return rankWeight;
 	}
 
 	public void AddNotification(String loc) {
