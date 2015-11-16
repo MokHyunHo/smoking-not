@@ -1,0 +1,14 @@
+Link to market (install app, description and installation instructions)
+https://play.google.com/store/apps/details?id=il.reporter.gws
+
+Apk file:
+http://code.google.com/p/smoking-not/downloads/detail?name=ILReporter201.apk
+
+Site:
+http://www.smokingnot2012.appspot.com
+
+Video:
+http://www.youtube.com/watch?v=F80cBMqJ9Is
+
+Usage instructions:
+http://code.google.com/p/smoking-not/downloads/detail?name=Instructions.docx

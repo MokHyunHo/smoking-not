@@ -1,0 +1,17 @@
+New main menu design option #1
+
+![http://smoking-not.googlecode.com/svn/wiki/images/new_main.jpg](http://smoking-not.googlecode.com/svn/wiki/images/new_main.jpg)
+
+There are 4 options for design.
+
+The preferred one:
+
+![http://smoking-not.googlecode.com/svn/wiki/images/new_design.jpg](http://smoking-not.googlecode.com/svn/wiki/images/new_design.jpg)
+
+More options:
+
+![http://smoking-not.googlecode.com/svn/wiki/images/mockup1.jpg](http://smoking-not.googlecode.com/svn/wiki/images/mockup1.jpg)
+
+![http://smoking-not.googlecode.com/svn/wiki/images/mockup2.jpg](http://smoking-not.googlecode.com/svn/wiki/images/mockup2.jpg)
+
+![http://smoking-not.googlecode.com/svn/wiki/images/mockup3.jpg](http://smoking-not.googlecode.com/svn/wiki/images/mockup3.jpg)
